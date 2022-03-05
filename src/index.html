@@ -5,31 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Mythall 3.5</title>
     <link rel="icon" type="image/x-icon" href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
-    <link rel="stylesheet" href="/assets/css/reset.css" />
-    <link rel="stylesheet" href="/assets/css/variables.css" />
-    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/theme.css" />
     <style>
       .intro {
+        margin: var(--space-2xl) 0;
         display: flex;
         flex-direction: column;
         gap: var(--space-sm);
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+      .banner {
+        background-image: url("https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/logo-banner.jpeg?alt=media&token=eb3c4cfb-2521-4950-8014-3109bdbda134");
+        background-size: cover;
+        background-repeat: no-repeat;
+        padding: var(--space-lg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+      .banner__img {
+        max-width: 100%;
+        height: auto;
       }
     </style>
   </head>
   <body>
-    <header>
-      <menu-navigation>
-        <link rel="stylesheet" href="/assets/css/menu-navigation.css" />
-        <menu-links />
-      </menu-navigation>
-    </header>
+    <header-component></header-component>
+    <section class="banner">
+      <img
+        class="banner__img"
+        alt="Mythall"
+        width="425"
+        height="146"
+        src="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/mythall.png?alt=media&token=0f766555-5cfd-482c-9564-b7592fe0e351" />
+    </section>
     <main>
       <section class="intro">
-        <h2>Welcome</h2>
-        <h1 id="appName"></h1>
-        <p>Hello <strong>Mythall</strong>! This is a brand new <small>project</small></p>
+        <h2>Bienvenue sur</h2>
+        <h1 id="appName">Mythall 3.5</h1>
+        <p>Salut <strong>Mythallois</strong>! Ceci est un nouveau <small>project</small></p>
       </section>
     </main>
+    <footer-component></footer-component>
   </body>
-  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/js/firebase.js" defer></script>
+  <script type="module" src="/js/components/header-component.js" defer></script>
+  <script type="module" src="/js/components/footer-component.js" defer></script>
 </html>

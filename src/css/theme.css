@@ -7,6 +7,10 @@ html {
   font-weight: 500;
 }
 
+body {
+  background-image: url("https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/bg.jpg?alt=media&token=b818688d-309b-4e06-a429-cea75f4652ae");
+}
+
 main {
   max-width: var(--page-width);
   margin: 0 auto;
@@ -36,4 +40,30 @@ strong {
 
 small {
   font-size: var(--font-body-xs);
+}
+
+header-component {
+  display: flex;
+  background: var(--color-primary);
+}
+
+.header {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-lg) var(--page-padding);
+}
+
+.header__links {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.header__link {
+  color: var(--text-white);
+}
+
+.footer {
+  display: flex;
+  justify-content: center;
+  padding: var(--space-lg) var(--page-padding);
 }

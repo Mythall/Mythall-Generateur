@@ -4,9 +4,11 @@
 :root {
   --color-primary: #360013;
   --color-secondary: #b48339;
-  --color-text-base: rgb(17 24 39 / 0.7);
-  --color-text-light: rgb(17 24 39 / 0.5);
-  --color-text-dark: rgb(17 24 39 / 0.9);
+
+  --text-base: rgb(17 24 39 / 0.7);
+  --text-light: rgb(17 24 39 / 0.5);
+  --text-dark: rgb(17 24 39 / 0.9);
+  --text-white: #ffffff;
 
   --font-headings-xs: 24px;
   --font-headings-sm: 28px;

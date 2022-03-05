@@ -27,6 +27,12 @@ Compile to dist
 
 New routes must be added to vite.config.js to be built
 
+# Documentation
+
+Firebase - https://firebase.google.com/docs
+Vite - https://vitejs.dev/
+BEM (CSS naming convention) - http://getbem.com/naming/
+
 # Deploy
 
 When you develop, create a feature branch for your update.
