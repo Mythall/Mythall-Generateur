@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "mythall-v7"
+  },
+  "targets": {
+    "mythall-v7": {
+      "hosting": {
+        "mythall": [
+          "mythall-v7"
+        ]
+      }
+    }
   }
 }
