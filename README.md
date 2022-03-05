@@ -1,7 +1,7 @@
 # Mythall-3.5
 
 This is the final version of Mythall Web App & Generator
-Built using basic html / css / js for easy collaboration
+Built using basic html, css & javascript for easy collaboration
 
 # How to use
 
@@ -12,7 +12,7 @@ Use 2 terminal for the following commands:
 npm run watch
 npm run dev
 
-This will rebuild & watch the project for you and run the firebase emulator locally to emulate project routing
+This will build & watch the project for you and run the firebase emulator on localhost:3000
 
 # Requirements
 
