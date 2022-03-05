@@ -1,0 +1,44 @@
+/* Variables to keep the style consistent accross the application */
+/* For media queries breakpoints we use 480, 760, 1024, 1360  */
+
+:root {
+  --color-primary: #360013;
+  --color-secondary: #b48339;
+  --color-text-base: rgb(17 24 39 / 0.7);
+  --color-text-light: rgb(17 24 39 / 0.5);
+  --color-text-dark: rgb(17 24 39 / 0.9);
+
+  --font-headings-xs: 24px;
+  --font-headings-sm: 28px;
+  --font-headings-md: 32px;
+  --font-headings-lg: 36px;
+  --font-headings-xl: 40px;
+
+  --font-body-xs: 14px;
+  --font-body-sm: 16px;
+  --font-body-md: 18px;
+  --font-body-lg: 20px;
+  --font-body-xl: 22px;
+
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 32px;
+  --space-lg: 48px;
+  --space-xl: 64px;
+  --space-2xl: 128px;
+
+  --shadow-xs: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.25);
+  --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+
+  --animation-speed: 0.3s;
+  --base-radius: 5px;
+  --base-padding: var(--space-sm);
+  --base-shadow: var(--shadow-sm);
+  --active-shadow: var(--shadow-md);
+  --page-width: 1366px;
+  --page-padding: var(--space-sm);
+  --transition: all ease var(--animation-speed);
+}

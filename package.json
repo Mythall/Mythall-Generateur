@@ -1,0 +1,26 @@
+{
+  "name": "mythall-3.5",
+  "version": "3.5.0",
+  "description": "This is the final version of Mythall Web App & Generator Built using basic html / css / js for easy collaboration",
+  "main": "index.js",
+  "scripts": {
+    "dev": "firebase emulators:start",
+    "build": "vite build",
+    "watch": "vite build --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Dominik-Giroux/Mythall-3.5.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Dominik-Giroux/Mythall-3.5/issues"
+  },
+  "homepage": "https://github.com/Dominik-Giroux/Mythall-3.5#readme",
+  "dependencies": {
+    "firebase": "^9.6.7",
+    "vite": "^2.8.6"
+  }
+}
