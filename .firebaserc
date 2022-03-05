@@ -6,7 +6,7 @@
     "mythall-v7": {
       "hosting": {
         "mythall": [
-          "mythall-v7"
+          "mythall"
         ]
       }
     }
