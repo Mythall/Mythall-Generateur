@@ -1,6 +1,36 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;600;700&display=swap");
 
+loading-component {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--color-primary);
+}
+loading-component .spinner {
+  display: inline-block;
+  width: 75px;
+  height: 75px;
+  border: 5px solid var(--color-primary);
+  border-radius: 50%;
+  border-top-color: var(--color-secondary);
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+}
+@keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes spin {
+  to {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
 html {
   font-family: "Josefin Sans", sans-serif;
   font-size: var(--font-body-md);
@@ -50,7 +80,17 @@ header-component {
 .header {
   max-width: var(--page-width);
   margin: 0 auto;
-  padding: var(--space-lg) var(--page-padding);
+  padding: var(--space-md) var(--page-padding);
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: space-between;
+}
+
+.header__logo {
+  width: 200px;
+  height: auto;
 }
 
 .header__links {
@@ -60,6 +100,41 @@ header-component {
 
 .header__link {
   color: var(--text-white);
+}
+
+a {
+  color: var(--color-primary);
+  transition: var(--transition);
+}
+a:hover {
+  color: var(--color-secondary);
+}
+
+input {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--base-radius);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: var(--base-shadow);
+  transition: var(--transition);
+}
+input:hover,
+input:focus,
+input:active {
+  box-shadow: var(--active-shadow);
+}
+
+button {
+  background: var(--color-primary);
+  color: var(--text-white);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--base-radius);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: var(--base-shadow);
+  transition: var(--transition);
+}
+button:hover {
+  cursor: pointer;
+  box-shadow: var(--active-shadow);
 }
 
 .footer {

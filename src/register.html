@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/variables.css" />
+    <link rel="stylesheet" href="/css/theme.css" />
+    <style>
+      .register {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .register__title {
+        text-align: center;
+      }
+      .register__box {
+        margin-top: var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+      }
+      @media (min-width: 420px) {
+        .register__box {
+          width: auto;
+          min-width: 320px;
+          padding: var(--space-md);
+        }
+      }
+      .register__group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+    </style>
+  </head>
+  <body>
+    <loading-component>
+      <div class="spinner"></div>
+    </loading-component>
+    <header-component></header-component>
+    <main>
+      <register-component class="register">
+        <div class="register__title">
+          <h1>Créer un compte</h1>
+          <p>Ou <a href="/login">connectez-vous</a></p>
+        </div>
+        <div class="register__box">
+          <div class="register__group">
+            <label for="email">Courriel</label>
+            <input id="email" type="text" />
+          </div>
+          <div class="register__group">
+            <label for="password">Mot de passe</label>
+            <input id="password" type="password" />
+          </div>
+          <button id="submit">S'enregistrer</button>
+        </div>
+      </register-component>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/js/firebase.js" defer></script>
+  <script type="module" src="/js/components/loading-component.js"></script>
+  <script type="module" src="/js/components/header-component.js" defer></script>
+  <script type="module" src="/js/components/footer-component.js" defer></script>
+  <script type="module" src="/js/components/register-component.js" defer></script>
+</html>

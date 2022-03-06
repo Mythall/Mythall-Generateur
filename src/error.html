@@ -4,7 +4,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Page Not Found</title>
-    <link rel="icon" type="image/x-icon" href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/variables.css" />
     <link rel="stylesheet" href="/css/theme.css" />
@@ -21,6 +24,9 @@
     </style>
   </head>
   <body>
+    <loading-component>
+      <div class="spinner"></div>
+    </loading-component>
     <header-component></header-component>
     <main>
       <div class="error">
@@ -29,6 +35,7 @@
       </div>
     </main>
     <footer-component></footer-component>
+    <script type="module" src="/js/components/loading-component.js"></script>
     <script type="module" src="/js/components/header-component.js" defer></script>
     <script type="module" src="/js/components/footer-component.js" defer></script>
   </body>
