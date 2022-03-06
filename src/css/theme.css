@@ -8,7 +8,7 @@ loading-component {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: var(--color-primary);
+  background-color: rgba(0, 0, 0, 0.8);
 }
 loading-component .spinner {
   display: inline-block;
