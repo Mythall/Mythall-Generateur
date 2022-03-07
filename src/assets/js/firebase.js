@@ -17,12 +17,4 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-onAuthStateChanged(auth, user => {
-  if (user == null) {
-    console.log("Annonymous authentication");
-    return;
-  }
-  console.log(`User connected - ${user.email}`);
-});
-
 export { app, auth, db };

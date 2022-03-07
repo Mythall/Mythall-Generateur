@@ -13,28 +13,42 @@
     <link rel="stylesheet" href="/assets/css/theme.css" />
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
     <style>
-      .intro {
-        margin: var(--space-2xl) 0;
+      .forgot {
         display: flex;
         flex-direction: column;
-        gap: var(--space-sm);
         justify-content: center;
         align-items: center;
+      }
+      .forgot__title {
         text-align: center;
       }
-      .banner {
-        background-image: url("https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/logo-banner.jpeg?alt=media&token=eb3c4cfb-2521-4950-8014-3109bdbda134");
-        background-size: cover;
-        background-repeat: no-repeat;
-        padding: var(--space-lg);
+      .forgot__box {
+        margin-top: var(--base-padding);
         display: flex;
-        justify-content: center;
-        align-items: center;
+        flex-direction: column;
+        gap: var(--space-md);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
       }
-      .banner__img {
-        max-width: 100%;
-        height: auto;
+      .required {
+        color: var(--color-error);
+      }
+      @media (min-width: 480px) {
+        .forgot__box {
+          width: auto;
+          min-width: 320px;
+          padding: var(--space-md);
+        }
+      }
+      .forgot__group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
       }
     </style>
   </head>
@@ -43,20 +57,20 @@
       <div class="spinner"></div>
     </loading-component>
     <header-component></header-component>
-    <section class="banner">
-      <img
-        class="banner__img"
-        alt="Mythall"
-        width="425"
-        height="146"
-        src="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/mythall.png?alt=media&token=0f766555-5cfd-482c-9564-b7592fe0e351" />
-    </section>
     <main>
-      <section class="intro">
-        <h2>Bienvenue sur</h2>
-        <h1 id="appName">Mythall 3.5</h1>
-        <p>Salut <strong>Mythallois</strong>! Ceci est un nouveau <small>project</small></p>
-      </section>
+      <forgot-component class="forgot">
+        <div class="forgot__title">
+          <h1>Mot de passe oublie?</h1>
+          <p>Ou <a href="/login">connectez-vous</a></p>
+        </div>
+        <form class="forgot__box">
+          <div class="forgot__group">
+            <label for="email">Courriel <span class="required">*</span></label>
+            <input id="email" type="email" required />
+          </div>
+          <button type="submit">Connexion</button>
+        </form>
+      </forgot-component>
     </main>
     <footer-component></footer-component>
   </body>
@@ -64,4 +78,5 @@
   <script type="module" src="/layouts/loading-component.js"></script>
   <script type="module" src="/layouts/header-component.js" defer></script>
   <script type="module" src="/layouts/footer-component.js" defer></script>
+  <script type="module" src="/components/forgot-component.js" defer></script>
 </html>

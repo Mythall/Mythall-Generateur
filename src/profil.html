@@ -14,27 +14,10 @@
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
     <style>
-      .intro {
-        margin: var(--space-2xl) 0;
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-sm);
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
-      .banner {
-        background-image: url("https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/logo-banner.jpeg?alt=media&token=eb3c4cfb-2521-4950-8014-3109bdbda134");
-        background-size: cover;
-        background-repeat: no-repeat;
-        padding: var(--space-lg);
+      profil-component {
         display: flex;
         justify-content: center;
         align-items: center;
-      }
-      .banner__img {
-        max-width: 100%;
-        height: auto;
       }
     </style>
   </head>
@@ -43,20 +26,10 @@
       <div class="spinner"></div>
     </loading-component>
     <header-component></header-component>
-    <section class="banner">
-      <img
-        class="banner__img"
-        alt="Mythall"
-        width="425"
-        height="146"
-        src="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/mythall.png?alt=media&token=0f766555-5cfd-482c-9564-b7592fe0e351" />
-    </section>
     <main>
-      <section class="intro">
-        <h2>Bienvenue sur</h2>
-        <h1 id="appName">Mythall 3.5</h1>
-        <p>Salut <strong>Mythallois</strong>! Ceci est un nouveau <small>project</small></p>
-      </section>
+      <profil-component>
+        <h1>Bienvenue <span id="name"></span></h1>
+      </profil-component>
     </main>
     <footer-component></footer-component>
   </body>
@@ -64,4 +37,5 @@
   <script type="module" src="/layouts/loading-component.js"></script>
   <script type="module" src="/layouts/header-component.js" defer></script>
   <script type="module" src="/layouts/footer-component.js" defer></script>
+  <script type="module" src="/components/profil-component.js" defer></script>
 </html>

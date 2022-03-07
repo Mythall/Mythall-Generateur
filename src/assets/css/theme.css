@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;600;700&display=swap");
 
+/* Loading Component */
 loading-component {
   position: absolute;
   width: 100vw;
@@ -31,6 +32,7 @@ loading-component .spinner {
   }
 }
 
+/* Theme */
 html {
   font-family: "Josefin Sans", sans-serif;
   font-size: var(--font-body-md);
@@ -72,73 +74,14 @@ small {
   font-size: var(--font-body-xs);
 }
 
-header-component {
-  display: flex;
-  background: var(--color-primary);
-}
-
-.header {
-  max-width: var(--page-width);
-  margin: 0 auto;
-  padding: var(--space-md) var(--page-padding);
-  display: flex;
-  flex: 1;
-  align-items: center;
-  gap: var(--space-sm);
-  justify-content: space-between;
-}
-
-.header__logo {
-  width: 200px;
-  height: auto;
-}
-
-.header__links {
-  display: flex;
-  gap: var(--space-sm);
-}
-
-.header__link {
-  color: var(--text-white);
-}
-
-a {
+a,
+.link {
   color: var(--color-primary);
   transition: var(--transition);
+  text-decoration: underline;
 }
-a:hover {
+a:hover,
+.link:hover {
   color: var(--color-secondary);
-}
-
-input {
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--base-radius);
-  border: 1px solid rgba(0, 0, 0, 0.7);
-  box-shadow: var(--base-shadow);
-  transition: var(--transition);
-}
-input:hover,
-input:focus,
-input:active {
-  box-shadow: var(--active-shadow);
-}
-
-button {
-  background: var(--color-primary);
-  color: var(--text-white);
-  padding: var(--space-xs) var(--space-sm);
-  border-radius: var(--base-radius);
-  border: 1px solid rgba(0, 0, 0, 0.7);
-  box-shadow: var(--base-shadow);
-  transition: var(--transition);
-}
-button:hover {
   cursor: pointer;
-  box-shadow: var(--active-shadow);
-}
-
-.footer {
-  display: flex;
-  justify-content: center;
-  padding: var(--space-lg) var(--page-padding);
 }

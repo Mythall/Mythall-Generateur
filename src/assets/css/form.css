@@ -1,0 +1,34 @@
+input {
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--base-radius);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: var(--base-shadow);
+  transition: var(--transition);
+}
+input:hover,
+input:focus,
+input:active {
+  box-shadow: var(--active-shadow);
+}
+
+/* Require JS Implementation in forms to add a touched class when blur */
+input.touched:valid {
+  border-color: var(--color-success);
+}
+input.touched:invalid {
+  border-color: var(--color-error);
+}
+
+button[type="submit"] {
+  background: var(--color-primary);
+  color: var(--text-white);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--base-radius);
+  border: 1px solid rgba(0, 0, 0, 0.7);
+  box-shadow: var(--base-shadow);
+  transition: var(--transition);
+}
+button[type="submit"]:hover {
+  cursor: pointer;
+  box-shadow: var(--active-shadow);
+}

@@ -8,9 +8,12 @@
       rel="icon"
       type="image/x-icon"
       href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
-    <link rel="stylesheet" href="/css/reset.css" />
-    <link rel="stylesheet" href="/css/variables.css" />
-    <link rel="stylesheet" href="/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
     <style>
       .register {
         display: flex;
@@ -32,17 +35,29 @@
         border-radius: var(--base-radius);
         box-shadow: var(--base-shadow);
       }
-      @media (min-width: 420px) {
-        .register__box {
-          width: auto;
-          min-width: 320px;
-          padding: var(--space-md);
-        }
-      }
       .register__group {
         display: flex;
         flex-direction: column;
+        flex-grow: 1;
         gap: var(--space-xs);
+      }
+      .register__multigroup {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+      .required {
+        color: var(--color-error);
+      }
+      @media (min-width: 480px) {
+        .register__box {
+          width: auto;
+          min-width: 400px;
+          padding: var(--space-md);
+        }
+        .register__multigroup {
+          flex-direction: row;
+        }
       }
     </style>
   </head>
@@ -57,24 +72,42 @@
           <h1>Créer un compte</h1>
           <p>Ou <a href="/login">connectez-vous</a></p>
         </div>
-        <div class="register__box">
-          <div class="register__group">
-            <label for="email">Courriel</label>
-            <input id="email" type="text" />
+        <form class="register__box">
+          <div class="register__multigroup">
+            <div class="register__group">
+              <label for="firstname">Prénom <span class="required">*</span></label>
+              <input id="firstname" type="text" value="a" required />
+            </div>
+            <div class="register__group">
+              <label for="lastname">Nom <span class="required">*</span></label>
+              <input id="lastname" type="text" value="a" required />
+            </div>
           </div>
           <div class="register__group">
-            <label for="password">Mot de passe</label>
-            <input id="password" type="password" />
+            <label for="birthdate">Date de naissance <span class="required">*</span></label>
+            <input id="birthdate" type="date" value="1991-06-10" required />
           </div>
-          <button id="submit">S'enregistrer</button>
-        </div>
+          <div class="register__group">
+            <label for="email">Courriel <span class="required">*</span></label>
+            <input id="email" type="email" value="a@a" required />
+          </div>
+          <div class="register__group">
+            <label for="password">Mot de passe <span class="required">*</span></label>
+            <input id="password" type="password" minlength="8" value="s86T61k6" required />
+          </div>
+          <div class="register__group">
+            <label for="confirm">Confirmer le mot de passe <span class="required">*</span></label>
+            <input id="confirm" type="password" minlength="8" required />
+          </div>
+          <button type="submit">S'enregistrer</button>
+        </form>
       </register-component>
     </main>
     <footer-component></footer-component>
   </body>
-  <script type="module" src="/js/firebase.js" defer></script>
-  <script type="module" src="/js/components/loading-component.js"></script>
-  <script type="module" src="/js/components/header-component.js" defer></script>
-  <script type="module" src="/js/components/footer-component.js" defer></script>
-  <script type="module" src="/js/components/register-component.js" defer></script>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/layouts/loading-component.js"></script>
+  <script type="module" src="/layouts/header-component.js" defer></script>
+  <script type="module" src="/layouts/footer-component.js" defer></script>
+  <script type="module" src="/components/register-component.js" defer></script>
 </html>

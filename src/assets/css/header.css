@@ -1,0 +1,31 @@
+header-component {
+  display: flex;
+  background: var(--color-primary);
+}
+
+.header {
+  max-width: var(--page-width);
+  margin: 0 auto;
+  padding: var(--space-md) var(--page-padding);
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+
+.header__logo {
+  width: 200px;
+  height: auto;
+}
+
+.header__links,
+header-authentication {
+  display: flex;
+  gap: var(--space-sm);
+}
+
+.header__link {
+  color: var(--text-white);
+}

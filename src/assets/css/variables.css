@@ -4,6 +4,8 @@
 :root {
   --color-primary: #360013;
   --color-secondary: #b48339;
+  --color-success: #009944;
+  --color-error: #cf000f;
 
   --text-base: rgb(17 24 39 / 0.7);
   --text-light: rgb(17 24 39 / 0.5);
