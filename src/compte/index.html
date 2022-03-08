@@ -14,10 +14,23 @@
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
     <style>
-      profil-component {
+      user-component {
         display: flex;
         justify-content: center;
         align-items: center;
+      }
+      personnages-component {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-md);
+        margin-top: var(--space-md);
+      }
+      .personnage {
+        background-color: #ffffff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+        padding: var(--space-sm);
       }
     </style>
   </head>
@@ -27,15 +40,22 @@
     </loading-component>
     <header-component></header-component>
     <main>
-      <profil-component>
+      <user-component>
         <h1>Bienvenue <span id="name"></span></h1>
-      </profil-component>
+      </user-component>
+      <personnages-component>
+        <template>
+          <a id="personnage" href="" class="personnage">
+            <h2 id="nom">nom</h2>
+          </a>
+        </template>
+      </personnages-component>
     </main>
     <footer-component></footer-component>
   </body>
   <script type="module" src="/assets/js/firebase.js" defer></script>
-  <script type="module" src="/layouts/loading-component.js"></script>
-  <script type="module" src="/layouts/header-component.js" defer></script>
-  <script type="module" src="/layouts/footer-component.js" defer></script>
-  <script type="module" src="/components/profil-component.js" defer></script>
+  <script type="module" src="/components/loading-component.js"></script>
+  <script type="module" src="/components/header-component.js" defer></script>
+  <script type="module" src="/components/footer-component.js" defer></script>
+  <script type="module" src="/compte/compte.js" defer></script>
 </html>

@@ -17,16 +17,20 @@ class HeaderAuthentication extends HTMLElement {
 
   renderAnnonymous = () => {
     this.innerHTML = `
-      <a class="header__link" href="/login">Connexion</a>
-      <a class="header__link" href="/register">S'enregistrer</a>
+      <a class="header__link" href="/compte/connexion">Connexion</a>
+      <a class="header__link" href="/compte/inscription">Inscription</a>
     `;
   };
 
   renderAuthenticated = () => {
     this.innerHTML = `
-      <button id="logout" class="link header__link" href="/logout">Se déconnecter</button>
+      <a class="header__link" href="/compte">Mon compte</a>
+      <button id="logout" class="link header__link" href="/logout">Déconnexion</button>
     `;
-    this.querySelector("#logout").addEventListener("click", async () => await signOut(auth));
+    this.querySelector("#logout").addEventListener("click", async () => {
+      await signOut(auth);
+      window.location.href = "/";
+    });
   };
 }
 
@@ -34,12 +38,7 @@ class HeaderComponent extends HTMLElement {
   constructor() {
     super();
 
-    this.links = [
-      {
-        name: "Accueil",
-        href: "/"
-      }
-    ];
+    this.links = [];
   }
 
   connectedCallback() {

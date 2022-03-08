@@ -1,4 +1,4 @@
-import { auth } from "../assets/js/firebase";
+import { auth } from "../../assets/js/firebase";
 import { sendPasswordResetEmail } from "firebase/auth";
 
 class ForgotComponent extends HTMLElement {
@@ -23,7 +23,7 @@ class ForgotComponent extends HTMLElement {
 
       // Redirect
       alert("Check your emails!");
-      window.location.href = "/login";
+      window.location.href = "/compte/connexion";
     } catch (error) {
       alert(error);
     }

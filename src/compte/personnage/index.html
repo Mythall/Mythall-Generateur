@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Page Not Found</title>
+    <title>Mythall 3.5</title>
     <link
       rel="icon"
       type="image/x-icon"
@@ -13,17 +13,7 @@
     <link rel="stylesheet" href="/assets/css/theme.css" />
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
-    <style>
-      .error {
-        margin: var(--space-2xl) 0;
-        display: flex;
-        flex-direction: column;
-        gap: var(--space-lg);
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-      }
-    </style>
+    <style></style>
   </head>
   <body>
     <loading-component>
@@ -31,14 +21,16 @@
     </loading-component>
     <header-component></header-component>
     <main>
-      <div class="error">
-        <h2>Erreur 404 - Page non trouvé</h2>
-        <h1>Vous êtes perdu quelque part sur le chemin de l'infinie</h1>
-      </div>
+      <personnage-component>
+        <h2 id="nom"></h2>
+        <p id="race"></p>
+      </personnage-component>
     </main>
     <footer-component></footer-component>
-    <script type="module" src="/components/loading-component.js"></script>
-    <script type="module" src="/components/header-component.js" defer></script>
-    <script type="module" src="/components/footer-component.js" defer></script>
   </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/components/loading-component.js"></script>
+  <script type="module" src="/components/header-component.js" defer></script>
+  <script type="module" src="/components/footer-component.js" defer></script>
+  <script type="module" src="/compte/personnage/personnage.js" defer></script>
 </html>

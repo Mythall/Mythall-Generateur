@@ -1,4 +1,4 @@
-import { auth } from "../assets/js/firebase";
+import { auth } from "../../assets/js/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 
 class RegisterComponent extends HTMLElement {
@@ -41,17 +41,11 @@ class RegisterComponent extends HTMLElement {
       // Create User in firestore with missing fields
       // ...
 
-      // Redirect to profile
-      // ...
+      // Redirect to account
+      window.location.href = "/compte";
 
       console.log(user);
     } catch (error) {
-      // Create a toast component
-      // ...
-
-      // Display error to user
-      // ...
-
       alert(error);
     }
     return;

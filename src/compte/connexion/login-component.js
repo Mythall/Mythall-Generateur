@@ -1,4 +1,4 @@
-import { auth } from "../assets/js/firebase";
+import { auth } from "../../assets/js/firebase";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
 class LoginComponent extends HTMLElement {
@@ -25,7 +25,7 @@ class LoginComponent extends HTMLElement {
       const user = userCredential.user;
 
       // Redirect
-      window.location.href = "/";
+      window.location.href = "/compte";
     } catch (error) {
       alert(error);
     }

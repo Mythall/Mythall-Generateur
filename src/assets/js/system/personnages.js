@@ -1,5 +1,5 @@
 import { db } from "../firebase";
-import { doc, getDoc, getDocs, collection, query, orderBy } from "firebase/firestore";
+import { doc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
 
 class Personnage {
   constructor(id, { nom, user, alignement, race, niveauEffectif, niveauReel, niveauProfane, niveauDivin, niveauDisponible, gnEffectif, vie }) {
@@ -8,7 +8,7 @@ class Personnage {
     this.nom = nom ? nom : null;
     // this.user = user ? user : null;
     // this.alignement = alignement ? alignement : null;
-    // this.race = race ? race : null;
+    this.race = race ? race : null;
     // this.statistiques: StatistiqueValue[];
     // this.capaciteSpeciales: StatistiqueValue[]; //Display Only, not saved
     // this.resistances: ResistanceValue[];
@@ -55,9 +55,17 @@ const getPersonnages = async () => {
   });
 };
 
+const getPersonnagesFromUserId = async userId => {
+  const ref = collection(db, "personnages");
+  const q = query(ref, where("userRef", "==", `${userId}`));
+  return (await getDocs(q)).docs.map(snap => {
+    return new Personnage(snap.id, snap.data());
+  });
+};
+
 const getPersonnage = async id => {
   const snap = await getDoc(doc(db, `personnages/${id}`));
   return new Personnage(snap.id, snap.data());
 };
 
-export { Personnage, getPersonnages, getPersonnage };
+export { Personnage, getPersonnages, getPersonnagesFromUserId, getPersonnage };

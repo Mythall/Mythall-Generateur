@@ -12,10 +12,11 @@ export default defineConfig(async () => {
       rollupOptions: {
         input: {
           main: resolve(__dirname, `${root}/index.html`),
-          login: resolve(__dirname, `${root}/login.html`),
-          register: resolve(__dirname, `${root}/register.html`),
-          forgot: resolve(__dirname, `${root}/forgot.html`),
-          profil: resolve(__dirname, `${root}/profil.html`),
+          connexion: resolve(__dirname, `${root}/compte/connexion/index.html`),
+          inscription: resolve(__dirname, `${root}/compte/inscription/index.html`),
+          motDePasseOublie: resolve(__dirname, `${root}/compte/mot-de-passe-oublie/index.html`),
+          personnage: resolve(__dirname, `${root}/compte/personnage/index.html`),
+          compte: resolve(__dirname, `${root}/compte/index.html`),
           error: resolve(__dirname, `${root}/error.html`)
         }
       }

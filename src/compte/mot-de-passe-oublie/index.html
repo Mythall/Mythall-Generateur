@@ -15,16 +15,16 @@
     <link rel="stylesheet" href="/assets/css/footer.css" />
     <link rel="stylesheet" href="/assets/css/form.css" />
     <style>
-      .login {
+      .forgot {
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: center;
       }
-      .login__title {
+      .forgot__title {
         text-align: center;
       }
-      .login__box {
+      .forgot__box {
         margin-top: var(--base-padding);
         display: flex;
         flex-direction: column;
@@ -39,13 +39,13 @@
         color: var(--color-error);
       }
       @media (min-width: 480px) {
-        .login__box {
+        .forgot__box {
           width: auto;
           min-width: 320px;
           padding: var(--space-md);
         }
       }
-      .login__group {
+      .forgot__group {
         display: flex;
         flex-direction: column;
         gap: var(--space-xs);
@@ -58,32 +58,25 @@
     </loading-component>
     <header-component></header-component>
     <main>
-      <login-component class="login">
-        <div class="login__title">
-          <h1>Connectez-vous</h1>
-          <p>Ou <a href="/register">créer un compte</a></p>
+      <forgot-component class="forgot">
+        <div class="forgot__title">
+          <h1>Mot de passe oublie?</h1>
+          <p>Ou <a href="/compte/connexion">connectez-vous</a></p>
         </div>
-        <form class="login__box">
-          <div class="login__group">
+        <form class="forgot__box">
+          <div class="forgot__group">
             <label for="email">Courriel <span class="required">*</span></label>
             <input id="email" type="email" required />
           </div>
-          <div class="login__group">
-            <label for="password">Mot de passe <span class="required">*</span></label>
-            <input id="password" type="password" minlength="8" required />
-          </div>
-          <div class="login__details">
-            <a href="/forgot">Mot de passe oublié?</a>
-          </div>
           <button type="submit">Connexion</button>
         </form>
-      </login-component>
+      </forgot-component>
     </main>
     <footer-component></footer-component>
   </body>
   <script type="module" src="/assets/js/firebase.js" defer></script>
-  <script type="module" src="/layouts/loading-component.js"></script>
-  <script type="module" src="/layouts/header-component.js" defer></script>
-  <script type="module" src="/layouts/footer-component.js" defer></script>
-  <script type="module" src="/components/login-component.js" defer></script>
+  <script type="module" src="/components/loading-component.js"></script>
+  <script type="module" src="/components/header-component.js" defer></script>
+  <script type="module" src="/components/footer-component.js" defer></script>
+  <script type="module" src="/compte/mot-de-passe-oublie/forgot-component.js" defer></script>
 </html>
