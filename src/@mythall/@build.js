@@ -1,18 +1,74 @@
-export class Choix {
-  constructor() {
-    this.type = "";
-    this.quantite = 1;
-    this.niveauObtention = 0;
-    this.ref = [];
-  }
+// export class Choix {
+//   constructor() {
+//     this.type = "";
+//     this.quantite = 1;
+//     this.niveauObtention = 0;
+//     this.ref = [];
+//   }
 
-  type;
-  quantite;
-  niveauObtention;
-  categorie;
-  domaine;
-  ref; // Référence pour choix de don, sort, aptitude, fourberie
-}
+//   type;
+//   quantite;
+//   niveauObtention;
+//   categorie;
+//   domaine;
+//   ref; // Référence pour choix de don, sort, aptitude, fourberie
+// }
+
+// export class ResistanceItem {
+
+//   constructor() {
+//     this.resistance = null;
+//     this.resistanceRef = '';
+//     this.niveau = 1;
+//     this.valeur = 0;
+//     this.cummulable = false;
+//   }
+
+//   resistance;
+//   resistanceRef;
+//   niveau;
+//   valeur;
+//   cummulable;
+// }
+
+// export class ResistanceValue {
+
+//   constructor() {
+//     this.resistance = null;
+//     this.valeur = 0;
+//   }
+
+//   resistance;
+//   valeur;
+// }
+
+// export class StatistiqueItem {
+
+//   constructor() {
+//     this.statistique = null;
+//     this.statistiqueRef = '';
+//     this.niveau = 1;
+//     this.valeur = 0;
+//     this.cummulable = false;
+//   }
+
+//   statistique: IStatistique;
+//   statistiqueRef: string;
+//   niveau: number;
+//   valeur: number;
+//   cummulable: boolean;
+// }
+
+// export class StatistiqueValue {
+
+//   constructor() {
+//     this.statistique = null;
+//     this.valeur = 0;
+//   }
+
+//   statistique: IStatistique;
+//   valeur: number;
+// }
 
 export const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
 
