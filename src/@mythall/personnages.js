@@ -1,158 +1,182 @@
 import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
+import { User } from "./users";
 
 class Personnage {
-  constructor(id, { nom, user, alignement, race, niveauEffectif, niveauReel, niveauProfane, niveauDivin, niveauDisponible, gnEffectif, vie }) {
-    //
-    this.id = id ? id : null;
-    this.nom = nom ? nom : null;
-    // this.user = user ? user : null;
-    // this.alignement = alignement ? alignement : null;
-    this.race = race ? race : null;
-    // this.statistiques: StatistiqueValue[];
-    // this.capaciteSpeciales: StatistiqueValue[]; //Display Only, not saved
-    // this.resistances: ResistanceValue[];
-    // this.immunites: IImmunite[];
-    // this.esprit: IEsprit;
-    // this.ecole = ecole;
-    // this.dieu: IDieu;
-    // this.ordres: IOrdre[];
-    // this.domaines: IDomaine[];
-
-    // this.niveauEffectif = niveauEffectif ? niveauEffectif : 0;
-    // this.niveauReel = niveauReel ? niveauReel : 0;
-    // this.niveauProfane = niveauProfane ? niveauProfane : 0;
-    // this.niveauDivin = niveauDivin ? niveauDivin : 0;
-    // this.niveauDisponible = niveauDisponible ? niveauDisponible : 0;
-    // this.gnEffectif = gnEffectif ? gnEffectif : 0;
-    // this.vie = vie ? vie : 5;
+  constructor(
+    id,
+    {
+      nom,
+      user,
+      alignement,
+      race,
+      statistiques,
+      capaciteSpeciales,
+      resistances,
+      immunites,
+      esprit,
+      ecole,
+      dieu,
+      ordres,
+      domaines,
+      userRef,
+      classes,
+      alignementRef,
+      dons,
+      aptitudes,
+      sorts,
+      fourberies,
+      raceRef,
+      espritRef,
+      ecoleRef,
+      dieuRef,
+      ordresRef,
+      domainesRef,
+      niveauEffectif,
+      niveauReel,
+      niveauProfane,
+      niveauDivin,
+      niveauDisponible,
+      gnEffectif,
+      vie
+    }
+  ) {
+    this.id = id;
+    this.nom = nom;
+    this.user = user;
+    this.alignement = alignement;
+    this.race = race;
+    this.statistiques = statistiques;
+    this.capaciteSpeciales = capaciteSpeciales;
+    this.resistances = resistances;
+    this.immunites = immunites;
+    this.esprit = esprit;
+    this.ecole = ecole;
+    this.dieu = dieu;
+    this.ordres = ordres;
+    this.domaines = domaines;
+    this.userRef = userRef;
+    this.classes = classes;
+    this.alignementRef = alignementRef;
+    this.dons = dons;
+    this.aptitudes = aptitudes;
+    this.sorts = sorts;
+    this.fourberies = fourberies;
+    this.raceRef = raceRef;
+    this.espritRef = espritRef;
+    this.ecoleRef = ecoleRef;
+    this.dieuRef = dieuRef;
+    this.ordresRef = ordresRef; // ... Changer pour singulier, un personnage n'as qu'un seul ordre - Valider aussi dans fiche perso pour changer pour un champ singulier au lieu d'un array
+    this.domainesRef = domainesRef;
+    this.niveauEffectif = niveauEffectif ? niveauEffectif : 0;
+    this.niveauReel = niveauReel ? niveauReel : 0;
+    this.niveauProfane = niveauProfane ? niveauProfane : 0;
+    this.niveauDivin = niveauDivin ? niveauDivin : 0;
+    this.niveauDisponible = niveauDisponible ? niveauDisponible : 0;
+    this.gnEffectif = gnEffectif ? gnEffectif : 0;
+    this.vie = vie ? vie : 5;
   }
 
-  // saveState() {
-  //   return {
-  //     nom: this.nom,
-  //     userRef: this.userRef,
-  //     // classes: ClasseItem[];
-  //     alignement: this.alignement,
-  //     // dons: DonItem[];
-  //     // aptitudes: AptitudeItem[];
-  //     // sorts: SortItem[];
-  //     // fourberies: FourberieItem[];
-  //     // raceRef: string;
-  //     gnEffectif: this.gnEffectif,
-  //     // espritRef: string;
-  //     ecole: this.ecole,
-  //     // dieuRef: string;
-  //     // ordresRef: string[];
-  //     // domainesRef: string[];
-  //     vie: this.vie
-  //   };
+  saveState() {
+    if (!this.dieuRef) this.dieuRef = "";
+    if (!this.ecoleRef) this.ecoleRef = "";
+    if (!this.espritRef) this.espritRef = "";
+    if (!this.ordresRef) this.ordresRef = [];
+    if (!this.domainesRef) this.domainesRef = [];
 
-  // _saveState(item) {
-  //   if (!item.dieuRef) item.dieuRef = '';
-  //   if (!item.ecoleRef) item.ecoleRef = '';
-  //   if (!item.espritRef) item.espritRef = '';
-  //   if (!item.ordresRef) item.ordresRef = [];
-  //   if (!item.domainesRef) item.domainesRef = [];
+    // Filter Out Race Dons / Sorts / Fourberies / Aptitudes
+    if (this.race) {
+      // Race
+      if (this.dons && this.dons.length > 0) {
+        let donsTemporaire = [];
+        this.dons.forEach(don => {
+          let found = false;
+          this.race.donsRacialRef.forEach(id => {
+            if (id == don.donRef) {
+              found = true;
+            }
+          });
 
-  //   // Filter Out Race Dons / Sorts / Fourberies / Aptitudes
-  //   if (item.race) {
+          if (!found) {
+            donsTemporaire.push(don);
+          }
+        });
+        this.dons = donsTemporaire;
+      }
 
-  //     // Race
-  //     if (item.dons && item.dons.length > 0) {
-  //       let donsTemporaire = [];
-  //       item.dons.forEach(don => {
-  //         let found = false;
-  //         item.race.donsRacialRef.forEach(id => {
-  //           if (id == don.donRef) {
-  //             found = true;
-  //           }
-  //         });
+      // Sorts
+      if (this.sorts && this.sorts.length > 0) {
+        let sortsTemporaire = [];
+        this.sorts.forEach(sort => {
+          let found = false;
+          this.race.sortsRacialRef.forEach(id => {
+            if (id == sort.sortRef) {
+              found = true;
+            }
+          });
 
-  //         if (!found) {
-  //           donsTemporaire.push(don);
-  //         }
+          if (!found) {
+            sortsTemporaire.push(sort);
+          }
+        });
+        this.sorts = sortsTemporaire;
+      }
 
-  //       });
-  //       item.dons = donsTemporaire;
-  //     }
+      // Aptitudes
+      if (this.aptitudes && this.aptitudes.length > 0) {
+        let aptitudesTemporaire = [];
+        this.aptitudes.forEach(aptitude => {
+          let found = false;
+          this.race.aptitudesRacialRef.forEach(id => {
+            if (id == aptitude.aptitudeRef) {
+              found = true;
+            }
+          });
 
-  //     // Sorts
-  //     if (item.sorts && item.sorts.length > 0) {
-  //       let sortsTemporaire = [];
-  //       item.sorts.forEach(sort => {
-  //         let found = false;
-  //         item.race.sortsRacialRef.forEach(id => {
-  //           if (id == sort.sortRef) {
-  //             found = true;
-  //           }
-  //         });
+          if (!found) {
+            aptitudesTemporaire.push(aptitude);
+          }
+        });
+        this.aptitudes = aptitudesTemporaire;
+      }
+    }
 
-  //         if (!found) {
-  //           sortsTemporaire.push(sort);
-  //         }
+    //Filter Out Populated Objects
+    this.classes.forEach(classeItem => {
+      classeItem.classe = null;
+    });
+    this.dons.forEach(donItem => {
+      donItem.don = null;
+    });
+    this.aptitudes.forEach(aptitudeItem => {
+      aptitudeItem.aptitude = null;
+    });
+    this.sorts.forEach(sortItem => {
+      sortItem.sort = null;
+    });
+    this.fourberies.forEach(fourberieItem => {
+      fourberieItem.fourberie = null;
+    });
 
-  //       });
-  //       item.sorts = sortsTemporaire;
-  //     }
-
-  //     // Aptitudes
-  //     if (item.aptitudes && item.aptitudes.length > 0) {
-  //       let aptitudesTemporaire = [];
-  //       item.aptitudes.forEach(aptitude => {
-  //         let found = false;
-  //         item.race.aptitudesRacialRef.forEach(id => {
-  //           if (id == aptitude.aptitudeRef) {
-  //             found = true;
-  //           }
-  //         });
-
-  //         if (!found) {
-  //           aptitudesTemporaire.push(aptitude);
-  //         }
-
-  //       });
-  //       item.aptitudes = aptitudesTemporaire;
-  //     }
-
-  //   }
-
-  //   //Filter Out Populated Objects
-  //   item.classes.forEach(classeItem => {
-  //     classeItem.classe = null;
-  //   });
-  //   item.dons.forEach(donItem => {
-  //     donItem.don = null;
-  //   });
-  //   item.aptitudes.forEach(aptitudeItem => {
-  //     aptitudeItem.aptitude = null;
-  //   });
-  //   item.sorts.forEach(sortItem => {
-  //     sortItem.sort = null;
-  //   });
-  //   item.fourberies.forEach(fourberieItem => {
-  //     fourberieItem.fourberie = null;
-  //   });
-
-  //   return {
-  //     nom: item.nom,
-  //     classes: item.classes.map((obj) => { return { ...obj } }),
-  //     alignementRef: item.alignementRef,
-  //     dons: item.dons.map((obj) => { return { ...obj } }),
-  //     aptitudes: item.aptitudes.map((obj) => { return { ...obj } }),
-  //     sorts: item.sorts.map((obj) => { return { ...obj } }),
-  //     fourberies: item.fourberies.map((obj) => { return { ...obj } }),
-  //     raceRef: item.raceRef,
-  //     userRef: item.userRef,
-  //     ecoleRef: item.ecoleRef,
-  //     espritRef: item.espritRef,
-  //     dieuRef: item.dieuRef,
-  //     ordresRef: item.ordresRef,
-  //     domainesRef: item.domainesRef,
-  //     vie: item.vie,
-  //     gnEffectif: item.gnEffectif,
-  //   }
-  // }
+    return {
+      nom: this.nom,
+      classes: this.classes,
+      alignementRef: this.alignementRef,
+      dons: this.dons,
+      aptitudes: this.aptitudes,
+      sorts: this.sorts,
+      fourberies: this.fourberies,
+      raceRef: this.raceRef,
+      userRef: this.userRef,
+      ecoleRef: this.ecoleRef,
+      espritRef: this.espritRef,
+      dieuRef: this.dieuRef,
+      ordresRef: this.ordresRef,
+      domainesRef: this.domainesRef,
+      vie: this.vie,
+      gnEffectif: this.gnEffectif
+    };
+  }
 }
 
 const getPersonnages = async () => {

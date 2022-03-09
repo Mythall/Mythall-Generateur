@@ -1,5 +1,5 @@
-import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { db } from "../assets/js/firebase";
 
 class Duree {
   constructor(id, { nom }) {
@@ -22,7 +22,7 @@ const getDurees = async () => {
 
 const getDuree = async id => {
   const snap = await getDoc(doc(db, `durees/${id}`));
-  return new Duree(snap.id, ...snap.data());
+  return new Duree(snap.id, snap.data());
 };
 
 const addDuree = async duree => {

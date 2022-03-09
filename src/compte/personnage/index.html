@@ -15,6 +15,9 @@
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
     <style>
+      .hidden {
+        display: none;
+      }
       .personnage {
         max-width: 80rem;
         background: #ffffff;
@@ -51,9 +54,9 @@
             </h2>
             <div class="personnage__informations">
               <div>
-                <div [ngIf]="user-displayname">
+                <div>
                   <strong>Joueur: </strong>
-                  <span id="user-displayname"></span>
+                  <span id="displayName"></span>
                   <br />
                 </div>
 
@@ -63,41 +66,38 @@
                   <br />
                 </div>
 
-                <div [ngIf]="race-nom">
+                <div>
                   <strong>Race: </strong>
-                  <span id="race-nom"></span>
+                  <span id="race"></span>
                   <br />
                 </div>
 
                 <!--Alignement-->
-                <div [ngIf]="alignement-nom">
+                <div>
                   <strong>Alignement: </strong>
-                  <span id="alignement-nom"></span>
+                  <span id="alignement"></span>
                   <br />
                 </div>
 
                 <!--Niveaux-->
-                <div [ngIf]="classes">
-                  <strong>Niveau: </strong>
-                  <div ngFor [ngForOf]="classes" let-classe>
-                    <span id="classe-classe-nom + '(' + classe-niveau + ') '"></span>
-                  </div>
+                <div>
+                  <strong>Niveau: </strong><span id="niveaux"></span>
                   <br />
                 </div>
 
                 <!--Niveau Effectif-->
-                <div [ngIf]="niveauEffectif">
+                <div>
                   <strong>Niveau Effectif: </strong>
                   <span id="niveauEffectif"></span>
-                  <!-- <span *ngIf="niveauProfane && niveauProfane > 0" id="'Profane(' + niveauProfane + ')'"></span>
-        <span *ngIf="niveauDivin && niveauDivin > 0" id="'Divin(' + niveauDivin + ')'"></span> -->
+                  <span id="niveauDivin" class="hidden"></span>
+                  <span id="niveauProfane" class="hidden"></span>
                   <br />
                 </div>
               </div>
 
               <div>
                 <!--Vie(s)-->
-                <div [ngIf]="vie">
+                <div>
                   <strong>Vie(s): </strong>
                   <span id="vie"></span>
                   <br />
@@ -106,45 +106,33 @@
                 <!--Divinité-->
                 <div [ngIf]="dieu-nom">
                   <strong>Divinité: </strong>
-                  <span id="dieu-nom"></span>
+                  <span id="divinite"></span>
                   <br />
                 </div>
 
                 <!--Domaines-->
-                <div [ngIf]="domaines && domaines.length > 0">
+                <div class="hidden">
                   <strong>Domaines: </strong>
-                  <div ngFor [ngForOf]="domaines" let-domaine let-last="last">
-                    <span id="domaine-nom"></span>
-                    <span *ngIf="!last">, </span>
-                  </div>
+                  <span id="domaine"></span>
                   <br />
                 </div>
 
                 <!--Ordres-->
-                <div [ngIf]="ordres && ordres.length > 0">
+                <div class="hidden">
                   <strong>Ordre(s): </strong>
-                  <div ngFor [ngForOf]="ordres" let-ordre>
-                    <span id="ordre-nom"></span>
-                  </div>
+                  <span id="ordre"></span>
                   <br />
                 </div>
 
                 <!--Esprit-->
-                <div [ngIf]="esprit-nom">
+                <div class="hidden">
                   <strong>Esprit Patron: </strong>
-                  <span id="esprit-nom"></span>
-                  <br />
-                </div>
-
-                <!--GN-->
-                <div [ngIf]="gnEffectif">
-                  <strong>Nombre d'évenement: </strong>
-                  <span id="gnEffectif"></span>
+                  <span id="esprit"></span>
                   <br />
                 </div>
 
                 <!--Niveau Disponible-->
-                <div [ngIf]="niveauDisponible">
+                <div class="hidden">
                   <strong>Niveau Disponible: </strong>
                   <span id="niveauDisponible"></span>
                   <br />

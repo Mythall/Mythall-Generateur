@@ -1,5 +1,5 @@
-import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { db } from "../assets/js/firebase";
 
 class Immunite {
   constructor(id, { nom }) {
@@ -22,7 +22,7 @@ const getImmunites = async () => {
 
 const getImmunite = async id => {
   const snap = await getDoc(doc(db, `immunites/${id}`));
-  return new Immunite(snap.id, ...snap.data());
+  return new Immunite(snap.id, snap.data());
 };
 
 const addImmunite = async immunite => {

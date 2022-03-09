@@ -1,5 +1,5 @@
-import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { db } from "../assets/js/firebase";
 
 class Zone {
   constructor(id, { nom }) {
@@ -22,7 +22,7 @@ const getZones = async () => {
 
 const getZone = async id => {
   const snap = await getDoc(doc(db, `zones/${id}`));
-  return new Zone(snap.id, ...snap.data());
+  return new Zone(snap.id, snap.data());
 };
 
 const addZone = async zone => {

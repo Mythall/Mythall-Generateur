@@ -1,5 +1,5 @@
-import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { db } from "../assets/js/firebase";
 
 class Alignement {
   constructor(id, { nom }) {
@@ -22,7 +22,7 @@ const getAlignements = async () => {
 
 const getAlignement = async id => {
   const snap = await getDoc(doc(db, `alignements/${id}`));
-  return new Alignement(snap.id, ...snap.data());
+  return new Alignement(snap.id, snap.data());
 };
 
 const addAlignement = async alignement => {

@@ -1,3 +1,13 @@
+import { toggleLoading } from "../assets/components/loading-component";
+import { getUser } from "./users";
+import { Personnage } from "./personnages";
+import { getAlignement } from "./alignements";
+import { getClasse } from "./classes";
+import { getDieu } from "./dieux";
+import { getFourberie } from "./fourberies";
+import { getOrdre } from "./ordres";
+import { getRace } from "./races";
+
 // export class Choix {
 //   constructor() {
 //     this.type = "";
@@ -70,52 +80,50 @@
 //   valeur: number;
 // }
 
-export const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
+// const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
 
 const buildPersonnage = async personnage => {
   try {
-    this.dialog.open(LoadingDialogComponent);
+    toggleLoading(true, "Assemblage de votre personnage...");
 
     console.log("Building Personnage...");
     await Promise.all([
-      this._getUser(personnage),
-      this._getRace(personnage),
-      this._getClasses(personnage),
-      this._getAlignement(personnage),
-      this._getDieu(personnage),
-      this._getOrdres(personnage),
-      this.getAllFourberies(personnage)
+      _getUser(personnage),
+      _getRace(personnage),
+      _getClasses(personnage),
+      _getAlignement(personnage),
+      _getDieu(personnage),
+      _getOrdres(personnage),
+      _getAllFourberies(personnage)
     ]);
 
     console.log("Building Niveau Effectif...");
-    await this._getNiveauEffectif(personnage);
+    await _getNiveauEffectif(personnage);
 
-    console.log("Building Domaines & Esprits...");
-    await Promise.all([this._getDomaines(personnage), this._getEsprit(personnage)]);
+    // console.log("Building Domaines & Esprits...");
+    // await Promise.all([this._getDomaines(personnage), this._getEsprit(personnage)]);
 
-    console.log("Building Aptitudes...");
-    await this._getAllAptitudes(personnage);
+    // console.log("Building Aptitudes...");
+    // await this._getAllAptitudes(personnage);
 
-    console.log("Building Sorts & Dons...");
-    await Promise.all([this._getAllSorts(personnage), this.getAllDons(personnage)]);
+    // console.log("Building Sorts & Dons...");
+    // await Promise.all([this._getAllSorts(personnage), this.getAllDons(personnage)]);
 
-    console.log("Building Base Statistiques...");
-    await this._getStatistiquesParDefault(personnage);
+    // console.log("Building Base Statistiques...");
+    // await this._getStatistiquesParDefault(personnage);
 
-    console.log("Building Statistiques, Resistances & Immunities...");
-    await Promise.all([this._getStatistiques(personnage), this._getResistances(personnage), this._getImmunites(personnage)]);
+    // console.log("Building Statistiques, Resistances & Immunities...");
+    // await Promise.all([this._getStatistiques(personnage), this._getResistances(personnage), this._getImmunites(personnage)]);
 
-    console.log("Building Niveau de dons & Capacité spéciales...");
-    await Promise.all([this._getDonsNiveauEffectif(personnage), this._getCapaciteSpeciales(personnage)]);
+    // console.log("Building Niveau de dons & Capacité spéciales...");
+    // await Promise.all([this._getDonsNiveauEffectif(personnage), this._getCapaciteSpeciales(personnage)]);
 
     console.log("Personnage Build Completed");
     console.log(personnage);
 
     // Completed
-    this.dialog.closeAll();
-
-    // Resolving
-    return personnage;
+    toggleLoading(false);
+    return new Personnage(personnage.id, personnage);
   } catch (error) {
     console.log(error);
     alert(error);
@@ -123,12 +131,12 @@ const buildPersonnage = async personnage => {
 };
 
 const _getUser = async personnage => {
-  personnage.user = await this.userService.getUser(personnage.userRef);
+  personnage.user = await getUser(personnage.userRef);
   return personnage;
 };
 
 const _getRace = async personnage => {
-  personnage.race = await this.raceService.getRace(personnage.raceRef);
+  personnage.race = await getRace(personnage.raceRef);
   return personnage;
 };
 
@@ -136,7 +144,7 @@ const _getClasses = async personnage => {
   // ...
   // Pretty sure we can optimize load time with a promise.all here
   personnage.classes.forEach(async classeItem => {
-    classeItem.classe = await this.classeService.getClasse(classeItem.classeRef);
+    classeItem.classe = await getClasse(classeItem.classeRef);
   });
 
   return personnage;
@@ -145,7 +153,7 @@ const _getClasses = async personnage => {
 const _getAlignement = async personnage => {
   if (personnage.alignementRef) {
     try {
-      personnage.alignement = await this.alignementService.getAlignement(personnage.alignementRef);
+      personnage.alignement = await getAlignement(personnage.alignementRef);
     } catch (e) {
       console.log("Une erreure est survenue lors de la requete pour l'alignement du personnage");
     }
@@ -156,7 +164,7 @@ const _getAlignement = async personnage => {
 const _getDieu = async personnage => {
   if (personnage.dieuRef) {
     try {
-      personnage.dieu = await this.dieuService.getDieu(personnage.dieuRef);
+      personnage.dieu = await getDieu(personnage.dieuRef);
     } catch (e) {
       console.log("Une erreure est survenue lors de la requete pour le dieu du personnage");
     }
@@ -165,23 +173,14 @@ const _getDieu = async personnage => {
 };
 
 const _getOrdres = async personnage => {
-  // Retourne seulement la liste des ordres du personnage
-  let count = 0;
-  if (!personnage.ordresRef) personnage.ordresRef = [];
-
-  if (personnage.ordresRef && personnage.ordresRef.length > 0) {
-    personnage.ordresRef.forEach(async ordreRef => {
-      const ordre = await this.ordreService.getOrdre(ordreRef);
-      if (!personnage.ordres) personnage.ordres = [];
-      personnage.ordres.push(ordre);
-      count++;
-      if (count == personnage.ordresRef.length) {
-        return personnage;
-      }
-    });
-  } else {
-    return personnage;
+  if (personnage?.ordresRef?.length > 0) {
+    try {
+      personnage.ordres = await Promise.all(personnage.ordresRef.map(ref => getOrdre(ref)));
+    } catch (e) {
+      console.log("Une erreure est survenue lors de la requete des ordres du personnage");
+    }
   }
+  return personnage;
 };
 
 const _getNiveauEffectif = async personnage => {
@@ -244,7 +243,7 @@ const _getEsprit = async personnage => {
   return personnage;
 };
 
-const getAllFourberies = async personnage => {
+const _getAllFourberies = async personnage => {
   let count = 0;
   if (!personnage.fourberies) personnage.fourberies = [];
 
@@ -253,7 +252,7 @@ const getAllFourberies = async personnage => {
       if (!fourberieItem.fourberie) {
         //Avoid fetching Fourberie if already fetch
 
-        fourberieItem.fourberie = await this.fourberieService.getFourberie(fourberieItem.fourberieRef);
+        fourberieItem.fourberie = await getFourberie(fourberieItem.fourberieRef);
         count++;
 
         if (count == personnage.fourberies.length) {
@@ -1133,3 +1132,5 @@ const _getCapaciteSpeciales = async personnage => {
 
   return personnage;
 };
+
+export { buildPersonnage };

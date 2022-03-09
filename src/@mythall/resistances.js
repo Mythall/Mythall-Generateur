@@ -1,5 +1,5 @@
-import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { db } from "../assets/js/firebase";
 
 class Resistance {
   constructor(id, { nom }) {
@@ -22,7 +22,7 @@ const getResistances = async () => {
 
 const getResistance = async id => {
   const snap = await getDoc(doc(db, `resistances/${id}`));
-  return new Resistance(snap.id, ...snap.data());
+  return new Resistance(snap.id, snap.data());
 };
 
 const addResistance = async resistance => {
