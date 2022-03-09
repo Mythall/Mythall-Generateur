@@ -34,9 +34,11 @@ New routes must be added to vite.config.js to be built
 
 # Documentation
 
-Firebase - https://firebase.google.com/docs
+MDN (The basics for us peasants) - https://developer.mozilla.org/en-US/
 
-Vite - https://vitejs.dev/
+Firebase (Database, Hosting, the nice stuff, etc...) - https://firebase.google.com/docs
+
+Vite (Module bundler) - https://vitejs.dev/
 
 BEM (CSS naming convention) - http://getbem.com/naming/
 

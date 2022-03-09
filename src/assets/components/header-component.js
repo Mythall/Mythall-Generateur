@@ -1,5 +1,6 @@
-import { auth } from "../assets/js/firebase";
+import { auth } from "../js/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import logoWhite from "../img/logo-white.png";
 
 class HeaderAuthentication extends HTMLElement {
   constructor() {
@@ -45,7 +46,7 @@ class HeaderComponent extends HTMLElement {
     this.innerHTML = `
       <header class="header">
         <a href="/">
-          <img alt="Logo" class="header__logo" src="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/logo-wht.png?alt=media&token=61ab1c66-542f-4d94-b722-32c4c2a073cc" />
+          <img alt="Logo" class="header__logo" src="${logoWhite}" />
         </a>
         <nav class="header__links">
           ${this.links
@@ -59,6 +60,8 @@ class HeaderComponent extends HTMLElement {
     `;
   }
 }
+
+// https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/logo-wht.png?alt=media&token=61ab1c66-542f-4d94-b722-32c4c2a073cc
 
 customElements.define("header-authentication", HeaderAuthentication);
 customElements.define("header-component", HeaderComponent);

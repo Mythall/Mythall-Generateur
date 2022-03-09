@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/assets/css/reset.css" />
     <link rel="stylesheet" href="/assets/css/variables.css" />
     <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/loading-component.css" />
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
     <style>
@@ -23,45 +24,24 @@
         align-items: center;
         text-align: center;
       }
-      .banner {
-        background-image: url("https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/logo-banner.jpeg?alt=media&token=eb3c4cfb-2521-4950-8014-3109bdbda134");
-        background-size: cover;
-        background-repeat: no-repeat;
-        padding: var(--space-lg);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-      .banner__img {
-        max-width: 100%;
-        height: auto;
-      }
     </style>
   </head>
   <body>
-    <loading-component>
-      <div class="spinner"></div>
-    </loading-component>
+    <loading-component></loading-component>
     <header-component></header-component>
-    <section class="banner">
-      <img
-        class="banner__img"
-        alt="Mythall"
-        width="425"
-        height="146"
-        src="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/mythall.png?alt=media&token=0f766555-5cfd-482c-9564-b7592fe0e351" />
-    </section>
+    <banner-component></banner-component>
     <main>
       <section class="intro">
         <h2>Bienvenue sur</h2>
         <h1 id="appName">Mythall 3.5</h1>
-        <p>Salut <strong>Mythallois</strong>! Ceci est un nouveau <small>project</small></p>
+        <p><strong>Mythallois</strong> et <strong>Mythalloises</strong></p>
       </section>
     </main>
     <footer-component></footer-component>
   </body>
   <script type="module" src="/assets/js/firebase.js" defer></script>
-  <script type="module" src="/components/loading-component.js"></script>
-  <script type="module" src="/components/header-component.js" defer></script>
-  <script type="module" src="/components/footer-component.js" defer></script>
+  <script type="module" src="/assets/components/loading-component.js"></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/banner-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
 </html>

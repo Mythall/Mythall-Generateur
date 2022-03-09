@@ -11,26 +11,456 @@
     <link rel="stylesheet" href="/assets/css/reset.css" />
     <link rel="stylesheet" href="/assets/css/variables.css" />
     <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/loading-component.css" />
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
-    <style></style>
+    <style>
+      .personnage {
+        max-width: 80rem;
+        background: #ffffff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+        padding: var(--space-lg);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-lg);
+      }
+      .personnage__informations {
+        margin-top: var(--space-md);
+        display: grid;
+        gap: var(--space-md);
+      }
+
+      @media (min-width: 760px) {
+        .personnage__informations {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+    </style>
   </head>
   <body>
-    <loading-component>
-      <div class="spinner"></div>
-    </loading-component>
+    <loading-component></loading-component>
     <header-component></header-component>
     <main>
       <personnage-component>
-        <h2 id="nom"></h2>
-        <p id="race"></p>
+        <div class="personnage">
+          <!--Informations-->
+          <div>
+            <h2>
+              <strong>Informations</strong>
+            </h2>
+            <div class="personnage__informations">
+              <div>
+                <div [ngIf]="user-displayname">
+                  <strong>Joueur: </strong>
+                  <span id="user-displayname"></span>
+                  <br />
+                </div>
+
+                <div>
+                  <strong>Nom du Personnage: </strong>
+                  <span id="nom"></span>
+                  <br />
+                </div>
+
+                <div [ngIf]="race-nom">
+                  <strong>Race: </strong>
+                  <span id="race-nom"></span>
+                  <br />
+                </div>
+
+                <!--Alignement-->
+                <div [ngIf]="alignement-nom">
+                  <strong>Alignement: </strong>
+                  <span id="alignement-nom"></span>
+                  <br />
+                </div>
+
+                <!--Niveaux-->
+                <div [ngIf]="classes">
+                  <strong>Niveau: </strong>
+                  <div ngFor [ngForOf]="classes" let-classe>
+                    <span id="classe-classe-nom + '(' + classe-niveau + ') '"></span>
+                  </div>
+                  <br />
+                </div>
+
+                <!--Niveau Effectif-->
+                <div [ngIf]="niveauEffectif">
+                  <strong>Niveau Effectif: </strong>
+                  <span id="niveauEffectif"></span>
+                  <!-- <span *ngIf="niveauProfane && niveauProfane > 0" id="'Profane(' + niveauProfane + ')'"></span>
+        <span *ngIf="niveauDivin && niveauDivin > 0" id="'Divin(' + niveauDivin + ')'"></span> -->
+                  <br />
+                </div>
+              </div>
+
+              <div>
+                <!--Vie(s)-->
+                <div [ngIf]="vie">
+                  <strong>Vie(s): </strong>
+                  <span id="vie"></span>
+                  <br />
+                </div>
+
+                <!--Divinité-->
+                <div [ngIf]="dieu-nom">
+                  <strong>Divinité: </strong>
+                  <span id="dieu-nom"></span>
+                  <br />
+                </div>
+
+                <!--Domaines-->
+                <div [ngIf]="domaines && domaines.length > 0">
+                  <strong>Domaines: </strong>
+                  <div ngFor [ngForOf]="domaines" let-domaine let-last="last">
+                    <span id="domaine-nom"></span>
+                    <span *ngIf="!last">, </span>
+                  </div>
+                  <br />
+                </div>
+
+                <!--Ordres-->
+                <div [ngIf]="ordres && ordres.length > 0">
+                  <strong>Ordre(s): </strong>
+                  <div ngFor [ngForOf]="ordres" let-ordre>
+                    <span id="ordre-nom"></span>
+                  </div>
+                  <br />
+                </div>
+
+                <!--Esprit-->
+                <div [ngIf]="esprit-nom">
+                  <strong>Esprit Patron: </strong>
+                  <span id="esprit-nom"></span>
+                  <br />
+                </div>
+
+                <!--GN-->
+                <div [ngIf]="gnEffectif">
+                  <strong>Nombre d'évenement: </strong>
+                  <span id="gnEffectif"></span>
+                  <br />
+                </div>
+
+                <!--Niveau Disponible-->
+                <div [ngIf]="niveauDisponible">
+                  <strong>Niveau Disponible: </strong>
+                  <span id="niveauDisponible"></span>
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Statistique-->
+          <div>
+            <div class="col-12">
+              <h2>
+                <strong>Statistiques</strong>
+              </h2>
+            </div>
+            <div class="col-6">
+              <div>
+                <!--Constitution-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'OdzM6YHkYw41HXMIcTsw'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Dextérité-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'oFeJq3NgdDDEwi0Y1rdR'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Force-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'gOg0TFSbU8mvlv8baCXE'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Intelligence-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'yKfNuFBQY5UknrTNOxpA'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Sagesse-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'HkaChqWpHOlINdla02ja'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div>
+                <!--Point(s) de vie Torse-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'sCcNIQDoWKUIIcSpkB2m'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Point(s) de vie Bras-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'ZSnV9s6cyzYihdFR6wfr'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Point(s) de vie Jambes-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == '69jKTq64XUCk51EmY0Z1'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Point(s) de lutte-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'Rp8BG8OtlNKl8aeuojdi'">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Point(s) de magie-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == '3f75skgSz3CWqdERXcqG' && statistique-valeur > 0">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+
+                <!--Point(s) de ki-->
+                <div ngFor [ngForOf]="statistiques" let-statistique>
+                  <div *ngIf="statistique-statistique-id == 'py44fmGyDCUnkkBZmto9' && statistique-valeur > 0">
+                    <strong id="statistique-statistique-nom + ': '"></strong>
+                    <span id="statistique-valeur"></span>
+                    <br />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Résistances & Immunités-->
+          <div>
+            <div class="col-6">
+              <h2>
+                <strong>Résistance(s)</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="resistances" let-resistance>
+                  <strong id="resistance-resistance-nom + ': '"></strong>
+                  <span id="resistance-valeur"></span>
+                  <br />
+                </div>
+                <span *ngIf="!resistances || resistances && resistances.length == 0">Aucune</span>
+              </div>
+            </div>
+            <div class="col-6">
+              <h2>
+                <strong>Immunité(s)</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="immunites" let-immunite>
+                  <strong id="immunite-nom"></strong>
+                  <br />
+                </div>
+                <span *ngIf="!immunites || immunites && immunites.length == 0">Aucune</span>
+              </div>
+            </div>
+          </div>
+
+          <!--Capacité(s) Spéciale(s)-->
+          <div *ngIf="capaciteSpeciales && capaciteSpeciales.length > 0">
+            <div class="col-12">
+              <h2>
+                <strong>Capacité(s) Spéciale(s)</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="capaciteSpeciales" let-statistique>
+                  <strong id="statistique-statistique-nom + ': ' "></strong>
+                  <span id="statistique-valeur"></span>
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Dons(s)-->
+          <div *ngIf="dons && dons.length > 0" class="mb-1">
+            <div class="col">
+              <h2>
+                <strong>Dons</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="dons" let-donItem>
+                  <div class="mb-2">
+                    <div class="col">
+                      <h3 class="mb-0">
+                        <span class="font-weight-bold" id="donItem-don-nom"></span>
+                        <span *ngIf="donItem-don-afficherNiveau" id="'(' + donItem-niveauEffectif + ')'"></span>
+                      </h3>
+
+                      <span id="donItem-don-description"></span>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Aptitudes(s)-->
+          <div *ngIf="aptitudes && aptitudes.length > 0" class="mb-1">
+            <div class="col">
+              <h2>
+                <strong>Aptitude(s) Spéciale(s)</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="aptitudes" let-aptitudeItem>
+                  <div class="mb-2">
+                    <div class="col">
+                      <h3 class="mb-0">
+                        <span class="font-weight-bold" id="aptitudeItem-aptitude-nom"></span>
+                      </h3>
+
+                      <span id="aptitudeItem-aptitude-description"></span>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Fourberies(s)-->
+          <div *ngIf="fourberies && fourberies.length > 0" class="mb-1">
+            <div class="col">
+              <h2>
+                <strong>Fourberies</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="fourberies" let-fourberieItem>
+                  <div class="mb-2">
+                    <div class="col">
+                      <h3 class="mb-0">
+                        <span class="font-weight-bold" id="fourberieItem-fourberie-nom"></span>
+                      </h3>
+                      <span id="fourberieItem-fourberie-description"></span>
+                      <br />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Sort(s) Racial-->
+          <div *ngIf="race && race-sortsRacial && race-sortsRacial.length > 0" class="mb-1">
+            <div class="col">
+              <h2>
+                <strong>Sort(s) Racial(aux)</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="race-sortsRacial" let-sort>
+                  <h3 class="font-weight-bold mb-0" id="sort-nom + ' (' + sort-ecole-nom + ')'"></h3>
+
+                  <strong>Portée: </strong>
+                  <span id="sort-porte-nom"></span>
+                  <br />
+
+                  <strong>Durée: </strong>
+                  <span id="sort-duree-nom"></span>
+                  <br />
+
+                  <strong>Zone d’effet: </strong>
+                  <span id="sort-zone-nom"></span>
+                  <br />
+
+                  <strong>Incantation: </strong>
+                  <span id="sort-incantation"></span>
+                  <br />
+
+                  <strong>Sommaire: </strong>
+                  <span id="sort-sommaire"></span>
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--Sort(s)-->
+          <div *ngIf="sorts && sorts.length > 0" class="mb-1">
+            <div class="col">
+              <h2>
+                <strong>Sort(s)</strong>
+              </h2>
+              <div>
+                <div ngFor [ngForOf]="sorts" let-sort>
+                  <h3 class="font-weight-bold mb-0" id="sort-sort-nom + ' (' + sort-sort-ecole-nom + ')'"></h3>
+
+                  <strong>Niveau: </strong>
+                  <span id="sort-sort-niveau"></span>
+                  <br />
+
+                  <strong>Portée: </strong>
+                  <span id="sort-sort-porte-nom"></span>
+                  <br />
+
+                  <strong>Durée: </strong>
+                  <span id="sort-sort-duree-nom"></span>
+                  <br />
+
+                  <strong>Zone d’effet: </strong>
+                  <span id="sort-sort-zone-nom"></span>
+                  <br />
+
+                  <strong>Incantation: </strong>
+                  <span id="sort-sort-incantation"></span>
+                  <br />
+
+                  <strong>Sommaire: </strong>
+                  <span id="sort-sort-sommaire"></span>
+                  <br />
+                  <br />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </personnage-component>
     </main>
     <footer-component></footer-component>
   </body>
   <script type="module" src="/assets/js/firebase.js" defer></script>
-  <script type="module" src="/components/loading-component.js"></script>
-  <script type="module" src="/components/header-component.js" defer></script>
-  <script type="module" src="/components/footer-component.js" defer></script>
+  <script type="module" src="/assets/components/loading-component.js"></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
   <script type="module" src="/compte/personnage/personnage.js" defer></script>
 </html>

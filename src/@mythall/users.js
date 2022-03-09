@@ -1,4 +1,4 @@
-import { db } from "../firebase";
+import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
 
 class Role {

@@ -1,14 +1,15 @@
-import { auth } from "../../assets/js/firebase";
-import { onAuthStateChanged } from "firebase/auth";
-import { getUser } from "../../assets/js/system/users";
-import { getPersonnage } from "../../assets/js/system/personnages";
+import { getPersonnage } from "../../@mythall/personnages";
+import { toggleLoading } from "../../assets/components/loading-component";
 
 class PersonnageComponent extends HTMLElement {
   constructor() {
     super();
-    (async () => {
-      await this.getPersonnage();
-    })();
+  }
+
+  async connectedCallback() {
+    toggleLoading(true, "Téléchargement de la fiche de personnage...");
+    await this.getPersonnage();
+    toggleLoading(false);
   }
 
   getPersonnage = async () => {
@@ -20,10 +21,13 @@ class PersonnageComponent extends HTMLElement {
         // Fetch personnage
         const personnage = await getPersonnage(value);
 
-        // Set attributes
-        this.querySelector("#nom").innerHTML = personnage.nom;
+        this.setInformations(personnage);
       }
     }
+  };
+
+  setInformations = personnage => {
+    this.querySelector("#nom").innerHTML = personnage.nom;
   };
 }
 

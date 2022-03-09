@@ -1,7 +1,7 @@
 import { auth } from "../assets/js/firebase";
 import { onAuthStateChanged } from "firebase/auth";
-import { getUser } from "../assets/js/system/users";
-import { getPersonnagesFromUserId } from "../assets/js/system/personnages";
+import { getUser } from "../@mythall/users";
+import { getPersonnagesFromUserId } from "../@mythall/personnages";
 
 let currentUser;
 
