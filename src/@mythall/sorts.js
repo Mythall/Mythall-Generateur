@@ -1,9 +1,6 @@
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
 import { getEcole } from "./ecoles";
-import { getPorte } from "./portes";
-import { getDuree } from "./durees";
-import { getZone } from "./zones";
 
 class SortItem {
   constructor({ sort, sortRef, niveauObtention }) {
@@ -22,9 +19,9 @@ class Sort {
     this.sommaire = sommaire;
     this.description = description;
     this.ecoleRef = ecoleRef;
-    this.porteRef = porteRef;
-    this.dureeRef = dureeRef;
-    this.zoneRef = zoneRef;
+    this.porteRef = porteRef; // ... Keeping them temporarly
+    this.dureeRef = dureeRef; // ... Keeping them temporarly
+    this.zoneRef = zoneRef; // ... Keeping them temporarly
     this.ecole = ecole;
     this.porte = porte;
     this.duree = duree;
@@ -39,31 +36,31 @@ class Sort {
       sommaire: this.sommaire,
       description: this.description,
       ecoleRef: this.ecoleRef,
-      porteRef: this.porteRef,
-      dureeRef: this.dureeRef,
-      zoneRef: this.zoneRef
+      porteRef: this.porteRef, // ... Keeping them temporarly
+      dureeRef: this.dureeRef, // ... Keeping them temporarly
+      zoneRef: this.zoneRef, // ... Keeping them temporarly
+      porte: this.porte,
+      duree: this.duree,
+      zone: this.zone
     };
   }
 
   async load() {
     this.ecole = await getEcole(this.ecoleRef);
-    this.porte = await getPorte(this.porteRef);
-    this.duree = await getDuree(this.dureeRef);
-    this.zone = await getZone(this.zoneRef);
     return;
   }
 }
 
 const getSorts = async () => {
   return (await getDocs(query(collection(db, "sorts")), orderBy("nom"))).docs.map(snap => {
-    return new Sort(snap.id, snap.data());
+    const sort = new Sort(snap.id, snap.data());
+    return sort;
   });
 };
 
 const getSort = async id => {
   const snap = await getDoc(doc(db, `sorts/${id}`));
   const sort = new Sort(snap.id, snap.data());
-  await sort.load();
   return sort;
 };
 

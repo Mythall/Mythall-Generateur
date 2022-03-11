@@ -74,6 +74,7 @@ const _getUser = async personnage => {
 const _getRace = async personnage => {
   personnage.race = await getRace(personnage.raceRef);
   personnage.race.sortsRacial = await Promise.all(personnage.race.sortsRacialRef.map(ref => getSort(ref)));
+  await Promise.all(personnage.race.sortsRacial.map(sort => sort.load()));
   return personnage;
 };
 
@@ -362,6 +363,9 @@ const _getAllSorts = async personnage => {
   personnage.sorts.forEach((item, i) => {
     item.sort = sorts[i];
   });
+
+  // Load Sort data
+  await Promise.all(personnage.sorts.map(item => item.sort.load()));
 };
 
 const _getAllDons = async personnage => {

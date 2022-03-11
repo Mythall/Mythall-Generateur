@@ -4,7 +4,7 @@ class FooterComponent extends HTMLElement {
     this.copyright = `Mythall ${new Date().getFullYear()} © Tous droits réservées`;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.innerHTML = `
       <footer class="footer">
         <div class="footer__copyright">${this.copyright}</div>

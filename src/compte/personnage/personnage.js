@@ -14,7 +14,7 @@ class PersonnageComponent extends HTMLElement {
     // Load Character
     await this._getPersonnage();
 
-    // console.log(this.personnage);
+    console.log(this.personnage);
 
     // Fill Sections
     this._setInformations();
@@ -229,9 +229,9 @@ class PersonnageComponent extends HTMLElement {
       const clone = this.querySelector("#templateSort").content.cloneNode(true);
       clone.querySelector("#sortNom").innerHTML = item.sort.nom;
       clone.querySelector("#sortEcole").innerHTML = `(${item.sort.ecole.nom})`;
-      clone.querySelector("#sortPorte").innerHTML = item.sort.porte.nom;
-      clone.querySelector("#sortDuree").innerHTML = item.sort.duree.nom;
-      clone.querySelector("#sortZone").innerHTML = item.sort.zone.nom;
+      clone.querySelector("#sortPorte").innerHTML = item.sort.porte;
+      clone.querySelector("#sortDuree").innerHTML = item.sort.duree;
+      clone.querySelector("#sortZone").innerHTML = item.sort.zone;
       clone.querySelector("#sortIncantation").innerHTML = item.sort.incantation;
       clone.querySelector("#sortSommaire").innerHTML = item.sort.sommaire;
       target.appendChild(clone);
