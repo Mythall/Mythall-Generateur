@@ -2,91 +2,23 @@ import { toggleLoading } from "../assets/components/loading-component";
 import { getUser } from "./users";
 import { Personnage } from "./personnages";
 import { getAlignement } from "./alignements";
+import { getAptitude, AptitudeItem } from "./aptitudes";
 import { getClasse } from "./classes";
 import { getDieu } from "./dieux";
+import { getDomaine } from "./domaines";
+import { getDon, DonItem } from "./dons";
+import { getEsprit } from "./esprits";
 import { getFourberie } from "./fourberies";
 import { getOrdre } from "./ordres";
 import { getRace } from "./races";
-
-// export class Choix {
-//   constructor() {
-//     this.type = "";
-//     this.quantite = 1;
-//     this.niveauObtention = 0;
-//     this.ref = [];
-//   }
-
-//   type;
-//   quantite;
-//   niveauObtention;
-//   categorie;
-//   domaine;
-//   ref; // Référence pour choix de don, sort, aptitude, fourberie
-// }
-
-// export class ResistanceItem {
-
-//   constructor() {
-//     this.resistance = null;
-//     this.resistanceRef = '';
-//     this.niveau = 1;
-//     this.valeur = 0;
-//     this.cummulable = false;
-//   }
-
-//   resistance;
-//   resistanceRef;
-//   niveau;
-//   valeur;
-//   cummulable;
-// }
-
-// export class ResistanceValue {
-
-//   constructor() {
-//     this.resistance = null;
-//     this.valeur = 0;
-//   }
-
-//   resistance;
-//   valeur;
-// }
-
-// export class StatistiqueItem {
-
-//   constructor() {
-//     this.statistique = null;
-//     this.statistiqueRef = '';
-//     this.niveau = 1;
-//     this.valeur = 0;
-//     this.cummulable = false;
-//   }
-
-//   statistique: IStatistique;
-//   statistiqueRef: string;
-//   niveau: number;
-//   valeur: number;
-//   cummulable: boolean;
-// }
-
-// export class StatistiqueValue {
-
-//   constructor() {
-//     this.statistique = null;
-//     this.valeur = 0;
-//   }
-
-//   statistique: IStatistique;
-//   valeur: number;
-// }
-
-// const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
+import { getResistance, Resistance, ResistanceValue } from "./resistances";
+import { getSort, SortItem } from "./sorts";
+import { getStatistique, Statistique, statistiqueIds, StatistiqueValue } from "./statistiques";
+import { getImmunite } from "./immunites";
 
 const buildPersonnage = async personnage => {
   try {
-    toggleLoading(true, "Assemblage de votre personnage...");
-
-    console.log("Building Personnage...");
+    _updateLoadingState("Assemblage de votre personnage...");
     await Promise.all([
       _getUser(personnage),
       _getRace(personnage),
@@ -97,29 +29,28 @@ const buildPersonnage = async personnage => {
       _getAllFourberies(personnage)
     ]);
 
-    console.log("Building Niveau Effectif...");
+    _updateLoadingState("Niveau Effectif...");
     await _getNiveauEffectif(personnage);
 
-    // console.log("Building Domaines & Esprits...");
-    // await Promise.all([this._getDomaines(personnage), this._getEsprit(personnage)]);
+    _updateLoadingState("Domaines & Esprits...");
+    await Promise.all([_getDomaines(personnage), _getEsprit(personnage)]);
 
-    // console.log("Building Aptitudes...");
-    // await this._getAllAptitudes(personnage);
+    _updateLoadingState("Aptitudes...");
+    await _getAllAptitudes(personnage);
 
-    // console.log("Building Sorts & Dons...");
-    // await Promise.all([this._getAllSorts(personnage), this.getAllDons(personnage)]);
+    _updateLoadingState("Sorts & Dons...");
+    await Promise.all([_getAllSorts(personnage), _getAllDons(personnage)]);
 
-    // console.log("Building Base Statistiques...");
-    // await this._getStatistiquesParDefault(personnage);
+    _updateLoadingState("Statistiques de base...");
+    await _getStatistiquesParDefault(personnage);
 
-    // console.log("Building Statistiques, Resistances & Immunities...");
-    // await Promise.all([this._getStatistiques(personnage), this._getResistances(personnage), this._getImmunites(personnage)]);
+    _updateLoadingState("Statistiques, Resistances & Immunities...");
+    await Promise.all([_getStatistiques(personnage), _getResistances(personnage), _getImmunites(personnage)]);
 
-    // console.log("Building Niveau de dons & Capacité spéciales...");
-    // await Promise.all([this._getDonsNiveauEffectif(personnage), this._getCapaciteSpeciales(personnage)]);
+    _updateLoadingState("Niveau de dons & Capacité spéciales...");
+    await Promise.all([_getDonsNiveauEffectif(personnage), _getCapaciteSpeciales(personnage)]);
 
-    console.log("Personnage Build Completed");
-    console.log(personnage);
+    _updateLoadingState("Assemblage du personnage terminé!");
 
     // Completed
     toggleLoading(false);
@@ -130,6 +61,11 @@ const buildPersonnage = async personnage => {
   }
 };
 
+const _updateLoadingState = msg => {
+  toggleLoading(true, msg);
+  console.log(msg);
+};
+
 const _getUser = async personnage => {
   personnage.user = await getUser(personnage.userRef);
   return personnage;
@@ -137,6 +73,7 @@ const _getUser = async personnage => {
 
 const _getRace = async personnage => {
   personnage.race = await getRace(personnage.raceRef);
+  personnage.race.sortsRacial = await Promise.all(personnage.race.sortsRacialRef.map(ref => getSort(ref)));
   return personnage;
 };
 
@@ -220,7 +157,7 @@ const _getDomaines = async personnage => {
     let count = 0;
 
     personnage.domainesRef.forEach(async domaineRef => {
-      const domaine = await this.domaineService.getDomaine(domaineRef);
+      const domaine = await getDomaine(domaineRef);
       if (!personnage.domaines) personnage.domaines = [];
       personnage.domaines.push(domaine);
       count++;
@@ -235,7 +172,7 @@ const _getDomaines = async personnage => {
 
 const _getEsprit = async personnage => {
   if (personnage.espritRef) {
-    const response = await this.espritService.getEsprit(personnage.espritRef);
+    const response = await getEsprit(personnage.espritRef);
     personnage.esprit = response;
     return personnage;
   }
@@ -285,7 +222,7 @@ const _getAllAptitudes = async personnage => {
   // Aptitudes Racial
   if (personnage.race && personnage.race.aptitudesRacialRef && personnage.race.aptitudesRacialRef.length > 0) {
     personnage.race.aptitudesRacialRef.forEach(aptitudeRef => {
-      let aptitudeItem = new AptitudeItem();
+      let aptitudeItem = new AptitudeItem({});
       aptitudeItem.aptitudeRef = aptitudeRef;
       personnage.aptitudes.push(aptitudeItem);
     });
@@ -337,7 +274,7 @@ const _getAllAptitudes = async personnage => {
   if (personnage.aptitudes && personnage.aptitudes.length > 0) {
     personnage.aptitudes.forEach(async aptitudeItem => {
       if (!aptitudeItem.aptitude) {
-        const aptitude = await this.aptitudeService.getAptitude(aptitudeItem.aptitudeRef);
+        const aptitude = await getAptitude(aptitudeItem.aptitudeRef);
         aptitudeItem.aptitude = aptitude;
         count++;
         if (count == personnage.aptitudes.length) {
@@ -408,9 +345,9 @@ const _getAllSorts = async personnage => {
   // Sorts Aptitudes (Équivalence)
   if (personnage.aptitudes && personnage.aptitudes.length > 0) {
     personnage.aptitudes.forEach(aptitudeItem => {
-      if (aptitudeItem.aptitude.sortsEquivalentRef && aptitudeItem.aptitude.sortsEquivalentRef.length > 0) {
+      if (aptitudeItem.aptitude?.sortsEquivalentRef.length > 0) {
         aptitudeItem.aptitude.sortsEquivalentRef.forEach(aptSortRef => {
-          let sortItem = new SortItem();
+          let sortItem = new SortItem({});
           sortItem.niveauObtention = aptitudeItem.niveauObtention;
           sortItem.sortRef = aptSortRef;
           personnage.sorts.push(sortItem);
@@ -419,40 +356,19 @@ const _getAllSorts = async personnage => {
     });
   }
 
-  // Remplis la liste de sorts complète
-  let count = 0;
-  if (!personnage.sorts) personnage.sorts = [];
-  if (personnage.sorts && personnage.sorts.length > 0) {
-    personnage.sorts.forEach(async sortItem => {
-      if (!sortItem.sort) {
-        //Avoid fetching Sort if already fetch
-        sortItem.sort = await this.sortService.getSort(sortItem.sortRef);
-        count++;
-        if (count == personnage.sorts.length) {
-          // Filter duplicated
-          personnage.sorts = personnage.sorts.filter((sort, index, self) => index === self.findIndex(d => d.sortRef === sort.sortRef));
-
-          return personnage;
-        }
-      } else {
-        count++;
-        if (count == personnage.sorts.length) {
-          personnage.sorts = personnage.sorts.filter((sort, index, self) => index === self.findIndex(d => d.sortRef === sort.sortRef));
-
-          return personnage;
-        }
-      }
-    });
-  } else {
-    return personnage;
-  }
+  // Filter duplicated
+  personnage.sorts = personnage.sorts.filter((sort, index, self) => index === self.findIndex(d => d.sortRef === sort.sortRef));
+  const sorts = await Promise.all(personnage.sorts.map(item => getSort(item.sortRef)));
+  personnage.sorts.forEach((item, i) => {
+    item.sort = sorts[i];
+  });
 };
 
-const getAllDons = async personnage => {
+const _getAllDons = async personnage => {
   // Dons Racial
   if (personnage.race && personnage.race.donsRacialRef && personnage.race.donsRacialRef.length > 0) {
     personnage.race.donsRacialRef.forEach(donRef => {
-      let donItem = new DonItem();
+      let donItem = new DonItem({});
       donItem.donRef = donRef;
       personnage.dons.push(donItem);
     });
@@ -502,7 +418,7 @@ const getAllDons = async personnage => {
     personnage.fourberies.forEach(fourberie => {
       if (fourberie.fourberie && fourberie.fourberie.donsEquivalentRef && fourberie.fourberie.donsEquivalentRef.length > 0) {
         fourberie.fourberie.donsEquivalentRef.forEach(aptDonRef => {
-          let donItem = new DonItem();
+          let donItem = new DonItem({});
           donItem.niveauObtention = fourberie.niveauObtention;
           donItem.donRef = aptDonRef;
           personnage.dons.push(donItem);
@@ -512,11 +428,11 @@ const getAllDons = async personnage => {
   }
 
   // Dons Aptitudes (Équivalence)
-  if (personnage.aptitudes && personnage.aptitudes.length > 0) {
+  if (personnage.aptitudes?.length > 0) {
     personnage.aptitudes.forEach(aptitude => {
-      if (aptitude.aptitude.donsEquivalentRef && aptitude.aptitude.donsEquivalentRef.length > 0) {
+      if (aptitude.aptitude?.donsEquivalentRef.length > 0) {
         aptitude.aptitude.donsEquivalentRef.forEach(aptDonRef => {
-          let donItem = new DonItem();
+          let donItem = new DonItem({});
           donItem.niveauObtention = aptitude.niveauObtention;
           donItem.donRef = aptDonRef;
           personnage.dons.push(donItem);
@@ -533,7 +449,7 @@ const getAllDons = async personnage => {
     personnage.dons.forEach(async donItem => {
       if (!donItem.don) {
         //Avoid fetching Don if already fetch
-        const don = await this.donService.getDon(donItem.donRef, false, true);
+        const don = await getDon(donItem.donRef, false, true);
         donItem.don = don;
         count++;
         if (count == personnage.dons.length) {
@@ -559,249 +475,113 @@ const getAllDons = async personnage => {
 
 const _getStatistiquesParDefault = async personnage => {
   const statistiques = await Promise.all([
-    this.statistiqueService.getStatistique(StatistiqueIds.Constitution),
-    this.statistiqueService.getStatistique(StatistiqueIds.Dextérité),
-    this.statistiqueService.getStatistique(StatistiqueIds.Force),
-    this.statistiqueService.getStatistique(StatistiqueIds.Intelligence),
-    this.statistiqueService.getStatistique(StatistiqueIds.Sagesse),
-    this.statistiqueService.getStatistique(StatistiqueIds.PVTorse),
-    this.statistiqueService.getStatistique(StatistiqueIds.PVBras),
-    this.statistiqueService.getStatistique(StatistiqueIds.PVJambes),
-    this.statistiqueService.getStatistique(StatistiqueIds.Lutte),
-    this.statistiqueService.getStatistique(StatistiqueIds.Mana)
+    getStatistique(statistiqueIds.Constitution),
+    getStatistique(statistiqueIds.Dextérité),
+    getStatistique(statistiqueIds.Force),
+    getStatistique(statistiqueIds.Intelligence),
+    getStatistique(statistiqueIds.Sagesse),
+    getStatistique(statistiqueIds.PVTorse),
+    getStatistique(statistiqueIds.PVBras),
+    getStatistique(statistiqueIds.PVJambes),
+    getStatistique(statistiqueIds.Lutte),
+    getStatistique(statistiqueIds.Mana),
+    getStatistique(statistiqueIds.Ki)
   ]);
 
-  // Constitution
-  const constitution = new StatistiqueValue();
-  constitution.statistique = statistiques[0]; // MUST MATCH statistiques INDEX
-  constitution.valeur = 0;
-  personnage.statistiques.push(constitution);
+  if (!personnage.statistiques) personnage.statistiques = [];
 
-  // Dexterite
-  let dexterite = new StatistiqueValue();
-  dexterite.statistique = statistiques[1]; // MUST MATCH statistiques INDEX
-  dexterite.valeur = 0;
-  personnage.statistiques.push(dexterite);
-
-  // Force
-  let force = new StatistiqueValue();
-  force.statistique = statistiques[2]; // MUST MATCH statistiques INDEX
-  force.valeur = 0;
-  personnage.statistiques.push(force);
-
-  // Intelligence
-  let intelligence = new StatistiqueValue();
-  intelligence.statistique = statistiques[3]; // MUST MATCH statistiques INDEX
-  intelligence.valeur = 0;
-  personnage.statistiques.push(intelligence);
-
-  // Sagesse
-  let sagesse = new StatistiqueValue();
-  sagesse.statistique = statistiques[4]; // MUST MATCH statistiques INDEX
-  sagesse.valeur = 0;
-  personnage.statistiques.push(sagesse);
-
-  // PV Torse
-  let pvTorse = new StatistiqueValue();
-  pvTorse.statistique = statistiques[5]; // MUST MATCH statistiques INDEX
-  pvTorse.valeur = 3;
-  personnage.statistiques.push(pvTorse);
-
-  // PV Bras
-  let pvBras = new StatistiqueValue();
-  pvBras.statistique = statistiques[6]; // MUST MATCH statistiques INDEX
-  pvBras.valeur = 2;
-  personnage.statistiques.push(pvBras);
-
-  // PV Jambes
-  let pvJambes = new StatistiqueValue();
-  pvJambes.statistique = statistiques[7]; // MUST MATCH statistiques INDEX
-  pvJambes.valeur = 2;
-  personnage.statistiques.push(pvJambes);
-
-  // Lutte
-  let lutte = new StatistiqueValue();
-  lutte.statistique = statistiques[8]; // MUST MATCH statistiques INDEX
-  lutte.valeur = 3;
-  personnage.statistiques.push(lutte);
-
-  // Mana
-  let mana = new StatistiqueValue();
-  mana.statistique = statistiques[9]; // MUST MATCH statistiques INDEX
-  mana.valeur = 0;
-  personnage.statistiques.push(mana);
-
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[0] })); // Constitution
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[1] })); // Dexterité
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[2] })); // Force
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[3] })); // Intelligence
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[4] })); // Sagesse
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[5], valeur: 3 })); // PV Torse
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[6], valeur: 2 })); // PV Bras
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[7], valeur: 2 })); // PV Jambes
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[8], valeur: 3 })); // Lutte
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[9], valeur: 0 })); // Mana
+  personnage.statistiques.push(new StatistiqueValue({ statistique: statistiques[10], valeur: 0 })); // Ki
   return personnage;
 };
 
 const _getStatistiques = async personnage => {
+  // Ajoute ou Update la statistique avec la bonne valeur, commulable ou non
+  const _setStatistique = statistiqueItem => {
+    const matchingIndex = personnage.statistiques.findIndex(statistiqueValue => statistiqueValue.statistique.id == statistiqueItem.statistiqueRef);
+    if (matchingIndex > -1) {
+      const statistique = personnage.statistiques[matchingIndex];
+      if (statistique) {
+        statistique.valeur = statistiqueItem.cummulable
+          ? (statistique.valeur += statistiqueItem.valeur) // Cummulable l'ajoute à la valeur
+          : (statistique.valeur = Math.max(statistique.valeur, statistiqueItem.valeur)); // Non Cummulable prend la plus forte valeur
+      }
+    } else {
+      personnage.statistiques.push(
+        new StatistiqueValue({ statistique: new Statistique(statistiqueItem.statistiqueRef, {}), valeur: statistiqueItem.valeur })
+      );
+    }
+  };
+
   //Race Statistiques
-  if (personnage.race.statistiques) {
-    personnage.race.statistiques.forEach(statistiqueItem => {
-      let found = false;
-
-      if (personnage.statistiques) {
-        personnage.statistiques.forEach(personnageStatistiqueItem => {
-          if (statistiqueItem.statistiqueRef == personnageStatistiqueItem.statistique.id && personnage.niveauReel >= statistiqueItem.niveau) {
-            //Cummulable l'ajoute à la valeur
-            if (statistiqueItem.cummulable) {
-              personnageStatistiqueItem.valeur += statistiqueItem.valeur;
-            }
-
-            //Non Cummulable prend la plus forte des deux
-            if (!statistiqueItem.cummulable) {
-              personnageStatistiqueItem.valeur = Math.max(personnageStatistiqueItem.valeur, statistiqueItem.valeur);
-            }
-
-            found = true;
-          }
-        });
-      }
-
-      if (!found && personnage.niveauReel >= statistiqueItem.niveau) {
-        if (!personnage.statistiques) {
-          personnage.statistiques = [];
-        }
-
-        let statistique = new StatistiqueValue();
-        statistique.statistique = statistiqueItem.statistique;
-        statistique.valeur = statistiqueItem.valeur;
-        personnage.statistiques.push(statistique);
-      }
-    });
-  }
+  personnage.race.statistiques.forEach(statistiqueItem => {
+    if (personnage.niveauReel >= statistiqueItem.niveau) {
+      _setStatistique(statistiqueItem);
+    }
+  });
 
   //Classe Statistiques
-  if (personnage.classes && personnage.classes.length > 0) {
-    personnage.classes.forEach(classeItem => {
-      if (classeItem.classe && classeItem.classe.statistiques) {
-        classeItem.classe.statistiques.forEach(statistiqueItem => {
-          let found = false;
-
-          if (personnage.statistiques) {
-            personnage.statistiques.forEach(personnageStatistiqueItem => {
-              if (statistiqueItem.statistiqueRef == personnageStatistiqueItem.statistique.id && classeItem.niveau >= statistiqueItem.niveau) {
-                //Cummulable l'ajoute à la valeur
-                if (statistiqueItem.cummulable) {
-                  personnageStatistiqueItem.valeur += statistiqueItem.valeur;
-                }
-
-                //Non Cummulable prend la plus forte des deux
-                if (!statistiqueItem.cummulable) {
-                  personnageStatistiqueItem.valeur = Math.max(personnageStatistiqueItem.valeur, statistiqueItem.valeur);
-                }
-
-                found = true;
-              }
-            });
-          }
-
-          if (!found && personnage.niveauReel >= statistiqueItem.niveau) {
-            if (!personnage.statistiques) {
-              personnage.statistiques = [];
-            }
-
-            let statistique = new StatistiqueValue();
-            statistique.statistique = statistiqueItem.statistique;
-            statistique.valeur = statistiqueItem.valeur;
-            personnage.statistiques.push(statistique);
-          }
-        });
-      }
+  const classesWithStatistiques = personnage.classes.filter(classeItem => classeItem.classe.statistiques?.length > 0);
+  if (classesWithStatistiques) {
+    classesWithStatistiques.forEach(classeItem => {
+      classeItem.classe.statistiques.forEach(statistiqueItem => {
+        if (classeItem.niveau >= statistiqueItem.niveau) {
+          _setStatistique(statistiqueItem);
+        }
+      });
     });
   }
 
   //Aptitude Statistiques
-  if (personnage.aptitudes) {
-    personnage.aptitudes.forEach(aptitudeItem => {
-      aptitudeItem.aptitude.statistiques.forEach(aptitudeStatistiqueItem => {
-        let found = false;
-
-        if (personnage.statistiques) {
-          personnage.statistiques.forEach(personnageStatistiqueItem => {
-            // ... Manque potentiellement un attribue de classe dans les aptitutes spéciales pour faire le calcul du niveau selon la classe
-            // ... Manque validation du niveau
-            if (aptitudeStatistiqueItem.statistiqueRef == personnageStatistiqueItem.statistique.id) {
-              //Cummulable l'ajoute à la valeur
-              if (aptitudeStatistiqueItem.cummulable) {
-                personnageStatistiqueItem.valeur += aptitudeStatistiqueItem.valeur;
-              }
-
-              //Non Cummulable prend la plus forte des deux
-              if (!aptitudeStatistiqueItem.cummulable) {
-                personnageStatistiqueItem.valeur = Math.max(personnageStatistiqueItem.valeur, aptitudeStatistiqueItem.valeur);
-              }
-
-              found = true;
-            }
-          });
-        }
-
-        if (!found) {
-          if (!personnage.statistiques) {
-            personnage.statistiques = [];
-          }
-
-          let statistique = new StatistiqueValue();
-          statistique.statistique = aptitudeStatistiqueItem.statistique;
-          statistique.valeur = aptitudeStatistiqueItem.valeur;
-          personnage.statistiques.push(statistique);
-        }
-      });
+  const aptitudesWithStatistiques = personnage.aptitudes.filter(aptitudeItem => aptitudeItem.aptitude.statistiques?.length > 0);
+  if (aptitudesWithStatistiques) {
+    const statistiquesModifiers = aptitudesWithStatistiques.map(aptitudeItem => aptitudeItem.aptitude.statistiques).flat();
+    statistiquesModifiers.forEach(statistiqueItem => {
+      if (personnage.niveauReel >= statistiqueItem.niveau) {
+        _setStatistique(statistiqueItem);
+      }
     });
   }
 
   //Don Statistiques
-  if (personnage.dons) {
-    personnage.dons.forEach(donItem => {
-      donItem.don.statistiques.forEach(donStatistiqueItem => {
-        let found = false;
-
-        if (personnage.statistiques) {
-          personnage.statistiques.forEach(personnageStatistiqueItem => {
-            if (donStatistiqueItem.statistiqueRef == personnageStatistiqueItem.statistique.id) {
-              //Cummulable l'ajoute à la valeur
-              if (donStatistiqueItem.cummulable) {
-                personnageStatistiqueItem.valeur += donStatistiqueItem.valeur;
-              }
-
-              //Non Cummulable prend la plus forte des deux
-              if (!donStatistiqueItem.cummulable) {
-                personnageStatistiqueItem.valeur = Math.max(personnageStatistiqueItem.valeur, donStatistiqueItem.valeur);
-              }
-
-              found = true;
-            }
-          });
-        }
-
-        if (!found) {
-          if (!personnage.statistiques) {
-            personnage.statistiques = [];
-          }
-
-          let statistique = new StatistiqueValue();
-          statistique.statistique = donStatistiqueItem.statistique;
-          statistique.valeur = donStatistiqueItem.valeur;
-          personnage.statistiques.push(statistique);
-        }
-      });
+  const donsWithStatistiques = personnage.dons.filter(donItem => donItem.don.statistiques?.length > 0);
+  if (donsWithStatistiques) {
+    const statistiquesModifiers = donsWithStatistiques.map(donItem => donItem.don.statistiques).flat();
+    statistiquesModifiers.forEach(statistiqueItem => {
+      _setStatistique(statistiqueItem);
     });
   }
 
+  // Load nom of statistiques without one currently
+  const statistiquesWithoutNom = personnage.statistiques.filter(statistiqueItem => !statistiqueItem.statistique.nom);
+  const statistiquesWithNom = await Promise.all(statistiquesWithoutNom.map(statistiqueValue => getStatistique(statistiqueValue.statistique.id)));
+  statistiquesWithNom.forEach(sv => {
+    personnage.statistiques.find(s => s.statistique.id == sv.id).statistique.nom = sv.nom;
+  });
+
+  // Base values
   let manaProfane = 0;
   let manaDivine = 0;
 
   //Modificateurs
   personnage.statistiques.forEach(statistiqueValue => {
     //Modificateur de Constitution
-    if (statistiqueValue.statistique.id == StatistiqueIds.Constitution) {
+    if (statistiqueValue.statistique.id == statistiqueIds.Constitution) {
       personnage.statistiques.forEach(statistiqueValueUpdate => {
         //Modificateur de point de vie
         if (
-          statistiqueValueUpdate.statistique.id == StatistiqueIds.PVTorse ||
-          statistiqueValueUpdate.statistique.id == StatistiqueIds.PVBras ||
-          statistiqueValueUpdate.statistique.id == StatistiqueIds.PVJambes
+          statistiqueValueUpdate.statistique.id == statistiqueIds.PVTorse ||
+          statistiqueValueUpdate.statistique.id == statistiqueIds.PVBras ||
+          statistiqueValueUpdate.statistique.id == statistiqueIds.PVJambes
         ) {
           statistiqueValueUpdate.valeur += statistiqueValue.valeur;
         }
@@ -809,18 +589,18 @@ const _getStatistiques = async personnage => {
     }
 
     //Modificateur de Lutte
-    if (statistiqueValue.statistique.id == StatistiqueIds.Force || statistiqueValue.statistique.id == StatistiqueIds.Dextérité) {
+    if (statistiqueValue.statistique.id == statistiqueIds.Force || statistiqueValue.statistique.id == statistiqueIds.Dextérité) {
       //Force ou Dextérité
       personnage.statistiques.forEach(statistiqueValueUpdate => {
         //Modificateur de Lutte
-        if (statistiqueValueUpdate.statistique.id == StatistiqueIds.Lutte) {
+        if (statistiqueValueUpdate.statistique.id == statistiqueIds.Lutte) {
           statistiqueValueUpdate.valeur += statistiqueValue.valeur;
         }
       });
     }
 
     //Modificateur de Mana
-    if (statistiqueValue.statistique.id == StatistiqueIds.Mana) {
+    if (statistiqueValue.statistique.id == statistiqueIds.Mana) {
       // Profane & Divin
       if (personnage.niveauProfane && personnage.niveauProfane > 0 && personnage.niveauProfane > personnage.race.ajustement) {
         manaProfane = statistiqueValue.valeur;
@@ -837,7 +617,7 @@ const _getStatistiques = async personnage => {
       if (manaProfane > 0 || manaDivine > 0) {
         personnage.statistiques.forEach(statistiqueValueUpdate => {
           //Intelligence
-          if (statistiqueValueUpdate.statistique.id == StatistiqueIds.Intelligence) {
+          if (statistiqueValueUpdate.statistique.id == statistiqueIds.Intelligence) {
             manaProfane += statistiqueValueUpdate.valeur;
 
             if (statistiqueValueUpdate.valeur == 1) {
@@ -849,7 +629,7 @@ const _getStatistiques = async personnage => {
           }
 
           //Sagesse
-          if (statistiqueValueUpdate.statistique.id == StatistiqueIds.Sagesse) {
+          if (statistiqueValueUpdate.statistique.id == statistiqueIds.Sagesse) {
             manaDivine += statistiqueValueUpdate.valeur;
 
             if (statistiqueValueUpdate.valeur == 1) {
@@ -868,9 +648,9 @@ const _getStatistiques = async personnage => {
   personnage.statistiques.forEach(statistiqueValue => {
     //Correcteur de Points de vie
     if (
-      statistiqueValue.statistique.id == StatistiqueIds.PVTorse ||
-      statistiqueValue.statistique.id == StatistiqueIds.PVBras ||
-      statistiqueValue.statistique.id == StatistiqueIds.PVJambes
+      statistiqueValue.statistique.id == statistiqueIds.PVTorse ||
+      statistiqueValue.statistique.id == statistiqueIds.PVBras ||
+      statistiqueValue.statistique.id == statistiqueIds.PVJambes
     ) {
       if (statistiqueValue.valeur <= 0) {
         statistiqueValue.valeur = 1;
@@ -878,14 +658,14 @@ const _getStatistiques = async personnage => {
     }
 
     //Correcteur de Lutte
-    if (statistiqueValue.statistique.id == StatistiqueIds.Lutte) {
+    if (statistiqueValue.statistique.id == statistiqueIds.Lutte) {
       if (statistiqueValue.valeur < 0) {
         statistiqueValue.valeur = 0;
       }
     }
 
     //Correcteur de Mana
-    if (statistiqueValue.statistique.id == StatistiqueIds.Mana) {
+    if (statistiqueValue.statistique.id == statistiqueIds.Mana) {
       if (manaProfane >= manaDivine) {
         statistiqueValue.valeur = manaProfane;
       } else {
@@ -898,195 +678,96 @@ const _getStatistiques = async personnage => {
 };
 
 const _getResistances = async personnage => {
-  //Race Resistances
-  if (personnage.race.resistances) {
-    personnage.race.resistances.forEach(resistanceItem => {
-      let found = false;
-
-      if (personnage.resistances && personnage.resistances.length > 0) {
-        personnage.resistances.forEach(personnageResistanceItem => {
-          if (resistanceItem.resistanceRef == personnageResistanceItem.resistance.id && personnage.niveauReel >= resistanceItem.niveau) {
-            //Cummulable l'ajoute à la valeur
-            if (resistanceItem.cummulable) {
-              personnageResistanceItem.valeur += resistanceItem.valeur;
-            }
-
-            //Non Cummulable prend la plus forte des deux
-            if (!resistanceItem.cummulable) {
-              personnageResistanceItem.valeur = Math.max(personnageResistanceItem.valeur, resistanceItem.valeur);
-            }
-
-            found = true;
-          }
-        });
+  // Set Resistance cummulable ou non
+  const _setResistance = resistanceItem => {
+    const matchingIndex = personnage.resistances.findIndex(resistanceValue => resistanceValue.resistance.id == resistanceItem.resistanceRef);
+    if (matchingIndex > -1) {
+      const resistance = personnage.resistances[matchingIndex];
+      if (resistance) {
+        resistance.valeur = resistanceItem.cummulable
+          ? (resistance.valeur += resistanceItem.valeur) // Cummulable l'ajoute à la valeur
+          : (resistance.valeur = Math.max(resistance.valeur, resistanceItem.valeur)); // Non Cummulable prend la plus forte valeur
       }
+    } else {
+      personnage.resistances.push(
+        new ResistanceValue({ resistance: new Resistance(resistanceItem.resistanceRef, {}), valeur: resistanceItem.valeur })
+      );
+    }
+  };
 
-      if (!found && personnage.niveauReel >= resistanceItem.niveau) {
-        if (!personnage.resistances) {
-          personnage.resistances = [];
-        }
+  // Race Resistances
+  personnage.race.resistances.forEach(resistanceItem => {
+    _setResistance(resistanceItem);
+  });
 
-        let resistance = new ResistanceValue();
-        resistance.resistance = resistanceItem.resistance;
-        resistance.valeur = resistanceItem.valeur;
-        personnage.resistances.push(resistance);
+  // Classes Resistances
+  const classesWithResistances = personnage.classes.filter(classeItem => classeItem.resistances?.length > 0);
+  const classesItemsWithResistances = classesWithResistances.map(classeItem => classeItem).flat();
+  classesItemsWithResistances.forEach(classeItem => {
+    classeItem.resistances.forEach(resistanceItem => {
+      if (classeItem.niveau >= resistanceItem.niveau) {
+        _setResistance(resistanceItem);
       }
     });
-  }
+  });
 
-  //Classe Resistances
-  if (personnage.classes && personnage.classes.length > 0) {
-    personnage.classes.forEach(classeItem => {
-      if (classeItem.classe && classeItem.classe.resistances) {
-        classeItem.classe.resistances.forEach(resistanceItem => {
-          let found = false;
-
-          if (personnage.resistances) {
-            personnage.resistances.forEach(personnageResistanceItem => {
-              if (resistanceItem.resistanceRef == personnageResistanceItem.resistance.id && classeItem.niveau >= resistanceItem.niveau) {
-                //Cummulable l'ajoute à la valeur
-                if (resistanceItem.cummulable) {
-                  personnageResistanceItem.valeur += resistanceItem.valeur;
-                }
-
-                //Non Cummulable prend la plus forte des deux
-                if (!resistanceItem.cummulable) {
-                  personnageResistanceItem.valeur = Math.max(personnageResistanceItem.valeur, resistanceItem.valeur);
-                }
-
-                found = true;
-              }
-            });
-          }
-
-          if (!found && personnage.niveauReel >= resistanceItem.niveau) {
-            if (!personnage.resistances) {
-              personnage.resistances = [];
-            }
-
-            let resistance = new ResistanceValue();
-            resistance.resistance = resistanceItem.resistance;
-            resistance.valeur = resistanceItem.valeur;
-            personnage.resistances.push(resistance);
-          }
-        });
-      }
+  // Aptitudes Resistances
+  const aptitudesWithResistances = personnage.aptitudes.filter(aptitudeItem => aptitudeItem.resistances?.length > 0);
+  const aptitudesItemsWithResistances = aptitudesWithResistances.map(aptitudeItem => aptitudeItem).flat();
+  aptitudesItemsWithResistances.forEach(aptitudeItem => {
+    aptitudeItem.resistances.forEach(resistanceItem => {
+      _setResistance(resistanceItem);
     });
-  }
+  });
 
-  //Aptitude Resistances
-  if (personnage.aptitudes) {
-    personnage.aptitudes.forEach(aptitudeItem => {
-      aptitudeItem.aptitude.resistances.forEach(aptitudeResistanceItem => {
-        let found = false;
-
-        if (personnage.resistances) {
-          personnage.resistances.forEach(personnageResistanceItem => {
-            if (aptitudeResistanceItem.resistanceRef == personnageResistanceItem.resistance.id) {
-              //Cummulable l'ajoute à la valeur
-              if (aptitudeResistanceItem.cummulable) {
-                personnageResistanceItem.valeur += aptitudeResistanceItem.valeur;
-              }
-
-              //Non Cummulable prend la plus forte des deux
-              if (!aptitudeResistanceItem.cummulable) {
-                personnageResistanceItem.valeur = Math.max(personnageResistanceItem.valeur, aptitudeResistanceItem.valeur);
-              }
-
-              found = true;
-            }
-          });
-        }
-
-        if (!found) {
-          if (!personnage.resistances) {
-            personnage.resistances = [];
-          }
-
-          let resistance = new ResistanceValue();
-          resistance.resistance = aptitudeResistanceItem.resistance;
-          resistance.valeur = aptitudeResistanceItem.valeur;
-          personnage.resistances.push(resistance);
-        }
-      });
+  // Dons Resistances
+  const donsWithResistances = personnage.dons.filter(donItem => donItem.resistances?.length > 0);
+  const donsItemsWithResistances = donsWithResistances.map(donItem => donItem).flat();
+  donsItemsWithResistances.forEach(donItem => {
+    donItem.resistances.forEach(resistanceItem => {
+      _setResistance(resistanceItem);
     });
-  }
+  });
 
-  //Don Resistances
-  if (personnage.dons) {
-    personnage.dons.forEach(donItem => {
-      donItem.don.resistances.forEach(donResistanceItem => {
-        let found = false;
-
-        if (personnage.resistances) {
-          personnage.resistances.forEach(personnageResistanceItem => {
-            if (donResistanceItem.resistanceRef == personnageResistanceItem.resistance.id) {
-              //Cummulable l'ajoute à la valeur
-              if (donResistanceItem.cummulable) {
-                personnageResistanceItem.valeur += donResistanceItem.valeur;
-              }
-
-              //Non Cummulable prend la plus forte des deux
-              if (!donResistanceItem.cummulable) {
-                personnageResistanceItem.valeur = Math.max(personnageResistanceItem.valeur, donResistanceItem.valeur);
-              }
-
-              found = true;
-            }
-          });
-        }
-
-        if (!found) {
-          if (!personnage.resistances) {
-            personnage.resistances = [];
-          }
-
-          let resistance = new ResistanceValue();
-          resistance.resistance = donResistanceItem.resistance;
-          resistance.valeur = donResistanceItem.valeur;
-          personnage.resistances.push(resistance);
-        }
-      });
-    });
-  }
+  // Load nom of resistances
+  const itemsWithoutNom = personnage.resistances.filter(item => !item.resistance.nom);
+  const items = await Promise.all(itemsWithoutNom.map(value => getResistance(value.resistance.id)));
+  items.forEach(item => {
+    personnage.resistances.find(r => r.resistance.id == item.id).resistance.nom = item.nom;
+  });
 
   return personnage;
 };
 
 const _getImmunites = async personnage => {
-  if (!personnage.immunites) personnage.immunites = [];
-
   //Race Immunites
-  if (personnage.race.immunites) {
-    personnage.immunites = [...personnage.immunites, ...personnage.race.immunites];
+  if (personnage.race.immunitesRef) {
+    personnage.immunitesRef = [...personnage.immunitesRef, ...personnage.race.immunitesRef];
   }
 
   //Classes Immunites
-  if (personnage.classes && personnage.classes.length > 0) {
-    personnage.classes.forEach(classeItem => {
-      if (classeItem.classe.immunites) {
-        personnage.immunites = [...personnage.immunites, ...classeItem.classe.immunites];
-      }
-    });
-  }
+  personnage.classes?.forEach(classeItem => {
+    if (classeItem.classe.immunitesRef) {
+      personnage.immunitesRef = [...personnage.immunitesRef, ...classeItem.classe.immunitesRef];
+    }
+  });
 
   //Aptitudes Immunites
-  if (personnage.aptitudes) {
-    personnage.aptitudes.forEach(aptitudeItem => {
-      if (aptitudeItem.aptitude && aptitudeItem.aptitude.immunites) {
-        personnage.immunites = [...personnage.immunites, ...aptitudeItem.aptitude.immunites];
-      }
-    });
-  }
+  personnage.aptitudes?.forEach(aptitudeItem => {
+    if (aptitudeItem.aptitude?.immunites) {
+      personnage.immunitesRef = [...personnage.immunitesRef, ...aptitudeItem.aptitude.immunitesRef];
+    }
+  });
 
   //Dons Immunites
-  if (personnage.dons) {
-    personnage.dons.forEach(donItem => {
-      if (donItem.don && donItem.don.immunites) {
-        personnage.immunites = [...personnage.immunites, ...donItem.don.immunites];
-      }
-    });
-  }
+  personnage.dons?.forEach(donItem => {
+    if (donItem.don?.immunites) {
+      personnage.immunitesRef = [...personnage.immunitesRef, ...donItem.don.immunitesRef];
+    }
+  });
+
+  // Load Immunites
+  personnage.immunites = await Promise.all(personnage.immunitesRef.map(id => getImmunite(id)));
 
   return personnage;
 };
@@ -1120,7 +801,7 @@ const _getCapaciteSpeciales = async personnage => {
   if (!personnage.capaciteSpeciales) personnage.capaciteSpeciales = [];
   personnage.statistiques.forEach(statistiqueValue => {
     let found = false;
-    Object.values(StatistiqueIds).forEach(statistiqueId => {
+    Object.values(statistiqueIds).forEach(statistiqueId => {
       if (statistiqueId == statistiqueValue.statistique.id) {
         found = true;
       }

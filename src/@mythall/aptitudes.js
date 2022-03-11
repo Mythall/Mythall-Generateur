@@ -4,17 +4,13 @@ import { getImmunite } from "./immunites";
 import { getResistance } from "./resistances";
 import { getStatistique } from "./statistiques";
 
-// export class AptitudeItem {
-//   constructor() {
-//       this.aptitude = null;
-//       this.aptitudeRef = '';
-//       this.niveauObtention = 1;
-//   }
-
-//   aptitude;
-//   aptitudeRef;
-//   niveauObtention;
-// }
+class AptitudeItem {
+  constructor({ aptitude, aptitudeRef, niveauObtention }) {
+    this.aptitude = aptitude ? aptitude : null;
+    this.aptitudeRef = aptitudeRef ? aptitudeRef : "";
+    this.niveauObtention = niveauObtention ? niveauObtention : 1;
+  }
+}
 
 class Aptitude {
   constructor(id, { nom, description, donsEquivalentRef, sortsEquivalentRef, immunitesRef, resistances, statistiques, choix }) {
@@ -99,7 +95,7 @@ const getAptitudes = async () => {
 const getAptitude = async id => {
   const snap = await getDoc(doc(db, `aptitudes/${id}`));
   const aptitude = new Aptitude(snap.id, snap.data());
-  await aptitude.load();
+  // await aptitude.load();
   return aptitude;
 };
 
@@ -115,4 +111,4 @@ const deleteAptitude = async id => {
   return await deleteDoc(doc(db, `aptitudes/${id}`));
 };
 
-export { Aptitude, getAptitudes, getAptitude, addAptitude, updateAptitude, deleteAptitude };
+export { Aptitude, AptitudeItem, getAptitudes, getAptitude, addAptitude, updateAptitude, deleteAptitude };

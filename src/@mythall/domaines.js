@@ -6,7 +6,23 @@ import { getDon } from "./dons";
 import { getSort } from "./sorts";
 
 class Domaine {
-  constructor(id, { nom, bonus, choix, aptitudes, dons, sorts, domaineContraireRef, domaineContraire, alignementPermisRef, alignementPermis, multiclassementRef, multiclassement }) {
+  constructor(
+    id,
+    {
+      nom,
+      bonus,
+      choix,
+      aptitudes,
+      dons,
+      sorts,
+      domaineContraireRef,
+      domaineContraire,
+      alignementPermisRef,
+      alignementPermis,
+      multiclassementRef,
+      multiclassement
+    }
+  ) {
     this.id = id;
     this.nom = nom;
     this.bonus = bonus;
@@ -54,12 +70,13 @@ class Domaine {
     };
   }
 
-  async load () {
+  async load() {
     await this._getClasses();
     await this._getDomaineContraire();
     await this._getAptitudees();
     await this._getDons();
     await this._getSorts();
+    return;
   }
 
   async _getDomaineContraire() {
@@ -68,7 +85,7 @@ class Domaine {
 
   async _getClasses() {
     if (this.multiclassementRef) {
-      this.multiclassementRef.forEach(async (classeRef) => {
+      this.multiclassementRef.forEach(async classeRef => {
         const classe = await getClasse(classeRef);
         if (!this.multiclassement) this.multiclassement = [];
         this.multiclassement.push(classe);
@@ -76,30 +93,29 @@ class Domaine {
     }
   }
 
-  async _getAptitudees(this) {
+  async _getAptitudees() {
     if (this.aptitudes && this.aptitudes.length > 0) {
-      this.aptitudes.forEach(async (aptitudeItem) => {
+      this.aptitudes.forEach(async aptitudeItem => {
         aptitudeItem.aptitude = await getAptitude(aptitudeItem.aptitudeRef);
       });
     }
   }
 
-  async _getDons(this) {
+  async _getDons() {
     if (this.dons && this.dons.length > 0) {
-      this.dons.forEach(async (donItem) => {
+      this.dons.forEach(async donItem => {
         donItem.don = await getDon(donItem.donRef);
       });
     }
   }
 
-  async _getSorts(this) {
+  async _getSorts() {
     if (this.sorts && this.sorts.length > 0) {
-      this.sorts.forEach(async (sortItem) => {
+      this.sorts.forEach(async sortItem => {
         sortItem.sort = await getSort(sortItem.sortRef);
       });
     }
   }
-
 }
 
 const getDomaines = async () => {

@@ -1,3 +1,21 @@
+// export class Choix {
+//   constructor() {
+//     this.type = "";
+//     this.quantite = 1;
+//     this.niveauObtention = 0;
+//     this.ref = [];
+//   }
+
+//   type;
+//   quantite;
+//   niveauObtention;
+//   categorie;
+//   domaine;
+//   ref; // Référence pour choix de don, sort, aptitude, fourberie
+// }
+
+// const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
+
 const getChoixPersonnage = async (personnage, progressingClasse) => {
   let listChoix = [];
 

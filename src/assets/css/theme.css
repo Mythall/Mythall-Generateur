@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500;600;700&display=swap");
 
 /* Theme */
 html {
@@ -10,6 +10,7 @@ html {
 
 body {
   background-image: url("https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/bg.jpg?alt=media&token=b818688d-309b-4e06-a429-cea75f4652ae");
+  font-weight: 400;
 }
 
 main {

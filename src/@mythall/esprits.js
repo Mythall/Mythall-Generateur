@@ -41,36 +41,36 @@ class Esprit {
     };
   }
 
-  async load () {
+  async load() {
     await this._getAptitudees();
     await this._getDons();
     await this._getSorts();
+    return;
   }
 
-  async _getAptitudees(this) {
+  async _getAptitudees() {
     if (this.aptitudes && this.aptitudes.length > 0) {
-      this.aptitudes.forEach(async (aptitudeItem) => {
+      this.aptitudes.forEach(async aptitudeItem => {
         aptitudeItem.aptitude = await getAptitude(aptitudeItem.aptitudeRef);
       });
     }
   }
 
-  async _getDons(this) {
+  async _getDons() {
     if (this.dons && this.dons.length > 0) {
-      this.dons.forEach(async (donItem) => {
+      this.dons.forEach(async donItem => {
         donItem.don = await getDon(donItem.donRef);
       });
     }
   }
 
-  async _getSorts(this) {
+  async _getSorts() {
     if (this.sorts && this.sorts.length > 0) {
-      this.sorts.forEach(async (sortItem) => {
+      this.sorts.forEach(async sortItem => {
         sortItem.sort = await getSort(sortItem.sortRef);
       });
     }
   }
-
 }
 
 const getEsprits = async () => {
@@ -82,7 +82,7 @@ const getEsprits = async () => {
 const getEsprit = async id => {
   const snap = await getDoc(doc(db, `esprits/${id}`));
   const esprit = new Esprit(snap.id, snap.data());
-  await esprit.load();
+  // await esprit.load();
   return esprit;
 };
 

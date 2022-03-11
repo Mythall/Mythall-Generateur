@@ -1,6 +1,7 @@
 import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
 import { User } from "./users";
+import { Race } from "./races";
 
 class Personnage {
   constructor(
@@ -14,6 +15,7 @@ class Personnage {
       capaciteSpeciales,
       resistances,
       immunites,
+      immunitesRef,
       esprit,
       ecole,
       dieu,
@@ -46,22 +48,23 @@ class Personnage {
     this.user = user;
     this.alignement = alignement;
     this.race = race;
-    this.statistiques = statistiques;
-    this.capaciteSpeciales = capaciteSpeciales;
-    this.resistances = resistances;
-    this.immunites = immunites;
+    this.statistiques = statistiques ? statistiques : [];
+    this.capaciteSpeciales = capaciteSpeciales ? capaciteSpeciales : [];
+    this.resistances = resistances ? resistances : [];
+    this.immunites = immunites ? immunites : [];
+    this.immunitesRef = immunitesRef ? immunitesRef : [];
     this.esprit = esprit;
     this.ecole = ecole;
     this.dieu = dieu;
-    this.ordres = ordres;
-    this.domaines = domaines;
+    this.ordres = ordres ? ordres : [];
+    this.domaines = domaines ? domaines : [];
     this.userRef = userRef;
-    this.classes = classes;
+    this.classes = classes ? classes : [];
     this.alignementRef = alignementRef;
-    this.dons = dons;
-    this.aptitudes = aptitudes;
-    this.sorts = sorts;
-    this.fourberies = fourberies;
+    this.dons = dons ? dons : [];
+    this.aptitudes = aptitudes ? aptitudes : [];
+    this.sorts = sorts ? sorts : [];
+    this.fourberies = fourberies ? fourberies : [];
     this.raceRef = raceRef;
     this.espritRef = espritRef;
     this.ecoleRef = ecoleRef;

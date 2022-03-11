@@ -1,6 +1,23 @@
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
 
+class ResistanceItem {
+  constructor({ resistance, resistanceRef, niveau, valeur, cummulable }) {
+    this.resistance = resistance ? resistance : null;
+    this.resistanceRef = resistanceRef ? resistanceRef : "";
+    this.niveau = niveau ? niveau : 1;
+    this.valeur = valeur ? valeur : 0;
+    this.cummulable = cummulable ? cummulable : false;
+  }
+}
+
+class ResistanceValue {
+  constructor({ resistance, valeur }) {
+    this.resistance = resistance ? resistance : null;
+    this.valeur = valeur ? valeur : 0;
+  }
+}
+
 class Resistance {
   constructor(id, { nom }) {
     this.id = id;
@@ -37,7 +54,7 @@ const deleteResistance = async id => {
   return await deleteDoc(doc(db, `resistances/${id}`));
 };
 
-export { Resistance, getResistances, getResistance, addResistance, updateResistance, deleteResistance };
+export { Resistance, ResistanceItem, ResistanceValue, getResistances, getResistance, addResistance, updateResistance, deleteResistance };
 
 // const resistances = [
 //   "Maladie",

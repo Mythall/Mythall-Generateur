@@ -2,6 +2,7 @@ import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, 
 import { db } from "../assets/js/firebase";
 import { getClasse } from "./classes";
 import { getResistance } from "./resistances";
+import { getStatistique } from "./statistiques";
 import { getImmunite } from "./immunites";
 import { getSort } from "./sorts";
 import { getDon } from "./dons";
@@ -41,18 +42,18 @@ class Race {
     this.alignementPermisRef = alignementPermisRef;
     this.classesDisponibleRef = classesDisponibleRef;
     this.ajustement = ajustement;
-    this.statistiques = statistiques;
-    this.resistances = resistances;
-    this.immunitesRef = immunitesRef;
-    this.sortsRacialRef = sortsRacialRef;
-    this.donsRacialRef = donsRacialRef;
-    this.aptitudesRacialRef = aptitudesRacialRef;
+    this.statistiques = statistiques ? statistiques : [];
+    this.resistances = resistances ? resistances : [];
+    this.immunitesRef = immunitesRef ? immunitesRef : [];
+    this.sortsRacialRef = sortsRacialRef ? sortsRacialRef : [];
+    this.donsRacialRef = donsRacialRef ? donsRacialRef : [];
+    this.aptitudesRacialRef = aptitudesRacialRef ? aptitudesRacialRef : [];
     this.alignementPermis = alignementPermis;
-    this.classesDisponible = classesDisponible;
-    this.immunites = immunites;
-    this.sortsRacial = sortsRacial;
-    this.donsRacial = donsRacial;
-    this.aptitudesRacial = aptitudesRacial;
+    this.classesDisponible = classesDisponible ? classesDisponible : [];
+    this.immunites = immunites ? immunites : [];
+    this.sortsRacial = sortsRacial ? sortsRacial : [];
+    this.donsRacial = donsRacial ? donsRacial : [];
+    this.aptitudesRacial = aptitudesRacial ? aptitudesRacial : [];
   }
 
   saveState() {

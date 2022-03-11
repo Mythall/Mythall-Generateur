@@ -22,7 +22,7 @@ class Fourberie {
     { nom, description, afficherNiveau, modificateurRef, fourberiesRequisRef, fourberiesRequis, donsEquivalentRef, donsEquivalent, modificateur }
   ) {
     this.id = id;
-    this.id = nom;
+    this.nom = nom;
     this.description = description;
     this.afficherNiveau = afficherNiveau;
     this.modificateurRef = modificateurRef;
@@ -51,6 +51,7 @@ class Fourberie {
   async load() {
     await this._getFourberiesRequis();
     await this._getModificateur();
+    return;
   }
 
   async _getFourberiesRequis() {

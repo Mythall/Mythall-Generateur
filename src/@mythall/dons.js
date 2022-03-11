@@ -4,6 +4,17 @@ import { getStatistique } from "./statistiques";
 import { getResistance } from "./resistances";
 import { getImmunite } from "./immunites";
 
+class DonItem {
+  constructor({ don, donRef, niveauObtention, niveauEffectif }) {
+    this.don = don ? don : null;
+    this.donRef = donRef ? donRef : "";
+    this.niveauObtention = niveauObtention ? niveauObtention : 1;
+    this.niveauEffectif = niveauEffectif ? niveauEffectif : 1;
+  }
+}
+
+// const DonCategories = ['Normal', 'Connaissance', 'Statistique', 'Résistance', 'Immunité', 'Maniement', 'Épique', 'Metamagie', 'Création', 'Spécialisation Martiale'];
+
 class Don {
   constructor(
     id,
@@ -89,10 +100,10 @@ class Don {
   }
 
   async load() {
-    await _getImmunites();
-    await _getResistances();
-    await _getStatistiques();
-    await _getModificateur();
+    await this._getImmunites();
+    await this._getResistances();
+    await this._getStatistiques();
+    await this._getModificateur();
     return;
   }
 
@@ -140,7 +151,7 @@ const getDons = async () => {
 const getDon = async id => {
   const snap = await getDoc(doc(db, `dons/${id}`));
   const don = new Don(snap.id, snap.data());
-  await don.load();
+  // await don.load();
   return don;
 };
 
@@ -156,7 +167,7 @@ const deleteDon = async id => {
   return await deleteDoc(doc(db, `dons/${id}`));
 };
 
-export { Don, getDons, getDon, addDon, updateDon, deleteDon };
+export { Don, DonItem, getDons, getDon, addDon, updateDon, deleteDon };
 
 // ...
 // Verifier ses methodes servaient à quoi

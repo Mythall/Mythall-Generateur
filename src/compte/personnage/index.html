@@ -28,14 +28,30 @@
         flex-direction: column;
         gap: var(--space-lg);
       }
-      .personnage__informations {
-        margin-top: var(--space-md);
+
+      .personnage h2 {
+        margin-bottom: var(--space-sm);
+      }
+
+      .personnage__informations,
+      .personnage__statistiques,
+      .personnage__resistances-immunites {
         display: grid;
         gap: var(--space-md);
       }
 
+      .personnge__dons,
+      .personnge__aptitudes,
+      .personnage__sorts {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+
       @media (min-width: 760px) {
-        .personnage__informations {
+        .personnage__informations,
+        .personnage__statistiques,
+        .personnage__resistances-immunites {
           grid-template-columns: repeat(2, 1fr);
         }
       }
@@ -46,6 +62,47 @@
     <header-component></header-component>
     <main>
       <personnage-component>
+        <template id="templateNameValue">
+          <div>
+            <strong id="name"></strong>
+            <span id="value"></span>
+          </div>
+        </template>
+
+        <template id="templateSort">
+          <div>
+            <h3>
+              <strong id="sortNom"></strong>
+              <span id="sortEcole"></span>
+            </h3>
+
+            <div>
+              <strong>Portée: </strong>
+              <span id="sortPorte"></span>
+            </div>
+
+            <div>
+              <strong>Durée: </strong>
+              <span id="sortDuree"></span>
+            </div>
+
+            <div>
+              <strong>Zone d’effet: </strong>
+              <span id="sortZone"></span>
+            </div>
+
+            <div>
+              <strong>Incantation: </strong>
+              <span id="sortIncantation"></span>
+            </div>
+
+            <div>
+              <strong>Sommaire: </strong>
+              <span id="sortSommaire"></span>
+            </div>
+          </div>
+        </template>
+
         <div class="personnage">
           <!--Informations-->
           <div>
@@ -54,36 +111,32 @@
             </h2>
             <div class="personnage__informations">
               <div>
+                <!--Joueur-->
                 <div>
                   <strong>Joueur: </strong>
                   <span id="displayName"></span>
-                  <br />
                 </div>
 
+                <!--Nom-->
                 <div>
                   <strong>Nom du Personnage: </strong>
                   <span id="nom"></span>
-                  <br />
                 </div>
 
+                <!--Race-->
                 <div>
                   <strong>Race: </strong>
                   <span id="race"></span>
-                  <br />
                 </div>
 
                 <!--Alignement-->
                 <div>
                   <strong>Alignement: </strong>
                   <span id="alignement"></span>
-                  <br />
                 </div>
 
                 <!--Niveaux-->
-                <div>
-                  <strong>Niveau: </strong><span id="niveaux"></span>
-                  <br />
-                </div>
+                <div><strong>Niveau: </strong><span id="niveaux"></span></div>
 
                 <!--Niveau Effectif-->
                 <div>
@@ -91,7 +144,6 @@
                   <span id="niveauEffectif"></span>
                   <span id="niveauDivin" class="hidden"></span>
                   <span id="niveauProfane" class="hidden"></span>
-                  <br />
                 </div>
               </div>
 
@@ -100,42 +152,36 @@
                 <div>
                   <strong>Vie(s): </strong>
                   <span id="vie"></span>
-                  <br />
                 </div>
 
                 <!--Divinité-->
                 <div [ngIf]="dieu-nom">
                   <strong>Divinité: </strong>
                   <span id="divinite"></span>
-                  <br />
                 </div>
 
                 <!--Domaines-->
                 <div class="hidden">
                   <strong>Domaines: </strong>
                   <span id="domaine"></span>
-                  <br />
                 </div>
 
                 <!--Ordres-->
                 <div class="hidden">
                   <strong>Ordre(s): </strong>
                   <span id="ordre"></span>
-                  <br />
                 </div>
 
                 <!--Esprit-->
                 <div class="hidden">
                   <strong>Esprit Patron: </strong>
                   <span id="esprit"></span>
-                  <br />
                 </div>
 
                 <!--Niveau Disponible-->
                 <div class="hidden">
                   <strong>Niveau Disponible: </strong>
                   <span id="niveauDisponible"></span>
-                  <br />
                 </div>
               </div>
             </div>
@@ -143,303 +189,100 @@
 
           <!--Statistique-->
           <div>
-            <div class="col-12">
-              <h2>
-                <strong>Statistiques</strong>
-              </h2>
-            </div>
-            <div class="col-6">
-              <div>
-                <!--Constitution-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'OdzM6YHkYw41HXMIcTsw'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
+            <h2>
+              <strong>Statistiques</strong>
+            </h2>
 
-                <!--Dextérité-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'oFeJq3NgdDDEwi0Y1rdR'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Force-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'gOg0TFSbU8mvlv8baCXE'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Intelligence-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'yKfNuFBQY5UknrTNOxpA'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Sagesse-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'HkaChqWpHOlINdla02ja'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-6">
-              <div>
-                <!--Point(s) de vie Torse-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'sCcNIQDoWKUIIcSpkB2m'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Point(s) de vie Bras-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'ZSnV9s6cyzYihdFR6wfr'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Point(s) de vie Jambes-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == '69jKTq64XUCk51EmY0Z1'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Point(s) de lutte-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'Rp8BG8OtlNKl8aeuojdi'">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Point(s) de magie-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == '3f75skgSz3CWqdERXcqG' && statistique-valeur > 0">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-
-                <!--Point(s) de ki-->
-                <div ngFor [ngForOf]="statistiques" let-statistique>
-                  <div *ngIf="statistique-statistique-id == 'py44fmGyDCUnkkBZmto9' && statistique-valeur > 0">
-                    <strong id="statistique-statistique-nom + ': '"></strong>
-                    <span id="statistique-valeur"></span>
-                    <br />
-                  </div>
-                </div>
-              </div>
+            <div class="personnage__statistiques">
+              <div id="statistiquesBase"></div>
+              <div id="statistiqueSpecialise"></div>
             </div>
           </div>
 
           <!--Résistances & Immunités-->
-          <div>
-            <div class="col-6">
+          <div class="personnage__resistances-immunites">
+            <div>
               <h2>
                 <strong>Résistance(s)</strong>
               </h2>
-              <div>
-                <div ngFor [ngForOf]="resistances" let-resistance>
-                  <strong id="resistance-resistance-nom + ': '"></strong>
-                  <span id="resistance-valeur"></span>
-                  <br />
-                </div>
-                <span *ngIf="!resistances || resistances && resistances.length == 0">Aucune</span>
-              </div>
+              <div id="resistances"></div>
             </div>
-            <div class="col-6">
+            <div>
               <h2>
                 <strong>Immunité(s)</strong>
               </h2>
-              <div>
-                <div ngFor [ngForOf]="immunites" let-immunite>
-                  <strong id="immunite-nom"></strong>
-                  <br />
-                </div>
-                <span *ngIf="!immunites || immunites && immunites.length == 0">Aucune</span>
-              </div>
+              <div id="immunites"></div>
             </div>
           </div>
 
           <!--Capacité(s) Spéciale(s)-->
           <div *ngIf="capaciteSpeciales && capaciteSpeciales.length > 0">
-            <div class="col-12">
-              <h2>
-                <strong>Capacité(s) Spéciale(s)</strong>
-              </h2>
-              <div>
-                <div ngFor [ngForOf]="capaciteSpeciales" let-statistique>
-                  <strong id="statistique-statistique-nom + ': ' "></strong>
-                  <span id="statistique-valeur"></span>
-                  <br />
-                </div>
-              </div>
-            </div>
+            <h2>
+              <strong>Capacité(s) Spéciale(s)</strong>
+            </h2>
+            <div id="capacitesSpeciales"></div>
           </div>
 
           <!--Dons(s)-->
-          <div *ngIf="dons && dons.length > 0" class="mb-1">
-            <div class="col">
-              <h2>
-                <strong>Dons</strong>
-              </h2>
+          <div>
+            <template id="templateDon">
               <div>
-                <div ngFor [ngForOf]="dons" let-donItem>
-                  <div class="mb-2">
-                    <div class="col">
-                      <h3 class="mb-0">
-                        <span class="font-weight-bold" id="donItem-don-nom"></span>
-                        <span *ngIf="donItem-don-afficherNiveau" id="'(' + donItem-niveauEffectif + ')'"></span>
-                      </h3>
-
-                      <span id="donItem-don-description"></span>
-                      <br />
-                    </div>
-                  </div>
-                </div>
+                <p>
+                  <strong id="donNom"></strong>
+                  <span id="donNiveau"></span>
+                </p>
+                <span id="donDescription"></span>
               </div>
-            </div>
+            </template>
+
+            <h2><strong>Dons</strong></h2>
+            <div id="dons" class="personnge__dons"></div>
           </div>
 
           <!--Aptitudes(s)-->
-          <div *ngIf="aptitudes && aptitudes.length > 0" class="mb-1">
-            <div class="col">
-              <h2>
-                <strong>Aptitude(s) Spéciale(s)</strong>
-              </h2>
+          <div>
+            <template id="templateAptitude">
               <div>
-                <div ngFor [ngForOf]="aptitudes" let-aptitudeItem>
-                  <div class="mb-2">
-                    <div class="col">
-                      <h3 class="mb-0">
-                        <span class="font-weight-bold" id="aptitudeItem-aptitude-nom"></span>
-                      </h3>
-
-                      <span id="aptitudeItem-aptitude-description"></span>
-                      <br />
-                    </div>
-                  </div>
-                </div>
+                <p><strong id="aptitudeNom"></strong></p>
+                <span id="aptitudeDescription"></span>
               </div>
-            </div>
+            </template>
+
+            <h2>
+              <strong>Aptitude(s) Spéciale(s)</strong>
+            </h2>
+            <div id="aptitudes" class="personnge__aptitudes"></div>
           </div>
 
           <!--Fourberies(s)-->
-          <div *ngIf="fourberies && fourberies.length > 0" class="mb-1">
-            <div class="col">
-              <h2>
-                <strong>Fourberies</strong>
-              </h2>
+          <div>
+            <template id="templateFourberie">
               <div>
-                <div ngFor [ngForOf]="fourberies" let-fourberieItem>
-                  <div class="mb-2">
-                    <div class="col">
-                      <h3 class="mb-0">
-                        <span class="font-weight-bold" id="fourberieItem-fourberie-nom"></span>
-                      </h3>
-                      <span id="fourberieItem-fourberie-description"></span>
-                      <br />
-                    </div>
-                  </div>
-                </div>
+                <p><strong id="fourberieNom"></strong></p>
+                <span id="fourberieDescription"></span>
               </div>
-            </div>
+            </template>
+
+            <h2>
+              <strong>Fourberies</strong>
+            </h2>
+            <div id="fourberies" class="personnge__fourberies"></div>
           </div>
 
           <!--Sort(s) Racial-->
-          <div *ngIf="race && race-sortsRacial && race-sortsRacial.length > 0" class="mb-1">
-            <div class="col">
-              <h2>
-                <strong>Sort(s) Racial(aux)</strong>
-              </h2>
-              <div>
-                <div ngFor [ngForOf]="race-sortsRacial" let-sort>
-                  <h3 class="font-weight-bold mb-0" id="sort-nom + ' (' + sort-ecole-nom + ')'"></h3>
-
-                  <strong>Portée: </strong>
-                  <span id="sort-porte-nom"></span>
-                  <br />
-
-                  <strong>Durée: </strong>
-                  <span id="sort-duree-nom"></span>
-                  <br />
-
-                  <strong>Zone d’effet: </strong>
-                  <span id="sort-zone-nom"></span>
-                  <br />
-
-                  <strong>Incantation: </strong>
-                  <span id="sort-incantation"></span>
-                  <br />
-
-                  <strong>Sommaire: </strong>
-                  <span id="sort-sommaire"></span>
-                  <br />
-                </div>
-              </div>
-            </div>
+          <div>
+            <h2>
+              <strong>Sort(s) Racial(aux)</strong>
+            </h2>
+            <div id="sortsRacial" class="personnage__sorts"></div>
           </div>
 
           <!--Sort(s)-->
-          <div *ngIf="sorts && sorts.length > 0" class="mb-1">
-            <div class="col">
-              <h2>
-                <strong>Sort(s)</strong>
-              </h2>
-              <div>
-                <div ngFor [ngForOf]="sorts" let-sort>
-                  <h3 class="font-weight-bold mb-0" id="sort-sort-nom + ' (' + sort-sort-ecole-nom + ')'"></h3>
-
-                  <strong>Niveau: </strong>
-                  <span id="sort-sort-niveau"></span>
-                  <br />
-
-                  <strong>Portée: </strong>
-                  <span id="sort-sort-porte-nom"></span>
-                  <br />
-
-                  <strong>Durée: </strong>
-                  <span id="sort-sort-duree-nom"></span>
-                  <br />
-
-                  <strong>Zone d’effet: </strong>
-                  <span id="sort-sort-zone-nom"></span>
-                  <br />
-
-                  <strong>Incantation: </strong>
-                  <span id="sort-sort-incantation"></span>
-                  <br />
-
-                  <strong>Sommaire: </strong>
-                  <span id="sort-sort-sommaire"></span>
-                  <br />
-                  <br />
-                </div>
-              </div>
-            </div>
+          <div>
+            <h2>
+              <strong>Sort(s)</strong>
+            </h2>
+            <div id="sorts" class="personnage__sorts"></div>
           </div>
         </div>
       </personnage-component>

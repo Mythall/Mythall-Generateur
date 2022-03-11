@@ -1,7 +1,7 @@
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
 
-const StatistiqueIds = {
+const statistiqueIds = {
   Constitution: "OdzM6YHkYw41HXMIcTsw",
   Dextérité: "oFeJq3NgdDDEwi0Y1rdR",
   Force: "gOg0TFSbU8mvlv8baCXE",
@@ -15,10 +15,27 @@ const StatistiqueIds = {
   Ki: "py44fmGyDCUnkkBZmto9"
 };
 
+class StatistiqueItem {
+  constructor({ statistique, statistiqueRef, niveau, valeur, cummulable }) {
+    this.statistique = statistique ? statistique : null;
+    this.statistiqueRef = statistiqueRef ? statistiqueRef : "";
+    this.niveau = niveau ? niveau : 1;
+    this.valeur = valeur ? valeur : 0;
+    this.cummulable = cummulable ? cummulable : false;
+  }
+}
+
+class StatistiqueValue {
+  constructor({ statistique, valeur }) {
+    this.statistique = statistique ? statistique : null;
+    this.valeur = valeur ? valeur : 0;
+  }
+}
+
 class Statistique {
   constructor(id, { nom }) {
     this.id = id;
-    this.nom = nom;
+    this.nom = nom ? nom : null;
   }
 
   saveState() {
@@ -51,6 +68,16 @@ const deleteStatistique = async id => {
   return await deleteDoc(doc(db, `statistiques/${id}`));
 };
 
-export { Statistique, getStatistiques, getStatistique, addStatistique, updateStatistique, deleteStatistique, StatistiqueIds };
+export {
+  Statistique,
+  StatistiqueItem,
+  StatistiqueValue,
+  getStatistiques,
+  getStatistique,
+  addStatistique,
+  updateStatistique,
+  deleteStatistique,
+  statistiqueIds
+};
 
 // const statistiques = ["Constitution", "Dextérité", "Force", "Intelligence", "Sagesse", "PVTorse", "PVBras", "PVJambes", "Lutte", "Mana", "Ki"];

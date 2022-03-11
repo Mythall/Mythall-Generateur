@@ -26,6 +26,7 @@ class Ordre {
 
   async load() {
     await this._getClasses();
+    return;
   }
 
   async _getClasses() {

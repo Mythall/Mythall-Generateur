@@ -5,6 +5,14 @@ import { getPorte } from "./portes";
 import { getDuree } from "./durees";
 import { getZone } from "./zones";
 
+class SortItem {
+  constructor({ sort, sortRef, niveauObtention }) {
+    this.sort = sort ? sort : null;
+    this.sortRef = sortRef ? sortRef : "";
+    this.niveauObtention = niveauObtention ? niveauObtention : 1;
+  }
+}
+
 class Sort {
   constructor(id, { nom, niveau, incantation, sommaire, description, ecoleRef, ecole, porteRef, porte, dureeRef, duree, zoneRef, zone }) {
     this.id = id;
@@ -71,4 +79,4 @@ const deleteSort = async id => {
   return await deleteDoc(doc(db, `sorts/${id}`));
 };
 
-export { Sort, getSorts, getSort, addSort, updateSort, deleteSort };
+export { Sort, SortItem, getSorts, getSort, addSort, updateSort, deleteSort };
