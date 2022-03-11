@@ -1,5 +1,6 @@
 import { auth } from "../../assets/js/firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { User, setUser } from "../../@mythall/users";
 
 class RegisterComponent extends HTMLElement {
   constructor() {
@@ -36,15 +37,22 @@ class RegisterComponent extends HTMLElement {
 
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, this.email.value, this.password.value);
-      const user = userCredential;
+      const user = userCredential.user;
 
-      // Create User in firestore with missing fields
-      // ...
+      const userData = new User(user.uid, {
+        uid: user.uid,
+        email: this.email.value,
+        displayname: `${this.firstname.value} ${this.lastname.value}`,
+        firstname: this.firstname.value,
+        lastname: this.lastname.value,
+        dateOfBirth: this.birthdate.value
+      });
+
+      // Save user in firestore - We use set here to choose a matching id with auth uid
+      await setUser(userData);
 
       // Redirect to account
       window.location.href = "/compte";
-
-      console.log(user);
     } catch (error) {
       alert(error);
     }

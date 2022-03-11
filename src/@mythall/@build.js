@@ -144,8 +144,8 @@ const _getNiveauEffectif = async personnage => {
   if (personnage.race) {
     if (personnage.race.ajustement) {
       personnage.niveauEffectif += +personnage.race.ajustement;
-      personnage.niveauProfane += +personnage.race.ajustement;
-      personnage.niveauDivin += +personnage.race.ajustement;
+      if (personnage.niveauProfane > 0) personnage.niveauProfane += +personnage.race.ajustement;
+      if (personnage.niveauDiving > 0) personnage.niveauDivin += +personnage.race.ajustement;
     }
   }
 

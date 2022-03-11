@@ -33,6 +33,12 @@
         margin-bottom: var(--space-sm);
       }
 
+      .personnage__space {
+        display: flex;
+        flex-direction: column;
+        gap: calc(var(--space-xs) / 2);
+      }
+
       .personnage__informations,
       .personnage__statistiques,
       .personnage__resistances-immunites {
@@ -42,10 +48,19 @@
 
       .personnge__dons,
       .personnge__aptitudes,
+      .personnge__fourberies,
       .personnage__sorts {
         display: flex;
         flex-direction: column;
         gap: var(--space-sm);
+      }
+
+      .personnage__sorts {
+        gap: var(--space-md);
+      }
+
+      .personnage__sort-title {
+        font-size: var(--font-body-lg);
       }
 
       @media (min-width: 760px) {
@@ -70,11 +85,11 @@
         </template>
 
         <template id="templateSort">
-          <div>
-            <h3>
+          <div class="personnage__space">
+            <div class="personnage__sort-title">
               <strong id="sortNom"></strong>
               <span id="sortEcole"></span>
-            </h3>
+            </div>
 
             <div>
               <strong>Portée: </strong>
@@ -110,11 +125,11 @@
               <strong>Informations</strong>
             </h2>
             <div class="personnage__informations">
-              <div>
+              <div class="personnage__space">
                 <!--Joueur-->
                 <div>
                   <strong>Joueur: </strong>
-                  <span id="displayName"></span>
+                  <span id="displayname"></span>
                 </div>
 
                 <!--Nom-->
@@ -147,7 +162,7 @@
                 </div>
               </div>
 
-              <div>
+              <div class="personnage__space">
                 <!--Vie(s)-->
                 <div>
                   <strong>Vie(s): </strong>
@@ -194,39 +209,39 @@
             </h2>
 
             <div class="personnage__statistiques">
-              <div id="statistiquesBase"></div>
-              <div id="statistiqueSpecialise"></div>
+              <div id="statistiquesBase" class="personnage__space"></div>
+              <div id="statistiqueSpecialise" class="personnage__space"></div>
             </div>
           </div>
 
           <!--Résistances & Immunités-->
-          <div class="personnage__resistances-immunites">
-            <div>
+          <div id="resistancesImmunitesSection" class="hidden personnage__resistances-immunites">
+            <div id="resistancesSection" class="hidden">
               <h2>
                 <strong>Résistance(s)</strong>
               </h2>
-              <div id="resistances"></div>
+              <div id="resistances" class="personnage__space"></div>
             </div>
-            <div>
+            <div id="immunitesSection" class="hidden">
               <h2>
                 <strong>Immunité(s)</strong>
               </h2>
-              <div id="immunites"></div>
+              <div id="immunites" class="personnage__space"></div>
             </div>
           </div>
 
           <!--Capacité(s) Spéciale(s)-->
-          <div *ngIf="capaciteSpeciales && capaciteSpeciales.length > 0">
+          <div id="capacitesSpecialesSection" class="hidden">
             <h2>
               <strong>Capacité(s) Spéciale(s)</strong>
             </h2>
-            <div id="capacitesSpeciales"></div>
+            <div id="capacitesSpeciales" class="personnage__space"></div>
           </div>
 
           <!--Dons(s)-->
           <div>
             <template id="templateDon">
-              <div>
+              <div class="personnage__space">
                 <p>
                   <strong id="donNom"></strong>
                   <span id="donNiveau"></span>
@@ -240,9 +255,9 @@
           </div>
 
           <!--Aptitudes(s)-->
-          <div>
+          <div id="aptitudesSection" class="hidden">
             <template id="templateAptitude">
-              <div>
+              <div class="personnage__space">
                 <p><strong id="aptitudeNom"></strong></p>
                 <span id="aptitudeDescription"></span>
               </div>
@@ -255,9 +270,9 @@
           </div>
 
           <!--Fourberies(s)-->
-          <div>
+          <div id="fourberiesSection" class="hidden">
             <template id="templateFourberie">
-              <div>
+              <div class="personnage__space">
                 <p><strong id="fourberieNom"></strong></p>
                 <span id="fourberieDescription"></span>
               </div>
@@ -270,7 +285,7 @@
           </div>
 
           <!--Sort(s) Racial-->
-          <div>
+          <div id="sortsRacialSection" class="hidden">
             <h2>
               <strong>Sort(s) Racial(aux)</strong>
             </h2>
@@ -278,7 +293,7 @@
           </div>
 
           <!--Sort(s)-->
-          <div>
+          <div id="sortsSection" class="hidden">
             <h2>
               <strong>Sort(s)</strong>
             </h2>

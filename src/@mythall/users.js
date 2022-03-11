@@ -1,4 +1,4 @@
-import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy, setDoc } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
 
 class Role {
@@ -10,26 +10,27 @@ class Role {
 }
 
 class User {
-  constructor(id, { displayName, firstname, lastname, dateOfBirth, email, photoURL, roles }) {
+  constructor(id, { displayname, firstname, lastname, dateOfBirth, email, photoURL, roles }) {
     this.uid = id;
     this.firstname = firstname;
     this.lastname = lastname;
-    this.displayName = displayName ? displayName : `${firstname} ${lastname}`;
+    this.displayname = displayname ? displayname : `${firstname} ${lastname}`;
     this.dateOfBirth = dateOfBirth;
     this.email = email;
-    this.photoURL = photoURL;
-    this.roles = roles;
+    if (photoURL) this.photoURL = photoURL;
+    if (roles) this.roles = roles;
   }
 
   saveState() {
     return {
-      displayName: this.displayName,
-      firstname: this.firstname,
-      lastname: this.lastname,
-      dateOfBirth: this.dateOfBirth,
-      email: this.email,
-      photoURL: this.photoURL,
-      roles: this.roles
+      uid: this.uid,
+      displayname: this.displayname ? this.displayname : null,
+      firstname: this.firstname ? this.firstname : null,
+      lastname: this.lastname ? this.lastname : null,
+      dateOfBirth: this.dateOfBirth ? this.dateOfBirth : null,
+      email: this.email ? this.email : null,
+      photoURL: this.photoURL ? this.photoURL : null,
+      roles: this.roles ? this.roles : null
     };
   }
 }
@@ -53,8 +54,12 @@ const updateUser = async user => {
   return await updateDoc(doc(db, `users/${user.id}`), user.saveState());
 };
 
+const setUser = async user => {
+  return await setDoc(doc(db, `users/${user.uid}`), user.saveState());
+};
+
 const deleteUser = async id => {
   return await deleteDoc(doc(db, `users/${id}`));
 };
 
-export { User, getUsers, getUser, addUser, updateUser, deleteUser };
+export { User, getUsers, getUser, addUser, updateUser, setUser, deleteUser };

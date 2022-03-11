@@ -12,9 +12,9 @@ class PersonnageComponent extends HTMLElement {
     toggleLoading(true, "Téléchargement de la fiche de personnage...");
 
     // Load Character
-    await this.getPersonnage();
+    await this._getPersonnage();
 
-    console.log(this.personnage);
+    // console.log(this.personnage);
 
     // Fill Sections
     this._setInformations();
@@ -29,7 +29,7 @@ class PersonnageComponent extends HTMLElement {
     toggleLoading(false);
   }
 
-  getPersonnage = async () => {
+  _getPersonnage = async () => {
     // Get URL paramas and convert from a set to an array
     const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
       return { [item[0]]: item[1] };
@@ -55,7 +55,7 @@ class PersonnageComponent extends HTMLElement {
   _setInformations = () => {
     // Informations
     this.querySelector("#nom").innerHTML = this.personnage.nom;
-    this.querySelector("#displayName").innerHTML = this.personnage.user.displayName;
+    this.querySelector("#displayname").innerHTML = this.personnage.user.displayname;
     this.querySelector("#vie").innerHTML = this.personnage.vie;
     this.querySelector("#niveauEffectif").innerHTML = this.personnage.niveauEffectif;
     this.querySelector("#alignement").innerHTML = this.personnage.alignement.nom;
@@ -128,17 +128,29 @@ class PersonnageComponent extends HTMLElement {
 
     statistiquesSpecialise.forEach(id => {
       const statistique = this.personnage.statistiques.find(statistiqueItem => statistiqueItem.statistique.id == id);
+      if (statistique?.statistique.id == statistiqueIds.Ki && statistique?.valeur <= 0) {
+        return;
+      }
       this._cloneNameValue(this.querySelector("#statistiqueSpecialise"), statistique?.statistique?.nom, statistique?.valeur);
     });
   };
 
   _setResistancesImmunites = () => {
-    this.personnage.resistances.forEach(resistanceValue => {
-      this._cloneNameValue(this.querySelector("#resistances"), resistanceValue?.resistance?.nom, resistanceValue?.valeur);
-    });
-    this.personnage.immunites.forEach(immunite => {
-      this._cloneNameValue(this.querySelector("#immunites"), immunite?.nom, "");
-    });
+    if (this.personnage.resistances?.length > 0) {
+      this.querySelector("#resistancesImmunitesSection").classList.toggle("hidden", false);
+      this.querySelector("#resistancesSection").classList.toggle("hidden", false);
+      this.personnage.resistances.forEach(resistanceValue => {
+        this._cloneNameValue(this.querySelector("#resistances"), resistanceValue?.resistance?.nom, resistanceValue?.valeur);
+      });
+    }
+
+    if (this.personnage.immunites?.length > 0) {
+      this.querySelector("#resistancesImmunitesSection").classList.toggle("hidden", false);
+      this.querySelector("#immunitesSection").classList.toggle("hidden", false);
+      this.personnage.immunites.forEach(immunite => {
+        this._cloneNameValue(this.querySelector("#immunites"), immunite?.nom, "");
+      });
+    }
   };
 
   _setCapacitesSpeciales = () => {
@@ -147,6 +159,7 @@ class PersonnageComponent extends HTMLElement {
       .filter(sv => !sIds.find(id => sv.statistique.id == id))
       .forEach(statistiqueValue => {
         this._cloneNameValue(this.querySelector("#capacitesSpeciales"), statistiqueValue?.statistique?.nom, statistiqueValue?.valeur);
+        this.querySelector("#capacitesSpecialesSection").classList.toggle("hidden", false);
       });
   };
 
@@ -171,6 +184,7 @@ class PersonnageComponent extends HTMLElement {
         clone.querySelector("#aptitudeNom").innerHTML = aptitudeItem.aptitude.nom;
         clone.querySelector("#aptitudeDescription").innerHTML = aptitudeItem.aptitude.description;
         this.querySelector("#aptitudes").appendChild(clone);
+        this.querySelector("#aptitudesSection").classList.toggle("hidden", false);
       });
     }
   };
@@ -183,6 +197,7 @@ class PersonnageComponent extends HTMLElement {
         clone.querySelector("#fourberieNom").innerHTML = fourberieItem.fourberie.nom;
         clone.querySelector("#fourberieDescription").innerHTML = fourberieItem.fourberie.description;
         this.querySelector("#fourberies").appendChild(clone);
+        this.querySelector("#fourberiesSection").classList.toggle("hidden", false);
       });
     }
   };
@@ -190,9 +205,11 @@ class PersonnageComponent extends HTMLElement {
   _setSorts = () => {
     this.personnage.race.sortsRacial.forEach(sort => {
       this._cloneSort(this.querySelector("#sortsRacial"), { sort });
+      this.querySelector("#sortsRacialSection").classList.toggle("hidden", false);
     });
     this.personnage.sorts.forEach(item => {
       this._cloneSort(this.querySelector("#sorts"), item);
+      this.querySelector("#sortsSection").classList.toggle("hidden", false);
     });
   };
 
