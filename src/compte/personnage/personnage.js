@@ -229,6 +229,7 @@ class PersonnageComponent extends HTMLElement {
       const clone = this.querySelector("#templateSort").content.cloneNode(true);
       clone.querySelector("#sortNom").innerHTML = item.sort.nom;
       clone.querySelector("#sortEcole").innerHTML = `(${item.sort.ecole.nom})`;
+      clone.querySelector("#sortNiveau").innerHTML = item.sort.niveau;
       clone.querySelector("#sortPorte").innerHTML = item.sort.porte;
       clone.querySelector("#sortDuree").innerHTML = item.sort.duree;
       clone.querySelector("#sortZone").innerHTML = item.sort.zone;
