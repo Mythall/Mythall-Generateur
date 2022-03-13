@@ -16,6 +16,11 @@ class UserComponent extends HTMLElement {
 
       currentUser = await getUser(user.uid);
       this.querySelector("#name").innerHTML = `${currentUser.displayname}`;
+
+      if (currentUser.roles.animateur == true || currentUser.roles.organisateur == true) {
+        this.querySelector("#animateur").innerHTML = `<a href="/organisateur/personnages">Liste des personnages</a>`;
+      }
+
       const personnagesComponent = document.querySelector("personnages-component");
       await personnagesComponent.getPersonnages();
     });

@@ -16,8 +16,10 @@
     <style>
       user-component {
         display: flex;
+        flex-direction: column;
         justify-content: center;
         align-items: center;
+        gap: var(--space-sm);
       }
       personnages-component {
         display: flex;
@@ -39,6 +41,9 @@
     <main>
       <user-component>
         <h1>Bienvenue <span id="name"></span></h1>
+        <div id="organisateur"></div>
+        <div id="animateur"></div>
+        <div id="joueur"></div>
       </user-component>
       <personnages-component>
         <template>

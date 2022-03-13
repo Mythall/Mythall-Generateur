@@ -1,7 +1,5 @@
 import { db } from "../assets/js/firebase";
 import { doc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
-import { User } from "./users";
-import { Race } from "./races";
 
 class Personnage {
   constructor(

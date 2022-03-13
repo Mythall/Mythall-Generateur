@@ -19,6 +19,7 @@ input.touched:invalid {
   border-color: var(--color-error);
 }
 
+.button-primary,
 button[type="submit"] {
   background: var(--color-primary);
   color: var(--text-white);
@@ -28,6 +29,7 @@ button[type="submit"] {
   box-shadow: var(--base-shadow);
   transition: var(--transition);
 }
+.button-primary:hover,
 button[type="submit"]:hover {
   cursor: pointer;
   box-shadow: var(--active-shadow);

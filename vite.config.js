@@ -17,6 +17,7 @@ export default defineConfig(async () => {
           motDePasseOublie: resolve(__dirname, `${root}/compte/mot-de-passe-oublie/index.html`),
           personnage: resolve(__dirname, `${root}/compte/personnage/index.html`),
           compte: resolve(__dirname, `${root}/compte/index.html`),
+          organisateurPersonnages: resolve(__dirname, `${root}/organisateur/personnages/index.html`),
           error: resolve(__dirname, `${root}/error.html`)
         }
       }
