@@ -1,7 +1,7 @@
 class FooterComponent extends HTMLElement {
   constructor() {
     super();
-    this.copyright = `Mythall ${new Date().getFullYear()} © Tous droits réservées`;
+    this.copyright = `Mythall ${new Date().getFullYear()} © Tous droits réservés`;
   }
 
   async connectedCallback() {
