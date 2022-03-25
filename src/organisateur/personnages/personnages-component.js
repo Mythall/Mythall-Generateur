@@ -4,7 +4,7 @@ class PersonnagesComponent extends HTMLElement {
   constructor() {
     super();
     this.filtreNom = this.querySelector("#filtreNom");
-    this.filtreNom.addEventListener("change", () => this._filtrePersonnages());
+    this.filtreNom.addEventListener("input", this._debounce(() => this._filterPersonnages()));
   }
 
   async connectedCallback() {
@@ -14,16 +14,17 @@ class PersonnagesComponent extends HTMLElement {
     });
   }
 
-  _filtrePersonnages() {
-    this._clearPersonanges();
+  _filterPersonnages() {
+    this._clearPersonnages();
+    let searchQuery = this._cleanForSearch(this.filtreNom.value);
     this.personnages
-      .filter(personnage => personnage.nom.includes(this.filtreNom.value))
+      .filter(personnage => this._cleanForSearch(personnage.nom).includes(searchQuery))
       .forEach(personnage => {
         this._setPersonnage(personnage);
       });
   }
 
-  _clearPersonanges() {
+  _clearPersonnages() {
     this.querySelector("#list").innerHTML = "";
   }
 
@@ -35,6 +36,21 @@ class PersonnagesComponent extends HTMLElement {
       clone.querySelector("#view").setAttribute("href", `/compte/personnage?id=${personnage.id}`);
       this.querySelector("#list").appendChild(clone);
     }
+  }
+
+  _debounce(func, timeout = 200) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => { 
+        func(args); 
+      }, timeout);
+    }
+  }
+
+  _cleanForSearch(string) {
+    // Allows for case insensitive, diacritics agnostic search
+    return string.toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
   }
 }
 
