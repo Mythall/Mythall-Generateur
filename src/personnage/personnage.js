@@ -1,7 +1,7 @@
-import { toggleLoading } from "../../assets/components/loading-component";
-import { getPersonnage } from "../../@mythall/personnages";
-import { buildPersonnage } from "../../@mythall/@build";
-import { statistiqueIds } from "../../@mythall/statistiques";
+import { toggleLoading } from "../assets/components/loading-component";
+import { getPersonnage } from "../@mythall/personnages";
+import { buildPersonnage } from "../@mythall/@build";
+import { statistiqueIds } from "../@mythall/statistiques";
 
 class PersonnageComponent extends HTMLElement {
   constructor() {

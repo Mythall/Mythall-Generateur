@@ -2,19 +2,14 @@ import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, 
 import { db } from "../assets/js/firebase";
 import { getStatistique } from "./statistiques";
 
-// export class FourberieItem {
-//   constructor() {
-//     this.fourberie = null;
-//     this.fourberieRef = '';
-//     this.niveauObtention = 1;
-//     this.niveauEffectif = 1;
-//   }
-
-//   fourberie: IFourberie;
-//   fourberieRef: string;
-//   niveauObtention: number;
-//   niveauEffectif: number;
-// }
+class FourberieItem {
+  constructor({ fourberie, fourberieRef, niveauObtention, niveauEffectif }) {
+    this.fourberie = fourberie ? fourberie : null;
+    this.fourberieRef = fourberieRef ? fourberieRef : "";
+    this.niveauObtention = niveauObtention ? niveauObtention : 1;
+    this.niveauEffectif = niveauEffectif ? niveauEffectif : 1;
+  }
+}
 
 class Fourberie {
   constructor(
@@ -96,4 +91,4 @@ const deleteFourberie = async id => {
   return await deleteDoc(doc(db, `fourberies/${id}`));
 };
 
-export { Fourberie, getFourberies, getFourberie, addFourberie, updateFourberie, deleteFourberie };
+export { Fourberie, FourberieItem, getFourberies, getFourberie, addFourberie, updateFourberie, deleteFourberie };

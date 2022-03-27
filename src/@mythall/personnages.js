@@ -31,6 +31,7 @@ class Personnage {
       ecoleRef,
       dieuRef,
       ordresRef,
+      ordreRef,
       domainesRef,
       niveauEffectif,
       niveauReel,
@@ -67,10 +68,11 @@ class Personnage {
     this.espritRef = espritRef;
     this.ecoleRef = ecoleRef;
     this.dieuRef = dieuRef;
+    this.ordreRef = ordreRef;
     this.ordresRef = ordresRef; // ... Changer pour singulier, un personnage n'as qu'un seul ordre - Valider aussi dans fiche perso pour changer pour un champ singulier au lieu d'un array
-    this.domainesRef = domainesRef;
-    this.niveauEffectif = niveauEffectif ? niveauEffectif : 0;
-    this.niveauReel = niveauReel ? niveauReel : 0;
+    this.domainesRef = domainesRef ? domainesRef : [];
+    this.niveauEffectif = niveauEffectif ? niveauEffectif : 1;
+    this.niveauReel = niveauReel ? niveauReel : 1;
     this.niveauProfane = niveauProfane ? niveauProfane : 0;
     this.niveauDivin = niveauDivin ? niveauDivin : 0;
     this.niveauDisponible = niveauDisponible ? niveauDisponible : 0;
@@ -83,6 +85,7 @@ class Personnage {
     if (!this.ecoleRef) this.ecoleRef = "";
     if (!this.espritRef) this.espritRef = "";
     if (!this.ordresRef) this.ordresRef = [];
+    if (!this.ordreRef) this.ordreRef = "";
     if (!this.domainesRef) this.domainesRef = [];
 
     // Filter Out Race Dons / Sorts / Fourberies / Aptitudes

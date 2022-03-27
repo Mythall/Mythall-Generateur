@@ -42,7 +42,7 @@ class PersonnagesComponent extends HTMLElement {
         personnages.forEach(personnage => {
           const clone = this.querySelector("template").content.cloneNode(true);
           clone.querySelector("#nom").textContent = personnage.nom;
-          clone.querySelector("#personnage").href = `/compte/personnage?id=${personnage.id}`;
+          clone.querySelector("#personnage").href = `/personnage?id=${personnage.id}`;
           this.appendChild(clone);
         });
       }

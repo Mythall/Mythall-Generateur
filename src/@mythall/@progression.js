@@ -1,153 +1,34 @@
-// export class Choix {
-//   constructor() {
-//     this.type = "";
-//     this.quantite = 1;
-//     this.niveauObtention = 0;
-//     this.ref = [];
-//   }
-
-//   type;
-//   quantite;
-//   niveauObtention;
-//   categorie;
-//   domaine;
-//   ref; // Référence pour choix de don, sort, aptitude, fourberie
-// }
+import { getRaces } from "./races";
+import { getClasses } from "./classes";
+import { getAlignements } from "./alignements";
+import { getDomaines } from "./domaines";
+import { getEcoles } from "./ecoles";
+import { getEsprits } from "./esprits";
+import { getOrdres } from "./ordres";
+import { getDieux } from "./dieux";
+import { getDons } from "./dons";
+import { getFourberies } from "./fourberies";
+import { getSort } from "./sorts";
 
 // const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
 
-const getChoixPersonnage = async (personnage, progressingClasse) => {
-  let listChoix = [];
-
-  // Dons aux 3 niveaux & don niveau 1
-  if (personnage.niveauReel % 3 == 0 || personnage.niveauReel == 1) {
-    const don = new Choix();
-    don.type = "don";
-    don.categorie = "Normal";
-    don.niveauObtention = personnage.niveauReel;
-    don.quantite = 1;
-
-    listChoix.push(Object.assign({}, don));
+class Choix {
+  constructor({ type, quantite, niveauObtention, categorie, domaine, ref }) {
+    this.type = type ? type : "";
+    this.quantite = quantite ? quantite : 1;
+    this.niveauObtention = niveauObtention ? niveauObtention : 0;
+    this.categorie = categorie ? categorie : null;
+    this.domaine = domaine ? domaine : null;
+    this.ref = ref ? ref : []; // Référence pour choix de don, sort, aptitude, fourberie
   }
+}
 
-  // Don Racial Humain
-  if (personnage.raceRef == "RkYWeQrxFkmFaepDM09n" && personnage.niveauReel == 1) {
-    const don = new Choix();
-    don.type = "don";
-    don.categorie = "Normal";
-    don.niveauObtention = 1;
-    don.quantite = 1;
-
-    listChoix.push({ ...don });
-  }
-
-  // Don Racial Elf
-  if (personnage.raceRef == "5hteaYQ4K8J1MaAvU9Zh" && personnage.niveauReel == 1) {
-    const don = new Choix();
-    don.type = "don";
-    don.categorie = "Connaissance";
-    don.niveauObtention = 1;
-    don.quantite = 1;
-
-    listChoix.push({ ...don });
-  }
-
-  // Get Choix de Classe
-  if (personnage.classes) {
-    personnage.classes.forEach(classeItem => {
-      // Choix de classe
-      if (classeItem.classeRef == progressingClasse.classeRef && classeItem.niveau == progressingClasse.niveau) {
-        classeItem.classe.choix.forEach(choix => {
-          if (choix.niveauObtention == progressingClasse.niveau) {
-            listChoix.push(choix);
-          }
-        });
-      }
-    });
-  }
-
-  // Domaines
-  if (personnage.domaines && personnage.domaines.length > 0) {
-    personnage.domaines.forEach(domaine => {
-      // Prêtre
-      if (progressingClasse.classeRef == "fNqknNgq0QmHzUaYEvEd") {
-        domaine.choix.forEach(choixDomaine => {
-          if (choixDomaine.niveauObtention == progressingClasse.niveau) {
-            listChoix.push(choixDomaine);
-          }
-        });
-      }
-    });
-  }
-
-  // ...
-
-  return listChoix;
-};
-
-const getChoixClasse = (personnage, progressingClasse) => {
-  let listChoix = [];
-
-  // Get All Classes Choices
-  if (personnage.classes) {
-    personnage.classes.forEach(classeItem => {
-      // Choix de classe
-      if (classeItem.classeRef == progressingClasse.classeRef && classeItem.niveau == progressingClasse.niveau) {
-        classeItem.classe.choix.forEach(choix => {
-          listChoix.push(choix);
-        });
-      }
-    });
-  }
-
-  return listChoix;
-};
-
-const getChoixDomaine = (personnage, progressingClasse) => {
-  let listChoix = [];
-
-  // Get All Classes Choices
-  if (progressingClasse.classeRef == "fNqknNgq0QmHzUaYEvEd") {
-    personnage.classes.forEach(classeItem => {
-      // Choix de domaine
-      if (classeItem.classeRef == "fNqknNgq0QmHzUaYEvEd" && progressingClasse.niveau == classeItem.niveau) {
-        // ID de prêtre
-        personnage.domaines.forEach(domaine => {
-          domaine.choix.forEach(choix => {
-            listChoix.push(choix);
-          });
-        });
-      }
-    });
-  }
-
-  return listChoix;
-};
-
-const getAvailableAlignements = async personnage => {
-  let alignements = await this.alignementService.getAlignements();
-
-  // Filtre selon la race
-  if (personnage.race) {
-    alignements = alignements.filter(alignement => {
-      return personnage.race.alignementPermisRef.includes(alignement.id);
-    });
-  }
-
-  // Filtre selon les classes
-  if (personnage.classes) {
-    personnage.classes.forEach(classe => {
-      alignements = alignements.filter(alignement => {
-        return classe.classe.alignementPermisRef.includes(alignement.id);
-      });
-    });
-  }
-
-  return alignements;
+const getAvailableRaces = async () => {
+  return (await getRaces()).sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
 const getAvailableClasses = async personnage => {
-  let list = await this.classeService.getClasses();
+  let list = await getClasses();
 
   // Filtre selon la race
   if (personnage.race) {
@@ -156,7 +37,7 @@ const getAvailableClasses = async personnage => {
     });
   }
 
-  // Filtre selon les classes
+  // Filtre selon les classes existante
   if (personnage.classes) {
     personnage.classes.forEach(classePerso => {
       // Multiclassement
@@ -213,21 +94,195 @@ const getAvailableClasses = async personnage => {
   }
 
   // Trie en Ordre Alphabetic
-  list = list.sort((a, b) => {
-    if (a.nom > b.nom) {
-      return 1;
-    }
-    if (a.nom < b.nom) {
-      return -1;
-    }
-    return 0;
-  });
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
+};
 
-  return list;
+const getAvailableAlignements = async personnage => {
+  let alignements = await getAlignements();
+
+  // Filtre selon la race
+  if (personnage.race) {
+    alignements = alignements.filter(alignement => {
+      return personnage.race.alignementPermisRef.includes(alignement.id);
+    });
+  }
+
+  // Filtre selon les classes
+  if (personnage.classes) {
+    personnage.classes.forEach(classe => {
+      alignements = alignements.filter(alignement => {
+        return classe.classe.alignementPermisRef.includes(alignement.id);
+      });
+    });
+  }
+
+  return alignements;
+};
+
+const getAvailableChoix = async (personnage, progressingClasse) => {
+  let listChoix = [];
+
+  // Dons aux 3 niveaux & don niveau 1
+  if (personnage.niveauReel % 3 == 0 || personnage.niveauReel == 1) {
+    const don = new Choix({
+      type: "don",
+      categorie: "Normal",
+      niveauObtention: personnage.niveauReel,
+      quantite: 1
+    });
+
+    listChoix.push(Object.assign({}, don));
+  }
+
+  // Don Racial Humain
+  if (personnage.raceRef == "RkYWeQrxFkmFaepDM09n" && personnage.niveauReel == 1) {
+    const existingChoix = listChoix.find(c => c.type == "don" && c.categorie == "Normal");
+    if (existingChoix) {
+      existingChoix.quantite++;
+    } else {
+      const don = new Choix({
+        type: "don",
+        categorie: "Normal",
+        niveauObtention: 1,
+        quantite: 1
+      });
+      listChoix.push({ ...don });
+    }
+  }
+
+  // Don Racial Elf
+  if (personnage.raceRef == "5hteaYQ4K8J1MaAvU9Zh" && personnage.niveauReel == 1) {
+    const existingChoix = listChoix.find(c => c.type == "don" && c.categorie == "Connaissance");
+    if (existingChoix) {
+      existingChoix.quantite++;
+    } else {
+      const don = new Choix({
+        type: "don",
+        categorie: "Connaissance",
+        niveauObtention: 1,
+        quantite: 1
+      });
+      listChoix.push({ ...don });
+    }
+  }
+
+  // Get Choix de Classe
+  if (personnage.classes) {
+    personnage.classes.forEach(classeItem => {
+      // Choix de classe
+      if (classeItem.classeRef == progressingClasse.classeRef && classeItem.niveau == progressingClasse.niveau) {
+        classeItem.classe.choix.forEach(choix => {
+          if (choix.niveauObtention == progressingClasse.niveau) {
+            const existingChoix = listChoix.find(c => c.type == choix.type && c.categorie == choix.categorie);
+            if (existingChoix) {
+              existingChoix.quantite++;
+            } else {
+              listChoix.push(choix);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  // Domaines
+  if (personnage.domaines && personnage.domaines.length > 0) {
+    personnage.domaines.forEach(domaine => {
+      // Prêtre
+      if (progressingClasse.classeRef == "fNqknNgq0QmHzUaYEvEd") {
+        domaine.choix.forEach(choixDomaine => {
+          if (choixDomaine.niveauObtention == progressingClasse.niveau) {
+            const existingChoix = listChoix.find(c => c.type == choixDomaine.type && c.categorie == choixDomaine.categorie);
+            if (existingChoix) {
+              existingChoix.quantite++;
+            } else {
+              listChoix.push(choixDomaine);
+            }
+          }
+        });
+      }
+    });
+  }
+
+  // ...
+  // Sort choix dans le bon ordre des choix à faire
+  // Domaine
+  // Ecole
+  // Esprit
+  // Ordre
+  // Connaissance
+  // Don
+  // Fourberie
+  // Sort
+  // Sort domaine
+
+  return listChoix;
+};
+
+const getAvailableDomaines = async personnage => {
+  let list = await getDomaines();
+
+  // Filtre selon l'alignement du personnage
+  if (personnage.alignementRef) {
+    list = list.filter(domaine => {
+      return domaine.alignementPermisRef.includes(personnage.alignementRef);
+    });
+  }
+
+  // Filtre selon les domaines du personnage
+  if (personnage.domaines && personnage.domaines.length > 0) {
+    personnage.domaines.forEach(domainePersonnage => {
+      // Filtre domaine existant
+      list = list.filter(domaine => {
+        return domaine.id != domainePersonnage.id;
+      });
+
+      // Filtre domaine oposé
+      list = list.filter(domaine => {
+        return domaine.id != domainePersonnage.domaineContraireRef;
+      });
+    });
+  }
+
+  // Trie en Ordre Alphabetic
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
+};
+
+const getAvailableEcoles = async () => {
+  return await getEcoles();
+};
+
+const getAvailableEsprits = async () => {
+  return await getEsprits();
+};
+
+const getAvailableOrdres = async personnage => {
+  const ordres = await getOrdres();
+
+  let list = ordres;
+
+  // Filtre selon l'alignement du personnage
+  if (personnage.alignementRef) {
+    list = list.filter(function (ordre) {
+      return ordre.alignementPermisRef.includes(personnage.alignementRef);
+    });
+  }
+
+  // Filtre selon les classes
+  if (personnage.classes) {
+    personnage.classes.forEach(classe => {
+      list = list.filter(function (ordre) {
+        return ordre.classeRef.includes(classe.classeRef);
+      });
+    });
+  }
+
+  // Trie en Ordre Alphabetic
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
 const getAvailableConnaissances = async personnage => {
-  const dons = await this.donService.getDons("Connaissance");
+  const dons = await getDons("Connaissance");
 
   let list = dons;
 
@@ -287,22 +342,11 @@ const getAvailableConnaissances = async personnage => {
   }
 
   // Trie en Ordre Alphabetic
-  list = list.sort((a, b) => {
-    if (a.nom > b.nom) {
-      return 1;
-    }
-    if (a.nom < b.nom) {
-      return -1;
-    }
-    return 0;
-  });
-
-  return list;
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
 const getAvailableDons = async personnage => {
-  const dons = await this.donService.getDons();
-
+  const dons = await getDons();
   let list = dons;
 
   // Filtre les dons déjà existant
@@ -390,15 +434,7 @@ const getAvailableDons = async personnage => {
   }
 
   // Trie en Ordre Alphabetic
-  list = list.sort((a, b) => {
-    if (a.nom > b.nom) {
-      return 1;
-    }
-    if (a.nom < b.nom) {
-      return -1;
-    }
-    return 0;
-  });
+  list = list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 
   // Filter Duplicates
   list = list.filter((don, index, self) => index === self.findIndex(d => d.id === don.id));
@@ -406,68 +442,8 @@ const getAvailableDons = async personnage => {
   return list;
 };
 
-const getAvailableDomaines = async personnage => {
-  let list = await this.domaineService.getDomaines();
-
-  // Filtre selon l'alignement du personnage
-  if (personnage.alignementRef) {
-    list = list.filter(domaine => {
-      return domaine.alignementPermisRef.includes(personnage.alignementRef);
-    });
-  }
-
-  // Filtre selon les domaines du personnage
-  if (personnage.domaines && personnage.domaines.length > 0) {
-    personnage.domaines.forEach(domainePersonnage => {
-      // Filtre domaine existant
-      list = list.filter(domaine => {
-        return domaine.id != domainePersonnage.id;
-      });
-
-      // Filtre domaine oposé
-      list = list.filter(domaine => {
-        return domaine.id != domainePersonnage.domaineContraireRef;
-      });
-    });
-  }
-
-  return list;
-};
-
-const getAvailableEcoles = async () => {
-  return await this.ecoleService.getEcoles();
-};
-
-const getAvailableEsprits = async () => {
-  return await this.espritService.getEsprits();
-};
-
-const getAvailableOrdres = async personnage => {
-  const ordres = await this.ordreService.getOrdres();
-
-  let list = ordres;
-
-  // Filtre selon l'alignement du personnage
-  if (personnage.alignementRef) {
-    list = list.filter(function (ordre) {
-      return ordre.alignementPermisRef.includes(personnage.alignementRef);
-    });
-  }
-
-  // Filtre selon les classes
-  if (personnage.classes) {
-    personnage.classes.forEach(classe => {
-      list = list.filter(function (ordre) {
-        return ordre.classeRef.includes(classe.classeRef);
-      });
-    });
-  }
-
-  return list;
-};
-
 const getAvailableFourberies = async personnage => {
-  const fourberies = await this.fourberieService.getFourberies();
+  const fourberies = await getFourberies();
 
   let list = fourberies;
 
@@ -514,58 +490,29 @@ const getAvailableFourberies = async personnage => {
   }
 
   // Trie en Ordre Alphabetic
-  list = list.sort((a, b) => {
-    if (a.nom > b.nom) {
-      return 1;
-    }
-    if (a.nom < b.nom) {
-      return -1;
-    }
-    return 0;
-  });
-
-  return list;
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
-const getAvailableSorts = async personnage => {
-  let list = [];
-
-  // Get list de sort disponible
-  if (personnage.classes) {
-    personnage.classes.forEach(classe => {
-      classe.classe.sortsDisponible.forEach(async sortDispo => {
-        if (sortDispo.niveauObtention <= classe.niveau) {
-          list.push(await this.sortService.getSort(sortDispo.sortRef));
-        }
-      });
-    });
-  }
+const getAvailableSorts = async (personnage, progressingClasse) => {
+  // Liste des sorts disponible pour la classe qui progresse actuellement selon son niveau
+  let list = progressingClasse.classe.sortsDisponible.filter(sd => sd.niveauObtention <= progressingClasse.niveau);
 
   // Filtre les sorts déjà existant
-  if (personnage.sorts && personnage.sorts.length > 0) {
-    personnage.sorts.forEach(sortPerso => {
-      list = list.filter(sort => {
-        return sort.id != sortPerso.sortRef;
-      });
-    });
-  }
+  list = list.filter(sd => !personnage.sorts.find(s => s.sortRef == sd.sortRef));
+
+  // Get Sort(s)
+  list = await Promise.all(
+    list.map(sd => {
+      return getSort(sd.sortRef);
+    })
+  );
 
   // Trie en Ordre Alphabetic
-  list = list.sort((a, b) => {
-    if (a.nom > b.nom) {
-      return 1;
-    }
-    if (a.nom < b.nom) {
-      return -1;
-    }
-    return 0;
-  });
-
-  return list;
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
-const getAvailableDieux = async personnage => {
-  let list = await this.dieuService.getDieux();
+const getAvailableDivinites = async personnage => {
+  let list = await getDieux();
 
   // Filtre selon l'alignement du personnage
   if (personnage.alignementRef) {
@@ -586,4 +533,20 @@ const getAvailableDieux = async personnage => {
   });
 
   return list;
+};
+
+export {
+  getAvailableRaces,
+  getAvailableClasses,
+  getAvailableAlignements,
+  getAvailableChoix,
+  getAvailableDomaines,
+  getAvailableEcoles,
+  getAvailableEsprits,
+  getAvailableOrdres,
+  getAvailableConnaissances,
+  getAvailableDons,
+  getAvailableFourberies,
+  getAvailableSorts,
+  getAvailableDivinites
 };

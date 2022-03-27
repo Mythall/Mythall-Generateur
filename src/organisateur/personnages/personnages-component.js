@@ -32,7 +32,7 @@ class PersonnagesComponent extends HTMLElement {
     if ("content" in document.createElement("template")) {
       const clone = this.querySelector("template").content.cloneNode(true);
       clone.querySelector("#nom").innerHTML = personnage.nom;
-      clone.querySelector("#view").setAttribute("href", `/compte/personnage?id=${personnage.id}`);
+      clone.querySelector("#view").setAttribute("href", `/personnage?id=${personnage.id}`);
       this.querySelector("#list").appendChild(clone);
     }
   }

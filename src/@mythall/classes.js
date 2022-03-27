@@ -10,16 +10,13 @@ import { getStatistique } from "./statistiques";
 // const ClasseTypes = ['Combatant', 'Lanceur de Sort'];
 // const ClasseSort = ['Divin', 'Profane'];
 
-// class ClasseItem {
-//   constructor() {
-//     this.classe = null;
-//     this.classeRef = '';
-//     this.niveau = 1;
-//   }
-//   classe;
-//   classeRef;
-//   niveau;
-// }
+class ClasseItem {
+  constructor(id) {
+    this.classe = null;
+    this.classeRef = id ? id : "";
+    this.niveau = 1;
+  }
+}
 
 // class ClasseAuthorise {
 //   constructor() {
@@ -239,4 +236,4 @@ const deleteClasse = async id => {
   return await deleteDoc(doc(db, `classes/${id}`));
 };
 
-export { Classe, getClasses, getClasse, addClasse, updateClasse, deleteClasse };
+export { Classe, ClasseItem, getClasses, getClasse, addClasse, updateClasse, deleteClasse };

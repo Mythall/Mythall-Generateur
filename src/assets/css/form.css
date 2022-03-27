@@ -1,21 +1,27 @@
-input {
+input,
+select {
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--base-radius);
   border: 1px solid rgba(0, 0, 0, 0.7);
   box-shadow: var(--base-shadow);
   transition: var(--transition);
 }
-input:hover,
-input:focus,
-input:active {
+input:not([disabled]):hover,
+input:not([disabled]):focus,
+input:not([disabled]):active,
+select:not([disabled]):hover,
+select:not([disabled]):focus,
+select:not([disabled]):active {
   box-shadow: var(--active-shadow);
 }
 
 /* Require JS Implementation in forms to add a touched class when blur */
-input.touched:valid {
+input.touched:valid,
+select.touched:valid {
   border-color: var(--color-success);
 }
-input.touched:invalid {
+input.touched:invalid,
+select.touched:invalid {
   border-color: var(--color-error);
 }
 

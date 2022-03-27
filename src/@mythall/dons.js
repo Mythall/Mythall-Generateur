@@ -1,4 +1,4 @@
-import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
+import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy, where } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
 import { getStatistique } from "./statistiques";
 import { getResistance } from "./resistances";
@@ -142,8 +142,13 @@ class Don {
   }
 }
 
-const getDons = async () => {
-  return (await getDocs(query(collection(db, "dons")), orderBy("nom"))).docs.map(snap => {
+const getDons = async categorie => {
+  const ref = collection(db, "dons");
+  let q = query(ref, orderBy("nom"));
+  if (categorie) {
+    q = query(ref, where("categorie", "==", categorie), orderBy("nom"));
+  }
+  return (await getDocs(q)).docs.map(snap => {
     return new Don(snap.id, snap.data());
   });
 };

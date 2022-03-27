@@ -2,7 +2,6 @@
   "name": "mythall-3.5",
   "version": "3.5.0",
   "description": "This is the final version of Mythall Web App & Generator Built using basic html / css / js for easy collaboration",
-  "main": "index.js",
   "scripts": {
     "build": "vite build",
     "dev": "firebase emulators:start",
