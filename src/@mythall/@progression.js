@@ -10,8 +10,6 @@ import { getDons } from "./dons";
 import { getFourberies } from "./fourberies";
 import { getSort } from "./sorts";
 
-// const ChoixTypes = ["aptitude", "connaissance", "don", "domaine", "ecole", "esprit", "fourberie", "ordre", "sort"];
-
 class Choix {
   constructor({ type, quantite, niveauObtention, categorie, domaine, ref }) {
     this.type = type ? type : "";
@@ -193,6 +191,7 @@ const getAvailableChoix = async (personnage, progressingClasse) => {
         domaine.choix.forEach(choixDomaine => {
           if (choixDomaine.niveauObtention == progressingClasse.niveau) {
             const existingChoix = listChoix.find(c => c.type == choixDomaine.type && c.categorie == choixDomaine.categorie);
+            console.log(existingChoix);
             if (existingChoix) {
               existingChoix.quantite++;
             } else {
@@ -203,18 +202,6 @@ const getAvailableChoix = async (personnage, progressingClasse) => {
       }
     });
   }
-
-  // ...
-  // Sort choix dans le bon ordre des choix à faire
-  // Domaine
-  // Ecole
-  // Esprit
-  // Ordre
-  // Connaissance
-  // Don
-  // Fourberie
-  // Sort
-  // Sort domaine
 
   return listChoix;
 };
@@ -521,18 +508,7 @@ const getAvailableDivinites = async personnage => {
     });
   }
 
-  // Trie en Ordre Alphabetic
-  list = list.sort((a, b) => {
-    if (a.nom > b.nom) {
-      return 1;
-    }
-    if (a.nom < b.nom) {
-      return -1;
-    }
-    return 0;
-  });
-
-  return list;
+  return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
 export {

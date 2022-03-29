@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/loading-component.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <style>
+      .personnage {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .personnage__title {
+        text-align: center;
+      }
+      .personnage__box {
+        margin-top: var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+      }
+      .personnage__group {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: var(--space-xs);
+      }
+      .personnage__multigroup {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+      .required {
+        color: var(--color-error);
+      }
+      .hidden {
+        display: none;
+      }
+      @media (min-width: 480px) {
+        .personnage__box {
+          width: auto;
+          min-width: 400px;
+          padding: var(--space-md);
+        }
+        .personnage__multigroup {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <loading-component></loading-component>
+    <header-component></header-component>
+    <main>
+      <creation-personnage class="personnage">
+        <h2 id="title" class="personnage__title">Création de personnage</h2>
+        <form id="personnageForm" class="personnage__box">
+          <!--Nom-->
+          <div class="personnage__group">
+            <label for="nom">Nom du personnage</label>
+            <input id="nom" type="text" minlength="2" maxlength="60" pattern="[a-zA-Z\s]+" required />
+          </div>
+          <button id="submit" type="submit" disabled>Envoyer</button>
+        </form>
+      </creation-personnage>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/assets/components/loading-component.js"></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
+  <script type="module" src="/personnage/creation-progression.js" defer></script>
+</html>

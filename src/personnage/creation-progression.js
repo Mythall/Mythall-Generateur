@@ -1,4 +1,5 @@
-import { Personnage } from "../../@mythall/personnages";
+import { auth } from "../assets/js/firebase";
+import { Personnage, addPersonnage, updatePersonnage } from "../@mythall/personnages";
 import {
   getAvailableRaces,
   getAvailableClasses,
@@ -13,13 +14,13 @@ import {
   getAvailableFourberies,
   getAvailableSorts,
   getAvailableDivinites
-} from "../../@mythall/@progression";
-import { getRace } from "../../@mythall/races";
-import { ClasseItem, getClasse } from "../../@mythall/classes";
-import { getDomaine } from "../../@mythall/domaines";
-import { DonItem } from "../../@mythall/dons";
-import { FourberieItem } from "../../@mythall/fourberies";
-import { SortItem } from "../../@mythall/sorts";
+} from "../@mythall/@progression";
+import { getRace } from "../@mythall/races";
+import { ClasseItem, getClasse } from "../@mythall/classes";
+import { getDomaine } from "../@mythall/domaines";
+import { DonItem } from "../@mythall/dons";
+import { FourberieItem } from "../@mythall/fourberies";
+import { SortItem } from "../@mythall/sorts";
 
 class CreationPersonnage extends HTMLElement {
   constructor() {
@@ -32,9 +33,13 @@ class CreationPersonnage extends HTMLElement {
     // Inputs
     this.form = this.querySelector("#personnageForm");
     this.nom = this.querySelector("#nom");
+    this.submit = this.querySelector("#submit");
 
     // Events
     this.nom.addEventListener("blur", () => this._updateNom());
+
+    // Form submit
+    this.addEventListener("submit", async event => await this._savePersonnage(event));
   }
 
   async connectedCallback() {
@@ -44,13 +49,12 @@ class CreationPersonnage extends HTMLElement {
 
   // Steps
   _initiateSteps = () => {
-    this.stepIndex = 0;
-    this.currentStep = "races";
     this.steps = [
       {
         id: "races",
         text: "Race",
         completed: false,
+        dynamic: false,
         copy: null,
         getOptions: this._getRacesOptions,
         updateEvent: this._udpdateRace
@@ -59,6 +63,7 @@ class CreationPersonnage extends HTMLElement {
         id: "classes",
         text: "Classe",
         completed: false,
+        dynamic: false,
         copy: null,
         getOptions: this._getClassesOptions,
         updateEvent: this._updateClasse
@@ -67,89 +72,74 @@ class CreationPersonnage extends HTMLElement {
         id: "alignements",
         text: "Alignement",
         completed: false,
+        dynamic: false,
         copy: null,
         getOptions: this._getAlignementsOptions,
         updateEvent: this._updateAlignement
       }
     ];
-  };
-
-  _setCurrentStep = async id => {
-    // Set current step
-    this.currentStep = id;
-    this.stepIndex = this.steps.findIndex(step => step.id == id);
-
-    // Get current step
-    const step = this.steps[this.stepIndex];
-
-    // Create a backup of the personnage state for this step
-    step.copy = this._clonePersonnage(this.personnage);
-
-    // Clear following steps
-    this.steps
-      .filter((step, index) => index > this.stepIndex)
-      .forEach((step, i, arr) => {
-        // Set step to not completed
-        step.completed = false;
-
-        // Remove html elements
-        document.getElementById(`#${step.id}Wrapper`)?.remove();
-      });
-
-    // Set step completed state
-    step.completed = true;
-  };
-
-  _getNextStep = async () => {
-    // Get next step properties
-    const step = this.steps[this.stepIndex];
-
-    // Get next step options
-    const options = await step.getOptions();
-
-    // Create html elements for next step
-    this._createStep(step.id, step.text, options, this._updateStep);
+    this.stepIndex = 0;
+    this.currentStep = this.steps[0];
   };
 
   _updateStep = async id => {
-    // Get current step
-    const index = this.steps.findIndex(step => step.id == id);
-    const step = this.steps[index];
-    this.currentStep = step.id;
-    this.stepIndex = index;
-
-    console.log(`Update step - ${this.currentStep}`);
+    // Set current step
+    this.currentStep = this.steps.find(step => step.id == id);
+    this.stepIndex = this.steps.findIndex(step => step.id == id);
 
     // Get html element
-    const select = this.querySelector(`#${this.currentStep}`);
+    const select = this.querySelector(`#${this.currentStep.id}`);
 
     // Add touched state for form validation
     select.classList.toggle("touched", true);
 
+    // Disable form submission
+    this.submit.disabled = true;
+
     // Validate result
     if (select.checkValidity()) {
+      // Load previous step character to reset further choices (Necessary when a user change a previous selection)
+      if (this.stepIndex > 0) {
+        this.personnage = this._clonePersonnage(this.steps[this.stepIndex - 1].copy);
+      }
+
       // step update event
-      await step.updateEvent(select.value);
+      await this.currentStep.updateEvent(select.value);
+
+      // Create a backup of the personnage state for this step & complete the current step
+      this.currentStep.copy = this._clonePersonnage(this.personnage);
+      this.currentStep.completed = true;
+
+      // Clear following steps (Necessary when a user change a previous selection)
+      this._clearFollowingSteps();
 
       // Check for dynamic steps
       await this._getDynamicSteps();
 
-      // Set generic step information
-      await this._setCurrentStep(this.currentStep);
-
-      // Increment index if needed
-      if (this.stepIndex < this.steps.length) this.stepIndex++;
-
-      // Get next step
-      await this._getNextStep();
+      // Get next uncompleted step else enable form submission
+      if (this.steps.find(step => !step.completed)) {
+        await this._getNextStep();
+      } else {
+        this.submit.disabled = false;
+      }
     }
+  };
+
+  _clearFollowingSteps = () => {
+    this.steps
+      .filter((s, i) => i > this.stepIndex) // Get only further steps
+      .forEach((step, i, arr) => {
+        document.getElementById(`#${step.id}Wrapper`)?.remove(); // Remove HTML Element
+        step.completed = false;
+      });
+
+    // Clear all uncompleted dynamic step
+    this.steps = this.steps.filter((s, i) => !s.dynamic || (s.dynamic && s.completed));
   };
 
   _getDynamicSteps = async () => {
     if (this.progressingClasse) {
       (await getAvailableChoix(this.personnage, this.progressingClasse)).forEach(choix => {
-        console.log(choix);
-
         if (choix.type == "domaine" && choix.quantite > 0) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `domaines-${i}`)) {
@@ -158,6 +148,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Domaine (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
+                order: 1,
                 copy: null,
                 getOptions: this._getDomainesOptions,
                 updateEvent: this._updateDomaine
@@ -174,6 +165,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Ecole`,
                 completed: false,
                 dynamic: true,
+                order: 2,
                 copy: null,
                 getOptions: this._getEcolesOptions,
                 updateEvent: this._updateEcole
@@ -190,6 +182,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Esprit patron`,
                 completed: false,
                 dynamic: true,
+                order: 3,
                 copy: null,
                 getOptions: this._getEspritsOptions,
                 updateEvent: this._updateEsprit
@@ -206,6 +199,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Ordre`,
                 completed: false,
                 dynamic: true,
+                order: 4,
                 copy: null,
                 getOptions: this._getOrdresOptions,
                 updateEvent: this._updateOrdre
@@ -222,6 +216,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Connaissance (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
+                order: 5,
                 copy: null,
                 getOptions: this._getConnaissancesOptions,
                 updateEvent: this._updateConnaissance
@@ -238,6 +233,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Don (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
+                order: 6,
                 copy: null,
                 getOptions: this._getDonsOptions,
                 updateEvent: this._updateDon
@@ -254,6 +250,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Fourberie (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
+                order: 7,
                 copy: null,
                 getOptions: this._getFourberiesOptions,
                 updateEvent: this._updateFourberie
@@ -270,6 +267,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Sort (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
+                order: 8,
                 copy: null,
                 getOptions: this._getSortsOptions,
                 updateEvent: this._updateSort
@@ -286,6 +284,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Sort de domaine (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
+                order: 9,
                 copy: null,
                 getOptions: this._getSortsOptions,
                 updateEvent: this._updateSort
@@ -293,23 +292,40 @@ class CreationPersonnage extends HTMLElement {
             }
           }
         }
+      });
 
-        if (!this.personnage.dieuRef && !this.steps.find(step => step.id == `divinite`)) {
-          this.steps.push({
-            id: `divinite`,
-            text: `Divinité`,
-            completed: false,
-            dynamic: true,
-            copy: null,
-            getOptions: this._getDivinitesOptions,
-            updateEvent: this._updateDivinite
-          });
+      // Add Divinite step
+      if (!this.personnage.dieuRef && !this.steps.find(step => step.id == `divinite`)) {
+        this.steps.push({
+          id: `divinite`,
+          text: `Divinité`,
+          completed: false,
+          dynamic: true,
+          order: 10,
+          copy: null,
+          getOptions: this._getDivinitesOptions,
+          updateEvent: this._updateDivinite
+        });
+      }
+
+      // Reorder to make sure steps are in the proper order
+      this.steps.sort((a, b) => {
+        if (a.dynamic && b.dynamic) {
+          return a.order - b.order;
         }
-
-        // Make sure divinite stays last
-        this.steps.push(this.steps.splice(this.steps.indexOf(this.steps.find(step => step.id == "divinite")), 1)[0]);
       });
     }
+  };
+
+  _getNextStep = async () => {
+    // Get next step properties
+    const nextStep = this.steps.find(step => !step.completed);
+
+    // Get next step options
+    const options = await nextStep.getOptions();
+
+    // Create html elements for next step
+    this._createStep(nextStep.id, nextStep.text, options, this._updateStep);
   };
 
   _createStep = (id, text, options, updateEvent) => {
@@ -326,7 +342,7 @@ class CreationPersonnage extends HTMLElement {
     // Appends Elements to section
     wrapper.appendChild(label);
     wrapper.appendChild(select);
-    this.form.appendChild(wrapper);
+    this.form.insertBefore(wrapper, this.submit);
   };
 
   _createWrapper = id => {
@@ -373,7 +389,6 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _getClassesOptions = async () => {
-    console.log("get classes options...");
     return (await getAvailableClasses(this.personnage)).map(c => {
       return { text: c.nom, value: c.id };
     });
@@ -410,7 +425,6 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _getConnaissancesOptions = async () => {
-    console.log("Get Connaissances...");
     return (await getAvailableConnaissances(this.personnage)).map(d => {
       return { text: d.nom, value: d.id };
     });
@@ -494,40 +508,30 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateConnaissance = async value => {
-    // Update personnage
     this.personnage.dons.push(
       new DonItem({
         donRef: value,
         niveauObtention: this.personnage.niveauReel
       })
     );
-    // Fill requirements ???
   };
 
   _updateDon = async value => {
-    // Update personnage
     this.personnage.dons.push(
       new DonItem({
         donRef: value,
         niveauObtention: this.personnage.niveauReel
       })
     );
-
-    // Fill requirements ???
-    // ...
   };
 
   _updateFourberie = async value => {
-    // Update personnage
     this.personnage.fourberies.push(
       new FourberieItem({
         fourberieRef: value,
         niveauObtention: this.personnage.niveauReel
       })
     );
-
-    // Fill requirements ???
-    // ...
   };
 
   _updateSort = async value => {
@@ -537,13 +541,37 @@ class CreationPersonnage extends HTMLElement {
         niveauObtention: this.personnage.niveauReel
       })
     );
-
-    // Fill requirements ???
-    // ...
   };
 
   _updateDivinite = async value => {
     this.personnage.dieuRef = value;
+  };
+
+  _savePersonnage = async event => {
+    event.preventDefault();
+
+    try {
+      if (!this.personnage.nom) {
+        this.personnage.nom = this.querySelector("#nom").value;
+      }
+
+      if (!this.personnage.userRef && auth.currentUser) {
+        this.personnage.userRef = auth.currentUser.uid;
+      }
+
+      if (this.personnage.id) {
+        await updatePersonnage(this.personnage);
+      } else {
+        const result = await addPersonnage(this.personnage);
+
+        if (result && result.id) {
+          window.location.href = `/personnage?id=${result.id}`;
+        }
+      }
+    } catch (error) {
+      alert(error);
+    }
+    return;
   };
 }
 

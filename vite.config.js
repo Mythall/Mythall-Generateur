@@ -16,7 +16,8 @@ export default defineConfig(async () => {
           inscription: resolve(__dirname, `${root}/compte/inscription/index.html`),
           motDePasseOublie: resolve(__dirname, `${root}/compte/mot-de-passe-oublie/index.html`),
           personnage: resolve(__dirname, `${root}/personnage/index.html`),
-          creationProgression: resolve(__dirname, `${root}/personnage/creation-progression/index.html`),
+          creation: resolve(__dirname, `${root}/personnage/creation.html`),
+          progression: resolve(__dirname, `${root}/personnage/progression.html`),
           compte: resolve(__dirname, `${root}/compte/index.html`),
           organisateurPersonnages: resolve(__dirname, `${root}/organisateur/personnages/index.html`),
           error: resolve(__dirname, `${root}/error.html`)

@@ -1,5 +1,5 @@
 import { db } from "../assets/js/firebase";
-import { doc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
+import { doc, addDoc, updateDoc, deleteDoc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
 
 class Personnage {
   constructor(
@@ -84,9 +84,51 @@ class Personnage {
     if (!this.dieuRef) this.dieuRef = "";
     if (!this.ecoleRef) this.ecoleRef = "";
     if (!this.espritRef) this.espritRef = "";
-    if (!this.ordresRef) this.ordresRef = [];
     if (!this.ordreRef) this.ordreRef = "";
     if (!this.domainesRef) this.domainesRef = [];
+
+    this.migrationFixes();
+
+    return {
+      nom: this.nom,
+      alignementRef: this.alignementRef,
+      classes: this.classes.map(classeItem => {
+        classeItem.classe = null;
+        return { ...classeItem };
+      }),
+      dons: this.dons.map(donItem => {
+        donItem.don = null;
+        return { ...donItem };
+      }),
+      aptitudes: this.aptitudes.map(aptitudeItem => {
+        aptitudeItem.aptitude = null;
+        return { ...aptitudeItem };
+      }),
+      sorts: this.sorts.map(sortItem => {
+        sortItem.sort = null;
+        return { ...sortItem };
+      }),
+      fourberies: this.fourberies.map(fourberieItem => {
+        fourberieItem.fourberie = null;
+        return { ...fourberieItem };
+      }),
+      raceRef: this.raceRef,
+      userRef: this.userRef,
+      ecoleRef: this.ecoleRef,
+      espritRef: this.espritRef,
+      dieuRef: this.dieuRef,
+      ordreRef: this.ordreRef,
+      domainesRef: this.domainesRef,
+      vie: this.vie,
+      gnEffectif: this.gnEffectif
+    };
+  }
+
+  migrationFixes() {
+    // Fixes for existing personnage with ordres
+    if (this.ordresRef && this.ordreRef.length > 0) {
+      this.ordreRef = this.ordresRef[0];
+    }
 
     // Filter Out Race Dons / Sorts / Fourberies / Aptitudes
     if (this.race) {
@@ -144,42 +186,6 @@ class Personnage {
         this.aptitudes = aptitudesTemporaire;
       }
     }
-
-    //Filter Out Populated Objects
-    this.classes.forEach(classeItem => {
-      classeItem.classe = null;
-    });
-    this.dons.forEach(donItem => {
-      donItem.don = null;
-    });
-    this.aptitudes.forEach(aptitudeItem => {
-      aptitudeItem.aptitude = null;
-    });
-    this.sorts.forEach(sortItem => {
-      sortItem.sort = null;
-    });
-    this.fourberies.forEach(fourberieItem => {
-      fourberieItem.fourberie = null;
-    });
-
-    return {
-      nom: this.nom,
-      classes: this.classes,
-      alignementRef: this.alignementRef,
-      dons: this.dons,
-      aptitudes: this.aptitudes,
-      sorts: this.sorts,
-      fourberies: this.fourberies,
-      raceRef: this.raceRef,
-      userRef: this.userRef,
-      ecoleRef: this.ecoleRef,
-      espritRef: this.espritRef,
-      dieuRef: this.dieuRef,
-      ordresRef: this.ordresRef,
-      domainesRef: this.domainesRef,
-      vie: this.vie,
-      gnEffectif: this.gnEffectif
-    };
   }
 }
 
@@ -202,4 +208,17 @@ const getPersonnage = async id => {
   return new Personnage(snap.id, snap.data());
 };
 
-export { Personnage, getPersonnages, getPersonnagesFromUserId, getPersonnage };
+const addPersonnage = async personnage => {
+  console.log(personnage.saveState());
+  return await addDoc(collection(db, `personnages`), personnage.saveState());
+};
+
+const updatePersonnage = async personnage => {
+  return await updateDoc(doc(db, `personnages/${race.id}`), personnage.saveState());
+};
+
+const deletePersonnage = async id => {
+  return await deleteDoc(doc(db, `personnages/${id}`));
+};
+
+export { Personnage, getPersonnages, getPersonnagesFromUserId, getPersonnage, addPersonnage, updatePersonnage, deletePersonnage };
