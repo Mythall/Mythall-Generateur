@@ -1,0 +1,35 @@
+modal-component {
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-md);
+  background-color: rgba(0, 0, 0, 0.8);
+  visibility: hidden;
+  opacity: 0;
+}
+modal-component:hover {
+  cursor: pointer;
+}
+
+.modal {
+  background: #ffffff;
+  border-radius: var(--base-radius);
+  box-shadow: var(--base-shadow);
+  padding: var(--space-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+.modal:hover {
+  cursor: initial;
+}
+
+.modal__buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-sm);
+}

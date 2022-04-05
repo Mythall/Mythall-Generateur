@@ -1,13 +1,21 @@
-import { getPersonnages } from "../../@mythall/personnages";
+import { getPersonnages, deletePersonnage } from "../../@mythall/personnages";
+import { toggleModal } from "../../assets/components/modal-component";
 
 class PersonnagesComponent extends HTMLElement {
   constructor() {
     super();
     this.filtreNom = this.querySelector("#filtreNom");
-    this.filtreNom.addEventListener("input", this._debounce(() => this._filterPersonnages()));
+    this.filtreNom.addEventListener(
+      "input",
+      this._debounce(() => this._filterPersonnages())
+    );
   }
 
   async connectedCallback() {
+    await this._getPersonanges();
+  }
+
+  async _getPersonanges() {
     this.personnages = await getPersonnages();
     this.personnages.forEach(personnage => {
       this._setPersonnage(personnage);
@@ -34,6 +42,15 @@ class PersonnagesComponent extends HTMLElement {
       const clone = this.querySelector("template").content.cloneNode(true);
       clone.querySelector("#nom").innerHTML = personnage.nom;
       clone.querySelector("#view").setAttribute("href", `/personnage?id=${personnage.id}`);
+      clone
+        .querySelector("#delete")
+        .addEventListener("click", () =>
+          toggleModal(
+            true,
+            `Êtes-vous certain de vouloir <strong>supprimer</strong> de façon <strong>définitive</strong> le personnage <strong>${personnage.nom}</strong> ?`,
+            async () => await this._deleteCallback(personnage)
+          )
+        );
       this.querySelector("#list").appendChild(clone);
     }
   }
@@ -42,15 +59,25 @@ class PersonnagesComponent extends HTMLElement {
     let timer;
     return (...args) => {
       clearTimeout(timer);
-      timer = setTimeout(() => { 
-        func(args); 
+      timer = setTimeout(() => {
+        func(args);
       }, timeout);
-    }
+    };
   }
 
   _cleanForSearch(string) {
     // Allows for case insensitive, diacritics agnostic search
-    return string.toString().normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    return string
+      .toString()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toLowerCase();
+  }
+
+  async _deleteCallback(personnage) {
+    await deletePersonnage(personnage.id);
+    this._clearPersonnages();
+    await this._getPersonanges();
   }
 }
 

@@ -25,24 +25,31 @@ select.touched:invalid {
   border-color: var(--color-error);
 }
 
-.button-primary,
+.button__default,
+.button__primary,
 button[type="submit"] {
-  background: var(--color-primary);
-  color: var(--text-white);
   padding: var(--space-xs) var(--space-sm);
   border-radius: var(--base-radius);
   border: 1px solid rgba(0, 0, 0, 0.7);
   box-shadow: var(--base-shadow);
   transition: var(--transition);
 }
-.button-primary:hover,
+.button__default:hover,
+.button__primary:hover,
 button[type="submit"]:hover {
   cursor: pointer;
   box-shadow: var(--active-shadow);
 }
-.button-primary:disabled,
+.button__default:disabled,
+.button__primary:disabled,
 button[type="submit"]:disabled {
   cursor: initial;
   box-shadow: var(--base-shadow);
   opacity: 0.7;
+}
+
+.button__primary,
+button[type="submit"] {
+  background: var(--color-primary);
+  color: var(--text-white);
 }
