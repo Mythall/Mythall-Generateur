@@ -53,7 +53,7 @@ class Dieu {
 }
 
 const getDieux = async () => {
-  return (await getDocs(query(collection(db, "dieux")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "dieux"), orderBy("nom")))).docs.map(snap => {
     return new Dieu(snap.id, snap.data());
   });
 };

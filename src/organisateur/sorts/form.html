@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
+    <link rel="stylesheet" href="/assets/css/modal-component.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <style>
+      form-sort-component {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .form__title {
+        text-align: center;
+      }
+      .form__box {
+        margin-top: var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+      }
+      .form__group {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: var(--space-xs);
+      }
+      .form__multigroup {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+      .required {
+        color: var(--color-error);
+      }
+      @media (min-width: 480px) {
+        .form__box {
+          width: auto;
+          min-width: 400px;
+          padding: var(--space-md);
+        }
+        .form__multigroup {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <modal-component></modal-component>
+    <header-component></header-component>
+    <main>
+      <form-sort-component>
+        <div class="form__title">
+          <h1 id="formTitle">Création de sort</h1>
+          <p><a href="/organisateur/sorts">Retour à la liste des sorts</a></p>
+        </div>
+        <form class="form__box">
+          <div class="form__group">
+            <label for="nom">Nom <span class="required">*</span></label>
+            <input id="nom" type="text" required />
+          </div>
+          <div class="form__group">
+            <label for="niveau">Niveau <span class="required">*</span></label>
+            <input id="niveau" type="text" required />
+          </div>
+          <div class="form__group">
+            <label for="incantation">Incantation <span class="required">*</span></label>
+            <textarea id="incantation" type="text" required></textarea>
+          </div>
+          <div class="form__group">
+            <label for="sommaire">Sommaire <span class="required">*</span></label>
+            <textarea id="sommaire" type="text" required></textarea>
+          </div>
+          <div class="form__group">
+            <label for="description">Description <span class="required">*</span></label>
+            <textarea id="description" type="text" required></textarea>
+          </div>
+          <div class="form__group">
+            <label for="ecoles">École <span class="required">*</span></label>
+            <select id="ecoles" required>
+              <option disabled selected></option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="porte">Porté <span class="required">*</span></label>
+            <input id="porte" type="text" required />
+          </div>
+          <div class="form__group">
+            <label for="duree">Durée <span class="required">*</span></label>
+            <input id="duree" type="text" required />
+          </div>
+          <div class="form__group">
+            <label for="zone">Zone d'effet <span class="required">*</span></label>
+            <input id="zone" type="text" required />
+          </div>
+          <button type="submit">Envoyer</button>
+        </form>
+      </form-sort-component>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
+  <script type="module" src="/assets/components/modal-component.js" defer></script>
+  <script type="module" src="/organisateur/sorts/sorts-component.js" defer></script>
+</html>

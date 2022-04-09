@@ -36,7 +36,7 @@ class User {
 }
 
 const getUsers = async () => {
-  return (await getDocs(query(collection(db, "users")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "users"), orderBy("nom")))).docs.map(snap => {
     return new User(snap.id, snap.data());
   });
 };

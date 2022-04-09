@@ -87,7 +87,7 @@ class Aptitude {
 }
 
 const getAptitudes = async () => {
-  return (await getDocs(query(collection(db, "aptitudes")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "aptitudes"), orderBy("nom")))).docs.map(snap => {
     return new Aptitude(snap.id, snap.data());
   });
 };

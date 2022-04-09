@@ -190,7 +190,7 @@ class Personnage {
 }
 
 const getPersonnages = async () => {
-  return (await getDocs(query(collection(db, "personnages")), orderBy("createdAt"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "personnages"), orderBy("createdAt")))).docs.map(snap => {
     return new Personnage(snap.id, snap.data());
   });
 };

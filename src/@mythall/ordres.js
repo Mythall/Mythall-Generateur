@@ -40,7 +40,7 @@ class Ordre {
 }
 
 const getOrdres = async () => {
-  return (await getDocs(query(collection(db, "ordres")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "ordres"), orderBy("nom")))).docs.map(snap => {
     return new Ordre(snap.id, snap.data());
   });
 };

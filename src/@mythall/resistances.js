@@ -32,7 +32,7 @@ class Resistance {
 }
 
 const getResistances = async () => {
-  return (await getDocs(query(collection(db, "resistances")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "resistances"), orderBy("nom")))).docs.map(snap => {
     return new Resistance(snap.id, snap.data());
   });
 };

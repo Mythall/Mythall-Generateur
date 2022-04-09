@@ -15,7 +15,7 @@ class Immunite {
 }
 
 const getImmunites = async () => {
-  return (await getDocs(query(collection(db, "immunites")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "immunites"), orderBy("nom")))).docs.map(snap => {
     return new Immunite(snap.id, snap.data());
   });
 };

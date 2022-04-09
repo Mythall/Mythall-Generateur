@@ -119,7 +119,7 @@ class Domaine {
 }
 
 const getDomaines = async () => {
-  return (await getDocs(query(collection(db, "domaines")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "domaines"), orderBy("nom")))).docs.map(snap => {
     return new Domaine(snap.id, snap.data());
   });
 };

@@ -15,7 +15,7 @@ class Alignement {
 }
 
 const getAlignements = async () => {
-  return (await getDocs(query(collection(db, "alignements")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "alignements"), orderBy("nom")))).docs.map(snap => {
     return new Alignement(snap.id, snap.data());
   });
 };

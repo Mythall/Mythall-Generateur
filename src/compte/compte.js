@@ -18,7 +18,15 @@ class UserComponent extends HTMLElement {
       this.querySelector("#name").innerHTML = `${currentUser.displayname}`;
 
       if (currentUser.roles.animateur == true || currentUser.roles.organisateur == true) {
-        this.querySelector("#animateur").innerHTML = `<a href="/organisateur/personnages">Liste des personnages</a>`;
+        this.querySelector("#animateur").innerHTML = `
+        <a href="/organisateur/personnages">Liste des personnages</a>
+        `;
+      }
+
+      if (currentUser.roles.organisateur == true) {
+        this.querySelector("#organisateur").innerHTML = `
+        <a href="/organisateur/sorts">Liste des sorts</a>
+        `;
       }
 
       const personnagesComponent = document.querySelector("personnages-component");

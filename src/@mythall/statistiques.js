@@ -46,7 +46,7 @@ class Statistique {
 }
 
 const getStatistiques = async () => {
-  return (await getDocs(query(collection(db, "statistiques")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "statistiques"), orderBy("nom")))).docs.map(snap => {
     return new Statistique(snap.id, snap.data());
   });
 };

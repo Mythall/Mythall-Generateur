@@ -67,7 +67,7 @@ class Fourberie {
 }
 
 const getFourberies = async () => {
-  return (await getDocs(query(collection(db, "fourberies")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "fourberies"), orderBy("nom")))).docs.map(snap => {
     return new Fourberie(snap.id, snap.data());
   });
 };

@@ -156,7 +156,7 @@ class Race {
 }
 
 const getRaces = async () => {
-  return (await getDocs(query(collection(db, "races")), orderBy("nom", "asc"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "races"), orderBy("nom", "asc")))).docs.map(snap => {
     return new Race(snap.id, snap.data());
   });
 };

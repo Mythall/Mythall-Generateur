@@ -15,7 +15,7 @@ class Ecole {
 }
 
 const getEcoles = async () => {
-  return (await getDocs(query(collection(db, "ecoles")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "ecoles"), orderBy("nom")))).docs.map(snap => {
     return new Ecole(snap.id, snap.data());
   });
 };

@@ -212,7 +212,7 @@ const getClasses = async () => {
   // ...
   // Add prestige, basic and maybe npc filters eventually
 
-  return (await getDocs(query(collection(db, "classes")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "classes"), orderBy("nom")))).docs.map(snap => {
     return new Classe(snap.id, snap.data());
   });
 };

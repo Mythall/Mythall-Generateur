@@ -15,7 +15,7 @@ class Porte {
 }
 
 const getPortes = async () => {
-  return (await getDocs(query(collection(db, "portes")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "portes"), orderBy("nom")))).docs.map(snap => {
     return new Porte(snap.id, snap.data());
   });
 };

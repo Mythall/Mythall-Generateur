@@ -15,7 +15,7 @@ class Duree {
 }
 
 const getDurees = async () => {
-  return (await getDocs(query(collection(db, "durees")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "durees"), orderBy("nom")))).docs.map(snap => {
     return new Duree(snap.id, snap.data());
   });
 };

@@ -74,7 +74,7 @@ class Esprit {
 }
 
 const getEsprits = async () => {
-  return (await getDocs(query(collection(db, "esprits")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "esprits"), orderBy("nom")))).docs.map(snap => {
     return new Esprit(snap.id, snap.data());
   });
 };

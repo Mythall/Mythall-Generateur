@@ -19,9 +19,6 @@ class Sort {
     this.sommaire = sommaire;
     this.description = description;
     this.ecoleRef = ecoleRef;
-    this.porteRef = porteRef; // ... Keeping them temporarly
-    this.dureeRef = dureeRef; // ... Keeping them temporarly
-    this.zoneRef = zoneRef; // ... Keeping them temporarly
     this.ecole = ecole;
     this.porte = porte;
     this.duree = duree;
@@ -36,9 +33,6 @@ class Sort {
       sommaire: this.sommaire,
       description: this.description,
       ecoleRef: this.ecoleRef,
-      porteRef: this.porteRef, // ... Keeping them temporarly
-      dureeRef: this.dureeRef, // ... Keeping them temporarly
-      zoneRef: this.zoneRef, // ... Keeping them temporarly
       porte: this.porte,
       duree: this.duree,
       zone: this.zone
@@ -52,7 +46,7 @@ class Sort {
 }
 
 const getSorts = async () => {
-  return (await getDocs(query(collection(db, "sorts")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "sorts"), orderBy("nom")))).docs.map(snap => {
     const sort = new Sort(snap.id, snap.data());
     return sort;
   });

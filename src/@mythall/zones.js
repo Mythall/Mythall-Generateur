@@ -15,7 +15,7 @@ class Zone {
 }
 
 const getZones = async () => {
-  return (await getDocs(query(collection(db, "zones")), orderBy("nom"))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "zones"), orderBy("nom")))).docs.map(snap => {
     return new Zone(snap.id, snap.data());
   });
 };
