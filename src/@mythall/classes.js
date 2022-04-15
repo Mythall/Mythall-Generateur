@@ -11,10 +11,10 @@ import { getStatistique } from "./statistiques";
 // const ClasseSort = ['Divin', 'Profane'];
 
 class ClasseItem {
-  constructor(id) {
-    this.classe = null;
-    this.classeRef = id ? id : "";
-    this.niveau = 1;
+  constructor({ classe, classeRef, niveau }) {
+    this.classe = classe ? classe : null;
+    this.classeRef = classeRef ? classeRef : "";
+    this.niveau = niveau ? niveau : 1;
   }
 }
 

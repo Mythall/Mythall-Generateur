@@ -63,3 +63,16 @@ button[type="submit"] {
   background: var(--color-primary);
   color: var(--text-white);
 }
+
+.button--flex {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.button__primary svg,
+.button__default svg {
+  width: 20px;
+  height: 20px;
+}

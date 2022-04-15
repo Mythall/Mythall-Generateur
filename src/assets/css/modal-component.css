@@ -16,6 +16,7 @@ modal-component:hover {
 }
 
 .modal {
+  color: #000000;
   background: #ffffff;
   border-radius: var(--base-radius);
   box-shadow: var(--base-shadow);

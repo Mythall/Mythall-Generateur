@@ -1,3 +1,5 @@
+import "../css/loading-component.css";
+
 const toggleLoading = (state, message) => {
   document.querySelector("loading-component").dispatchEvent(new CustomEvent("toggle", { detail: { state, message } }));
 };

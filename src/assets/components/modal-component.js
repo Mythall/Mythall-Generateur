@@ -1,3 +1,5 @@
+import "../css/modal-component.css";
+
 const toggleModal = (state, message, successCallback) => {
   document.querySelector("modal-component").dispatchEvent(new CustomEvent("toggle", { detail: { state, message, successCallback } }));
 };
@@ -13,7 +15,7 @@ class ModalComponent extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
     <div class="modal">
-      <div id="message" class="loading__message"></div>
+      <div id="message"></div>
       <div class=modal__buttons>
         <button id="cancel" class="button__default">Cancel</button>
         <button id="confirm" class="button__primary">Confirm</button>

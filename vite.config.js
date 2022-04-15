@@ -19,9 +19,10 @@ export default defineConfig(async () => {
           creation: resolve(__dirname, `${root}/personnage/creation.html`),
           progression: resolve(__dirname, `${root}/personnage/progression.html`),
           compte: resolve(__dirname, `${root}/compte/index.html`),
-          organisateurPersonnages: resolve(__dirname, `${root}/organisateur/personnages/index.html`),
-          organisateurSortsList: resolve(__dirname, `${root}/organisateur/sorts/index.html`),
-          organisateurSortsForm: resolve(__dirname, `${root}/organisateur/sorts/form.html`),
+          personnagesList: resolve(__dirname, `${root}/organisateur/personnages/index.html`),
+          personnagesForm: resolve(__dirname, `${root}/organisateur/personnages/form.html`),
+          sortsList: resolve(__dirname, `${root}/organisateur/sorts/index.html`),
+          sortsForm: resolve(__dirname, `${root}/organisateur/sorts/form.html`),
           error: resolve(__dirname, `${root}/error.html`)
         }
       }

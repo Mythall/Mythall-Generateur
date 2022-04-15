@@ -1,5 +1,6 @@
 import { db } from "../assets/js/firebase";
-import { doc, addDoc, updateDoc, deleteDoc, getDoc, getDocs, collection, query, orderBy, where } from "firebase/firestore";
+import { Timestamp } from "firebase/firestore";
+import { doc, addDoc, updateDoc, deleteDoc, getDoc, getDocs, collection, query, orderBy, where, Firestore } from "firebase/firestore";
 
 class Personnage {
   constructor(
@@ -39,7 +40,9 @@ class Personnage {
       niveauDivin,
       niveauDisponible,
       gnEffectif,
-      vie
+      vie,
+      createdAt,
+      updatedAt
     }
   ) {
     this.id = id;
@@ -78,6 +81,8 @@ class Personnage {
     this.niveauDisponible = niveauDisponible ? niveauDisponible : 0;
     this.gnEffectif = gnEffectif ? gnEffectif : 0;
     this.vie = vie ? vie : 5;
+    this.createdAt = createdAt ? createdAt : Timestamp.now();
+    this.updatedAt = updatedAt ? updatedAt : Timestamp.now();
   }
 
   saveState() {
@@ -120,7 +125,9 @@ class Personnage {
       ordreRef: this.ordreRef,
       domainesRef: this.domainesRef,
       vie: this.vie,
-      gnEffectif: this.gnEffectif
+      gnEffectif: this.gnEffectif,
+      createdAt: this.createdAt,
+      updatedAt: Timestamp.now()
     };
   }
 
@@ -190,7 +197,7 @@ class Personnage {
 }
 
 const getPersonnages = async () => {
-  return (await getDocs(query(collection(db, "personnages"), orderBy("createdAt")))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "personnages"), orderBy("updatedAt", "desc")))).docs.map(snap => {
     return new Personnage(snap.id, snap.data());
   });
 };
@@ -209,12 +216,13 @@ const getPersonnage = async id => {
 };
 
 const addPersonnage = async personnage => {
-  console.log(personnage.saveState());
-  return await addDoc(collection(db, `personnages`), personnage.saveState());
+  const docRef = await addDoc(collection(db, `personnages`), personnage.saveState());
+  console.log(docRef.id);
+  return docRef;
 };
 
 const updatePersonnage = async personnage => {
-  return await updateDoc(doc(db, `personnages/${race.id}`), personnage.saveState());
+  return await updateDoc(doc(db, `personnages/${personnage.id}`), personnage.saveState());
 };
 
 const deletePersonnage = async id => {

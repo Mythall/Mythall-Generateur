@@ -472,7 +472,7 @@ class CreationPersonnage extends HTMLElement {
 
   _updateClasse = async value => {
     // Update personnage
-    this.personnage.classes.push(new ClasseItem(value));
+    this.personnage.classes.push(new ClasseItem({ classeRef: value }));
 
     // Fill Requirements for available classes
     const classes = await Promise.all(this.personnage.classes.map(classe => getClasse(classe.classeRef)));

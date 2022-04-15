@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <style>
+      form-personnage-component {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .form__title {
+        text-align: center;
+      }
+      .form__box {
+        margin-top: var(--base-padding);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+      }
+      .form__tab {
+        padding-top: var(--space-sm);
+        padding-bottom: var(--space-sm);
+        display: flex;
+        gap: var(--space-md);
+        flex-direction: column;
+      }
+      .form__wrapper {
+        display: flex;
+        gap: var(--space-sm);
+        flex-direction: column;
+      }
+      .form__group {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: var(--space-xs);
+      }
+      .form__multigroup {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+      .required {
+        color: var(--color-error);
+      }
+      .hidden {
+        display: none;
+      }
+
+      .form__icon {
+        width: 20px;
+        height: 20px;
+      }
+
+      .form__button {
+        max-height: 33.5px;
+      }
+
+      /* Tabs */
+      .tablinks {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+      }
+
+      /* Style the buttons that are used to open the tab content */
+      .tablinks__link {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 14px 16px;
+        transition: 0.3s;
+      }
+      .tablinks__link:hover {
+        background-color: #ddd;
+      }
+      .tablinks__link--active {
+        background-color: #ccc;
+      }
+
+      @media (min-width: 480px) {
+        .form__box {
+          width: auto;
+          min-width: 400px;
+          padding: var(--space-md);
+        }
+        .form__multigroup {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <loading-component></loading-component>
+    <modal-component></modal-component>
+    <header-component></header-component>
+    <main>
+      <form-personnage-component>
+        <div class="form__title">
+          <h1 id="formTitle">Création de personnage</h1>
+          <p><a href="/organisateur/personnages">Retour à la liste des personnages</a></p>
+        </div>
+        <form class="form__box">
+          <div class="tablinks">
+            <button data-target="base" class="tablinks__link tablinks__link--active">Base</button>
+            <button data-target="classes" class="tablinks__link">Classe(s)</button>
+            <button data-target="dons" class="tablinks__link">Don(s)</button>
+            <button data-target="sorts" class="tablinks__link">Sort(s)</button>
+            <button data-target="aptitudes" class="tablinks__link">Aptitude(s)</button>
+            <button data-target="fourberies" class="tablinks__link">Fourberie(s)</button>
+          </div>
+
+          <!-- Base -->
+          <div id="base" class="form__tab">
+            <div class="form__group">
+              <label for="nom">Nom <span class="required">*</span></label>
+              <input id="nom" type="text" required />
+            </div>
+            <div class="form__group">
+              <label for="user">Joueur <span class="required">*</span></label>
+              <select id="user" required>
+                <option disabled selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="race">Race <span class="required">*</span></label>
+              <select id="race" required>
+                <option disabled selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="alignement">Alignement <span class="required">*</span></label>
+              <select id="alignement" required>
+                <option disabled selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="divinite">Divinité <span class="required">*</span></label>
+              <select id="divinite" required>
+                <option disabled selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="domaines">Domaines</label>
+              <select id="domaines" multiple></select>
+            </div>
+            <div class="form__group">
+              <label for="ecole">École</label>
+              <select id="ecole">
+                <option selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="esprit">Esprit</label>
+              <select id="esprit">
+                <option selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="ordre">Ordre</label>
+              <select id="ordre">
+                <option selected></option>
+              </select>
+            </div>
+            <div class="form__group">
+              <label for="vie">Vie(s) <span class="required">*</span></label>
+              <input id="vie" type="number" value="5" required />
+            </div>
+          </div>
+
+          <!-- Classes -->
+          <div id="classes" class="form__tab hidden">
+            <!-- Classe Item Template-->
+            <template id="templateClasses">
+              <div id="classe" class="form__multigroup">
+                <div class="form__group">
+                  <label id="classeLabel" for="classeRef">Classe <span class="required">*</span></label>
+                  <select id="classeRef" required>
+                    <option disabled selected></option>
+                  </select>
+                </div>
+                <div class="form__group">
+                  <label id="niveauLabel" for="niveau">Niveau <span class="required">*</span></label>
+                  <input id="niveau" type="number" min="1" max="20" required />
+                </div>
+                <div class="form__group">
+                  <label>Action(s)</label>
+                  <button id="delete" class="button__default button--flex form__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+
+            <!-- Wrapper -->
+            <div id="classesWrapper" class="form__wrapper"></div>
+
+            <!-- New Item -->
+            <div class="form__group">
+              <button id="addClasse" class="button__default button--flex form__button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Dons -->
+          <div id="dons" class="form__tab hidden">
+            <!-- Don Item Template-->
+            <template id="templateDons">
+              <div id="don" class="form__multigroup">
+                <div class="form__group">
+                  <label id="donLabel" for="donRef">Don <span class="required">*</span></label>
+                  <select id="donRef" required>
+                    <option disabled selected></option>
+                  </select>
+                </div>
+                <div class="form__group">
+                  <label id="niveauLabel" for="niveauObtention">Niveau d'obtention <span class="required">*</span></label>
+                  <input id="niveauObtention" type="number" min="1" value="1" required />
+                </div>
+                <div class="form__group">
+                  <label>Action(s)</label>
+                  <button id="delete" class="button__default button--flex form__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+
+            <!-- Wrapper -->
+            <div id="donsWrapper" class="form__wrapper"></div>
+
+            <!-- New Item -->
+            <div class="form__group">
+              <button id="addDon" class="button__default button--flex form__button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Sorts -->
+          <div id="sorts" class="form__tab hidden">
+            <!-- Sort Item Template-->
+            <template id="templateSorts">
+              <div id="sort" class="form__multigroup">
+                <div class="form__group">
+                  <label id="sortLabel" for="sortRef">Sort <span class="required">*</span></label>
+                  <select id="sortRef" required>
+                    <option disabled selected></option>
+                  </select>
+                </div>
+                <div class="form__group">
+                  <label id="niveauLabel" for="niveauObtention">Niveau d'obtention <span class="required">*</span></label>
+                  <input id="niveauObtention" type="number" min="1" value="1" required />
+                </div>
+                <div class="form__group">
+                  <label>Action(s)</label>
+                  <button id="delete" class="button__default button--flex form__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+
+            <!-- Wrapper -->
+            <div id="sortsWrapper" class="form__wrapper"></div>
+
+            <!-- New Item -->
+            <div class="form__group">
+              <button id="addSort" class="button__default button--flex form__button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Aptitudes -->
+          <div id="aptitudes" class="form__tab hidden">
+            <!-- Aptitude Item Template-->
+            <template id="templateAptitudes">
+              <div id="aptitude" class="form__multigroup">
+                <div class="form__group">
+                  <label id="aptitudeLabel" for="aptitudeRef">Aptitude <span class="required">*</span></label>
+                  <select id="aptitudeRef" required>
+                    <option disabled selected></option>
+                  </select>
+                </div>
+                <div class="form__group">
+                  <label id="niveauLabel" for="niveauObtention">Niveau d'obtention <span class="required">*</span></label>
+                  <input id="niveauObtention" type="number" min="1" value="1" required />
+                </div>
+                <div class="form__group">
+                  <label>Action(s)</label>
+                  <button id="delete" class="button__default button--flex form__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+
+            <!-- Wrapper -->
+            <div id="aptitudesWrapper" class="form__wrapper"></div>
+
+            <!-- New Item -->
+            <div class="form__group">
+              <button id="addAptitude" class="button__default button--flex form__button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- Fourberies -->
+          <div id="fourberies" class="form__tab hidden">
+            <!-- Fourberie Item Template-->
+            <template id="templateFourberies">
+              <div id="fourberie" class="form__multigroup">
+                <div class="form__group">
+                  <label id="fourberieLabel" for="fourberieRef">Fourberie <span class="required">*</span></label>
+                  <select id="fourberieRef" required>
+                    <option disabled selected></option>
+                  </select>
+                </div>
+                <div class="form__group">
+                  <label id="niveauLabel" for="niveauObtention">Niveau d'obtention <span class="required">*</span></label>
+                  <input id="niveauObtention" type="number" min="1" value="1" required />
+                </div>
+                <div class="form__group">
+                  <label>Action(s)</label>
+                  <button id="delete" class="button__default button--flex form__button">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                      <path
+                        fill-rule="evenodd"
+                        d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z"
+                        clip-rule="evenodd" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </template>
+
+            <!-- Wrapper -->
+            <div id="fourberiesWrapper" class="form__wrapper"></div>
+
+            <!-- New Item -->
+            <div class="form__group">
+              <button id="addFourberie" class="button__default button--flex form__button">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z"
+                    clip-rule="evenodd" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit">Envoyer</button>
+        </form>
+      </form-personnage-component>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
+  <script type="module" src="/organisateur/personnages/personnages-component.js" defer></script>
+</html>
