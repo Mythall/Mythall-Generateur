@@ -61,6 +61,35 @@ const buildPersonnage = async personnage => {
   }
 };
 
+const buildPersonnageForProgression = async personnage => {
+  try {
+    _updateLoadingState("Assemblage de votre personnage...");
+    await Promise.all([
+      _getUser(personnage),
+      _getRace(personnage),
+      _getClasses(personnage),
+      _getAlignement(personnage),
+      _getDieu(personnage),
+      _getOrdres(personnage)
+    ]);
+
+    _updateLoadingState("Niveau Effectif...");
+    await _getNiveauEffectif(personnage);
+
+    _updateLoadingState("Domaines & Esprits...");
+    await Promise.all([_getDomaines(personnage), _getEsprit(personnage)]);
+
+    _updateLoadingState("Assemblage du personnage terminé!");
+
+    // Completed
+    toggleLoading(false);
+    return new Personnage(personnage.id, personnage);
+  } catch (error) {
+    console.log(error);
+    alert(error);
+  }
+};
+
 const _updateLoadingState = msg => {
   toggleLoading(true, msg);
   console.log(msg);
@@ -129,15 +158,15 @@ const _getNiveauEffectif = async personnage => {
 
   if (personnage.classes) {
     personnage.classes.forEach(classe => {
-      personnage.niveauEffectif += classe.niveau;
-      personnage.niveauReel += classe.niveau;
+      personnage.niveauEffectif += +classe.niveau;
+      personnage.niveauReel += +classe.niveau;
 
       if (classe.classe.sort == "Profane") {
-        personnage.niveauProfane += classe.niveau;
+        personnage.niveauProfane += +classe.niveau;
       }
 
       if (classe.classe.sort == "Divin") {
-        personnage.niveauDivin += classe.niveau;
+        personnage.niveauDivin += +classe.niveau;
       }
     });
   }
@@ -146,7 +175,7 @@ const _getNiveauEffectif = async personnage => {
     if (personnage.race.ajustement) {
       personnage.niveauEffectif += +personnage.race.ajustement;
       if (personnage.niveauProfane > 0) personnage.niveauProfane += +personnage.race.ajustement;
-      if (personnage.niveauDiving > 0) personnage.niveauDivin += +personnage.race.ajustement;
+      if (personnage.niveauDivin > 0) personnage.niveauDivin += +personnage.race.ajustement;
     }
   }
 
@@ -818,4 +847,4 @@ const _getCapaciteSpeciales = async personnage => {
   return personnage;
 };
 
-export { buildPersonnage };
+export { buildPersonnage, buildPersonnageForProgression };

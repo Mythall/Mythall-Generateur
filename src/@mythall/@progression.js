@@ -129,6 +129,8 @@ const getAvailableChoix = async (personnage, progressingClasse) => {
       quantite: 1
     });
 
+    // console.log("Don 3 niveau ou lvl 1");
+
     listChoix.push(Object.assign({}, don));
   }
 

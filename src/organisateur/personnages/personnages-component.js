@@ -56,6 +56,7 @@ class ListPersonnagesComponent extends HTMLElement {
       const clone = this.querySelector("template").content.cloneNode(true);
       clone.querySelector("#nom").innerHTML = personnage.nom;
       clone.querySelector("#view").setAttribute("href", `/personnage?id=${personnage.id}`);
+      clone.querySelector("#progress").setAttribute("href", `/personnage/progression?id=${personnage.id}`);
       clone.querySelector("#edit").setAttribute("href", `/organisateur/personnages/form?id=${personnage.id}`);
       clone
         .querySelector("#delete")

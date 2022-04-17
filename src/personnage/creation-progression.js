@@ -1,5 +1,6 @@
 import { auth } from "../assets/js/firebase";
-import { Personnage, addPersonnage, updatePersonnage } from "../@mythall/personnages";
+import { buildPersonnageForProgression } from "../@mythall/@build";
+import { Personnage, addPersonnage, getPersonnage, updatePersonnage } from "../@mythall/personnages";
 import {
   getAvailableRaces,
   getAvailableClasses,
@@ -26,10 +27,6 @@ class CreationPersonnage extends HTMLElement {
   constructor() {
     super();
 
-    // Create new personnage
-    this.initialPersonnage = new Personnage(null, {});
-    this.personnage = this._clonePersonnage(this.initialPersonnage);
-
     // Inputs
     this.form = this.querySelector("#personnageForm");
     this.nom = this.querySelector("#nom");
@@ -43,6 +40,40 @@ class CreationPersonnage extends HTMLElement {
   }
 
   async connectedCallback() {
+    // Get URL paramas and convert from a set to an array
+    const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
+      return { [item[0]]: item[1] };
+    });
+
+    // Find id param
+    const id = params.find(param => param["id"] != null)?.id;
+
+    if (id) {
+      try {
+        // Set progression mode
+        this.progression = true;
+
+        // Build Existing Personnage
+        this.initialPersonnage = await getPersonnage(id);
+        this.initialPersonnage = await buildPersonnageForProgression(this.initialPersonnage);
+        this.initialPersonnage.id = id;
+        console.log(this.initialPersonnage);
+
+        // Set nom for visual cue
+        this.nom.value = this.initialPersonnage.nom;
+      } catch (error) {
+        alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
+        console.log(error);
+      }
+    } else {
+      // Create new personnage
+      this.initialPersonnage = new Personnage(null, {});
+    }
+
+    // Assign personnage
+    this.personnage = this._clonePersonnage(this.initialPersonnage);
+
+    // Initiate process
     this._initiateSteps();
     await this._getNextStep();
   }
@@ -62,6 +93,7 @@ class CreationPersonnage extends HTMLElement {
       {
         id: "classes",
         text: "Classe",
+        progression: true,
         completed: false,
         dynamic: false,
         copy: null,
@@ -78,6 +110,7 @@ class CreationPersonnage extends HTMLElement {
         updateEvent: this._updateAlignement
       }
     ];
+    if (this.progression) this.steps = this.steps.filter(s => s.progression);
     this.stepIndex = 0;
     this.currentStep = this.steps[0];
   };
@@ -139,7 +172,9 @@ class CreationPersonnage extends HTMLElement {
 
   _getDynamicSteps = async () => {
     if (this.progressingClasse) {
-      (await getAvailableChoix(this.personnage, this.progressingClasse)).forEach(choix => {
+      const availableChoix = await getAvailableChoix(this.personnage, this.progressingClasse);
+      console.log(availableChoix);
+      availableChoix.forEach(choix => {
         if (choix.type == "domaine" && choix.quantite > 0) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `domaines-${i}`)) {
@@ -381,6 +416,14 @@ class CreationPersonnage extends HTMLElement {
     return new Personnage(personnage.id ? personnage.id : null, JSON.parse(JSON.stringify(personnage)));
   };
 
+  _setPersonnageFromPreviousStep = () => {
+    if (this.stepIndex > 0) {
+      this.personnage = this._clonePersonnage(this.steps[this.stepIndex - 1].copy);
+    } else {
+      this.personnage = this._clonePersonnage(this.initialPersonnage);
+    }
+  };
+
   // Get Available Options
   _getRacesOptions = async () => {
     return (await getAvailableRaces()).map(r => {
@@ -460,6 +503,9 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _udpdateRace = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     if (value != this.personnage.raceRef) {
       // Update current personnage
       this.initialPersonnage.raceRef = value;
@@ -471,8 +517,18 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateClasse = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     // Update personnage
-    this.personnage.classes.push(new ClasseItem({ classeRef: value }));
+    const existingClasse = this.personnage.classes.find(ci => ci.classeRef == value);
+    if (existingClasse) {
+      existingClasse.niveau++;
+      this.personnage.niveauReel++;
+      this.personnage.niveauEffectif++;
+    } else {
+      this.personnage.classes.push(new ClasseItem({ classeRef: value }));
+    }
 
     // Fill Requirements for available classes
     const classes = await Promise.all(this.personnage.classes.map(classe => getClasse(classe.classeRef)));
@@ -483,10 +539,16 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateAlignement = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.alignementRef = value;
   };
 
   _updateDomaine = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     // Update personnage
     this.personnage.domainesRef.push(value);
 
@@ -496,18 +558,30 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateEcole = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.ecoleRef = value;
   };
 
   _updateEsprit = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.espritRef = value;
   };
 
   _updateOrdre = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.ordreRef = value;
   };
 
   _updateConnaissance = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.dons.push(
       new DonItem({
         donRef: value,
@@ -517,6 +591,9 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateDon = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.dons.push(
       new DonItem({
         donRef: value,
@@ -526,6 +603,9 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateFourberie = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.fourberies.push(
       new FourberieItem({
         fourberieRef: value,
@@ -535,6 +615,9 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateSort = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.sorts.push(
       new SortItem({
         sortRef: value,
@@ -544,6 +627,9 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _updateDivinite = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
     this.personnage.dieuRef = value;
   };
 
@@ -561,6 +647,7 @@ class CreationPersonnage extends HTMLElement {
 
       if (this.personnage.id) {
         await updatePersonnage(this.personnage);
+        window.location.href = `/personnage?id=${this.personnage.id}`;
       } else {
         const result = await addPersonnage(this.personnage);
 
@@ -576,24 +663,3 @@ class CreationPersonnage extends HTMLElement {
 }
 
 customElements.define("creation-personnage", CreationPersonnage);
-
-// _getPersonnage = async () => {
-//   // Get URL paramas and convert from a set to an array
-//   const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
-//     return { [item[0]]: item[1] };
-//   });
-
-//   // Find id param
-//   const id = params.find(param => param["id"] != null)?.id;
-
-//   if (id) {
-//     try {
-//       // Build Personnage
-//       const base = await getPersonnage(id);
-//       this.progression = true;
-//     } catch (error) {
-//       alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
-//       console.log(error);
-//     }
-//   }
-// };
