@@ -120,6 +120,7 @@ class FormPersonnageComponent extends HTMLElement {
     this.ordre = this.querySelector("#ordre");
     this.user = this.querySelector("#user");
     this.vie = this.querySelector("#vie");
+    this.gnEffectif = this.querySelector("#gnEffectif");
 
     // Form events
     this.addEventListener("submit", async event => await this._save(event));
@@ -191,6 +192,7 @@ class FormPersonnageComponent extends HTMLElement {
         if (personnage.ordreRef) this.ordre.value = personnage.ordreRef;
         if (!personnage.ordreRef && personnage.ordresRef) this.ordre.value = personnage.ordresRef;
         if (personnage.vie) this.vie.value = personnage.vie;
+        if (personnage.gnEffectif) this.gnEffectif.value = personnage.gnEffectif;
 
         if (personnage.domainesRef) {
           const options = Array.from(document.querySelectorAll("#domaines option"));
@@ -541,7 +543,8 @@ class FormPersonnageComponent extends HTMLElement {
         ecoleRef: this.ecole.value,
         espritRef: this.esprit.value,
         ordreRef: this.ordre.value,
-        vue: this.vie.value,
+        vie: this.vie.value,
+        gnEffectif: this.gnEffectif.value,
         domainesRef,
         classes,
         dons,

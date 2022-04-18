@@ -110,7 +110,26 @@ class CreationPersonnage extends HTMLElement {
         updateEvent: this._updateAlignement
       }
     ];
-    if (this.progression) this.steps = this.steps.filter(s => s.progression);
+    if (this.progression) {
+      // Ajustement de niveau
+      if (this.personnage.gnEffectif <= this.personnage.race.ajustement) {
+        this.steps = [
+          {
+            id: "ajustement",
+            text: "Ajustement de niveau",
+            completed: false,
+            dynamic: false,
+            progression: true,
+            copy: null,
+            getOptions: this._getAjustementptions,
+            updateEvent: this._udpdateAjustement
+          }
+        ];
+      }
+
+      // Remove creation steps
+      this.steps = this.steps.filter(s => s.progression);
+    }
     this.stepIndex = 0;
     this.currentStep = this.steps[0];
   };
@@ -425,6 +444,11 @@ class CreationPersonnage extends HTMLElement {
   };
 
   // Get Available Options
+
+  _getAjustementptions = async () => {
+    return [{ text: `Ajustement de niveau (${this.personnage.gnEffectif}/${this.personnage.race.ajustement})`, value: true }];
+  };
+
   _getRacesOptions = async () => {
     return (await getAvailableRaces()).map(r => {
       return { text: r.nom, value: r.id };
@@ -500,6 +524,11 @@ class CreationPersonnage extends HTMLElement {
   // Update Events
   _updateNom = async () => {
     this.nom.classList.toggle("touched", true);
+  };
+
+  _udpdateAjustement = async () => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
   };
 
   _udpdateRace = async value => {
@@ -637,6 +666,8 @@ class CreationPersonnage extends HTMLElement {
     event.preventDefault();
 
     try {
+      this.personnage.gnEffectif++;
+
       if (!this.personnage.nom) {
         this.personnage.nom = this.querySelector("#nom").value;
       }
