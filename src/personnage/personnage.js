@@ -14,8 +14,6 @@ class PersonnageComponent extends HTMLElement {
     // Load Character
     await this._getPersonnage();
 
-    console.log(this.personnage);
-
     // Fill Sections
     this._setInformations();
     this._setStatistiques();
@@ -30,7 +28,7 @@ class PersonnageComponent extends HTMLElement {
   }
 
   _getPersonnage = async () => {
-    // Get URL paramas and convert from a set to an array
+    // Get URL params and convert from a set to an array
     const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
       return { [item[0]]: item[1] };
     });
@@ -44,7 +42,7 @@ class PersonnageComponent extends HTMLElement {
         const base = await getPersonnage(id);
         this.personnage = await buildPersonnage(base);
       } catch (error) {
-        alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
+        alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
       }
     } else {
@@ -88,6 +86,12 @@ class PersonnageComponent extends HTMLElement {
     if (this.personnage.domaines?.length > 0) {
       const elem = this.querySelector("#domaine");
       elem.innerHTML = this.personnage.domaines?.map(domaine => domaine.nom).join(", ");
+      elem.parentElement.classList.toggle("hidden", false);
+    }
+
+    if (this.personnage.ecole) {
+      const elem = this.querySelector("#ecole");
+      elem.innerHTML = this.personnage.ecole;
       elem.parentElement.classList.toggle("hidden", false);
     }
 
