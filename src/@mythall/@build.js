@@ -7,6 +7,7 @@ import { getClasse } from "./classes";
 import { getDieu } from "./dieux";
 import { getDomaine } from "./domaines";
 import { getDon, DonItem } from "./dons";
+import { getEcole } from "./ecoles";
 import { getEsprit } from "./esprits";
 import { getFourberie } from "./fourberies";
 import { getOrdre } from "./ordres";
@@ -32,8 +33,8 @@ const buildPersonnage = async personnage => {
     _updateLoadingState("Niveau Effectif...");
     await _getNiveauEffectif(personnage);
 
-    _updateLoadingState("Domaines & Esprits...");
-    await Promise.all([_getDomaines(personnage), _getEsprit(personnage)]);
+    _updateLoadingState("École, Domaines & Esprits...");
+    await Promise.all([_getEcole(personnage), _getDomaines(personnage), _getEsprit(personnage)]);
 
     _updateLoadingState("Aptitudes...");
     await _getAllAptitudes(personnage);
@@ -177,6 +178,16 @@ const _getNiveauEffectif = async personnage => {
       if (personnage.niveauProfane > 0) personnage.niveauProfane += +personnage.race.ajustement;
       if (personnage.niveauDivin > 0) personnage.niveauDivin += +personnage.race.ajustement;
     }
+  }
+
+  return personnage;
+};
+
+const _getEcole = async personnage => {
+  if (personnage.ecoleRef) {
+    const response = await getEcole(personnage.ecoleRef);
+    personnage.ecole = response.nom;
+    return personnage;
   }
 
   return personnage;
