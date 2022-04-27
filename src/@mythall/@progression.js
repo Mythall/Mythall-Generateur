@@ -9,6 +9,7 @@ import { getDieux } from "./dieux";
 import { getDons } from "./dons";
 import { getFourberies } from "./fourberies";
 import { getSort } from "./sorts";
+import { getAptitude } from "./aptitudes";
 
 class Choix {
   constructor({ type, quantite, niveauObtention, categorie, domaine, ref }) {
@@ -270,6 +271,67 @@ const getAvailableOrdres = async personnage => {
   return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
+const getAvailableAptitudes = async (personnage, progressingClasse) => {
+  let aptitudeRefs = progressingClasse.classe.choix
+    .filter(x => x.type == 'aptitude' && x.niveauObtention === progressingClasse.niveau)
+    .map(x => x.ref)
+    .flat();
+
+  let rodeurUnavailableCombatStyleProgressAptitudeRef = _getRodeurUnavailableCombatStyleProgress(personnage);
+
+  if (rodeurUnavailableCombatStyleProgressAptitudeRef) {
+    aptitudeRefs = aptitudeRefs.filter(x => x != rodeurUnavailableCombatStyleProgressAptitudeRef);
+  }
+
+  return await Promise.all(aptitudeRefs.map(async ref => await getAptitude(ref)));
+}
+
+const rangedCombatStyleAptitudeRefs = [
+  'g5NSyyh4n2M9A69Gpcj3', // Style
+  '2QK0QnyPsu9WljfWqBAC', // Science
+  'bqZBLKSRTdZibeAQ5jKE' // Maîtrise
+]
+
+const dualWieldCombatStyleAptitudeRefs = [
+  'fvb07AqehmArvoHyw929', // Style
+  'VM4yz2QmWy101SzPWw2C', // Science
+  'xUliJugimhST8EY3YRS7' // Maîtrise
+]
+
+const _getRodeurUnavailableCombatStyleProgress = (personnage) => {
+  let currentAptitudes = personnage.aptitudes.map(x => x.aptitudeRef);
+  
+  if (currentAptitudes.length <= 0) {
+    return null;
+  }
+
+  let isRanged = currentAptitudes.some(x => rangedCombatStyleAptitudeRefs.includes(x));
+  let isDualWield = currentAptitudes.some(x => dualWieldCombatStyleAptitudeRefs.includes(x));
+
+  let aptitudesToCheck;
+  let aptitudesFromWhichToRemove;
+
+  if (isRanged) {
+    aptitudesToCheck = rangedCombatStyleAptitudeRefs;
+    aptitudesFromWhichToRemove = dualWieldCombatStyleAptitudeRefs;
+  } else if (isDualWield) {
+    aptitudesToCheck = dualWieldCombatStyleAptitudeRefs;
+    aptitudesFromWhichToRemove = rangedCombatStyleAptitudeRefs;
+  } else {
+    return null;
+  }
+
+  let newAvailableAptitudeRefIndex;
+  currentAptitudes.forEach(x => {
+    let currentAptitudeIndex = aptitudesToCheck.indexOf(x);
+    if (currentAptitudeIndex > -1) {
+      newAvailableAptitudeRefIndex = currentAptitudeIndex + 1;
+    }
+  })
+
+  return aptitudesFromWhichToRemove[newAvailableAptitudeRefIndex];
+}
+
 const getAvailableConnaissances = async personnage => {
   const dons = await getDons("Connaissance");
 
@@ -330,7 +392,7 @@ const getAvailableConnaissances = async personnage => {
     });
   }
 
-  // Trie en Ordre Alphabetic
+  // Trie en Ordre Alphabétique
   return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
@@ -338,7 +400,7 @@ const getAvailableDons = async personnage => {
   const dons = await getDons();
   let list = dons;
 
-  // Filtre les dons déjà existant
+  // Filtre les dons déjà existants
   if (personnage.dons && personnage.dons.length > 0) {
     personnage.dons.forEach(donPerso => {
       list = list.filter(don => {
@@ -347,14 +409,14 @@ const getAvailableDons = async personnage => {
     });
   }
 
-  // Filtre les Race Authorisé
+  // Filtre les Races Autorisées
   if (personnage.raceRef) {
     list = list.filter(function (don) {
       return don.racesAutoriseRef.includes(personnage.raceRef);
     });
   }
 
-  // Filtre les classes authorisé
+  // Filtre les classes autorisées
   if (personnage.classes) {
     let result = [];
 
@@ -517,6 +579,7 @@ export {
   getAvailableRaces,
   getAvailableClasses,
   getAvailableAlignements,
+  getAvailableAptitudes,
   getAvailableChoix,
   getAvailableDomaines,
   getAvailableEcoles,

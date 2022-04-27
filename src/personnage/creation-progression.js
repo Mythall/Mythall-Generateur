@@ -5,6 +5,7 @@ import {
   getAvailableRaces,
   getAvailableClasses,
   getAvailableAlignements,
+  getAvailableAptitudes,
   getAvailableChoix,
   getAvailableDomaines,
   getAvailableEcoles,
@@ -22,6 +23,7 @@ import { getDomaine } from "../@mythall/domaines";
 import { DonItem } from "../@mythall/dons";
 import { FourberieItem } from "../@mythall/fourberies";
 import { SortItem } from "../@mythall/sorts";
+import { AptitudeItem } from "../@mythall/aptitudes";
 
 class CreationPersonnage extends HTMLElement {
   constructor() {
@@ -88,7 +90,7 @@ class CreationPersonnage extends HTMLElement {
         dynamic: false,
         copy: null,
         getOptions: this._getRacesOptions,
-        updateEvent: this._udpdateRace
+        updateEvent: this._updateRace
       },
       {
         id: "classes",
@@ -122,7 +124,7 @@ class CreationPersonnage extends HTMLElement {
             progression: true,
             copy: null,
             getOptions: this._getAjustementptions,
-            updateEvent: this._udpdateAjustement
+            updateEvent: this._updateAjustement
           }
         ];
       }
@@ -262,6 +264,23 @@ class CreationPersonnage extends HTMLElement {
           }
         }
 
+        if (choix.type == "aptitude" && choix.quantite > 0) {
+          for (let i = 1; i <= choix.quantite; i++) {
+            if (!this.steps.find(step => step.id == `aptitude-${i}`)) {
+              this.steps.push({
+                id: `aptitude-${i}`,
+                text: `Aptitude (${i}/${choix.quantite})`,
+                completed: false,
+                dynamic: true,
+                order: 5,
+                copy: null,
+                getOptions: this._getAptitudesOptions,
+                updateEvent: this._updateAptitude
+              });
+            }
+          }
+        }
+
         if (choix.type == "don" && choix.categorie == "Connaissance" && choix.quantite > 0) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `connaissance-${i}`)) {
@@ -270,7 +289,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Connaissance (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
-                order: 5,
+                order: 6,
                 copy: null,
                 getOptions: this._getConnaissancesOptions,
                 updateEvent: this._updateConnaissance
@@ -287,7 +306,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Don (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
-                order: 6,
+                order: 7,
                 copy: null,
                 getOptions: this._getDonsOptions,
                 updateEvent: this._updateDon
@@ -304,7 +323,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Fourberie (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
-                order: 7,
+                order: 8,
                 copy: null,
                 getOptions: this._getFourberiesOptions,
                 updateEvent: this._updateFourberie
@@ -321,7 +340,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Sort (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
-                order: 8,
+                order: 9,
                 copy: null,
                 getOptions: this._getSortsOptions,
                 updateEvent: this._updateSort
@@ -338,7 +357,7 @@ class CreationPersonnage extends HTMLElement {
                 text: `Sort de domaine (${i}/${choix.quantite})`,
                 completed: false,
                 dynamic: true,
-                order: 9,
+                order: 10,
                 copy: null,
                 getOptions: this._getSortsOptions,
                 updateEvent: this._updateSort
@@ -355,7 +374,7 @@ class CreationPersonnage extends HTMLElement {
           text: `Divinité`,
           completed: false,
           dynamic: true,
-          order: 10,
+          order: 11,
           copy: null,
           getOptions: this._getDivinitesOptions,
           updateEvent: this._updateDivinite
@@ -491,6 +510,12 @@ class CreationPersonnage extends HTMLElement {
     });
   };
 
+  _getAptitudesOptions = async () => {
+    return (await getAvailableAptitudes(this.personnage, this.progressingClasse)).map(a => {
+      return { text: a.nom, value: a.id };
+    });
+  };
+
   _getConnaissancesOptions = async () => {
     return (await getAvailableConnaissances(this.personnage)).map(d => {
       return { text: d.nom, value: d.id };
@@ -526,12 +551,12 @@ class CreationPersonnage extends HTMLElement {
     this.nom.classList.toggle("touched", true);
   };
 
-  _udpdateAjustement = async () => {
+  _updateAjustement = async () => {
     // Make sure we always have the right step loaded even if players plays around with dropdowns
     this._setPersonnageFromPreviousStep();
   };
 
-  _udpdateRace = async value => {
+  _updateRace = async value => {
     // Make sure we always have the right step loaded even if players plays around with dropdowns
     this._setPersonnageFromPreviousStep();
 
@@ -605,6 +630,18 @@ class CreationPersonnage extends HTMLElement {
     this._setPersonnageFromPreviousStep();
 
     this.personnage.ordreRef = value;
+  };
+
+  _updateAptitude = async value => {
+    // Make sure we always have the right step loaded even if players plays around with dropdowns
+    this._setPersonnageFromPreviousStep();
+
+    this.personnage.aptitudes.push(
+      new AptitudeItem({
+        aptitudeRef: value,
+        niveauObtention: this.personnage.niveauReel
+      })
+    );
   };
 
   _updateConnaissance = async value => {
