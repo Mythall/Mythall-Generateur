@@ -123,7 +123,7 @@ const _getAlignement = async personnage => {
     try {
       personnage.alignement = await getAlignement(personnage.alignementRef);
     } catch (e) {
-      console.log("Une erreure est survenue lors de la requete pour l'alignement du personnage");
+      console.log("Une erreur est survenue lors de la requete pour l'alignement du personnage");
     }
   }
   return personnage;
@@ -134,7 +134,7 @@ const _getDieu = async personnage => {
     try {
       personnage.dieu = await getDieu(personnage.dieuRef);
     } catch (e) {
-      console.log("Une erreure est survenue lors de la requete pour le dieu du personnage");
+      console.log("Une erreur est survenue lors de la requete pour le dieu du personnage");
     }
   }
   return personnage;
@@ -145,7 +145,7 @@ const _getOrdres = async personnage => {
     try {
       personnage.ordres = await Promise.all(personnage.ordresRef.map(ref => getOrdre(ref)));
     } catch (e) {
-      console.log("Une erreure est survenue lors de la requete des ordres du personnage");
+      console.log("Une erreur est survenue lors de la requete des ordres du personnage");
     }
   }
   return personnage;

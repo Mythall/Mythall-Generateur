@@ -9,8 +9,6 @@ class ProgressionSortsRecopiablesItem {
     this.niveauMagicien = niveauMagicien ? niveauMagicien : null;
     this.niveauSortPermis = niveauSortPermis ? niveauSortPermis : 0;
     this.quantiteSortsPermis = quantiteSortsPermis ? quantiteSortsPermis : 0;
-    console.log('ctor 1');
-    console.log(niveauMagicien, niveauSortPermis, quantiteSortsPermis);
   }
 }
 
@@ -20,8 +18,6 @@ class ProgressionSortsRecopiables {
     this.niveauMagicien = niveauMagicien;
     this.niveauSortPermis = niveauSortPermis;
     this.quantiteSortsPermis = quantiteSortsPermis;
-    console.log('ctor 2');
-    console.log(niveauMagicien, niveauSortPermis, quantiteSortsPermis);
   }
 
   saveState() {
@@ -47,7 +43,7 @@ const findProgressionSortsRecopiablesById = async id => {
 const findProgressionSortsRecopiables = async (personnage, progressingClasse) => {
   let progressionSortsRecopiables = await _findProgressionSortsRecopiablesByNiveauMagicien(progressingClasse.niveau);
 
-  if (progressingClasse.classe.statistiques.filter(stat => stat.statistiqueRef === statistiqueIds.Intelligence && stat.valeur > 0).length > 0) {
+  if (personnage.statistiques.filter(stat => stat.statistique.id === statistiqueIds.Intelligence && stat.valeur > 0).length > 0) {
     progressionSortsRecopiables.niveauSortPermis += 1;
   }
 

@@ -1,5 +1,5 @@
 import { auth } from "../assets/js/firebase";
-import { buildPersonnageForProgression } from "../@mythall/@build";
+import { buildPersonnage, buildPersonnageForProgression } from "../@mythall/@build";
 import { Personnage, addPersonnage, getPersonnage, updatePersonnage } from "../@mythall/personnages";
 import {
   getAvailableRaces,
@@ -58,7 +58,7 @@ class CreationPersonnage extends HTMLElement {
 
         // Build Existing Personnage
         this.initialPersonnage = await getPersonnage(id);
-        this.initialPersonnage = await buildPersonnageForProgression(this.initialPersonnage);
+        this.initialPersonnage = await buildPersonnage(this.initialPersonnage);
         this.initialPersonnage.id = id;
 
         // Set nom for visual cue
@@ -379,7 +379,7 @@ class CreationPersonnage extends HTMLElement {
               dynamic: true,
               order: 11,
               copy: null,
-              getOptions: this._getSortsOptions,
+              getOptions: () => this._getSortsRecopiablesOptions(progressionSortsRecopiables.niveauSortPermis),
               updateEvent: this._updateSort
             });
           }
@@ -554,7 +554,25 @@ class CreationPersonnage extends HTMLElement {
   };
 
   _getSortsOptions = async () => {
-    return (await getAvailableSorts(this.personnage, this.progressingClasse)).map(s => {
+    return (await getAvailableSorts(this.personnage, this.progressingClasse, this.progressingClasse.niveau)).map(s => {
+      return { text: s.nom, value: s.id };
+    });
+  };
+
+  _getSortsRecopiablesOptions = async (niveauSortPermis) => {
+    let niveauSortToNiveauAcquisition = {
+      1: 1,
+      2: 2,
+      3: 3,
+      4: 4,
+      5: 6,
+      6: 8,
+      7: 10,
+      8: 13,
+      9: 16,
+    };
+
+    return (await getAvailableSorts(this.personnage, this.progressingClasse, niveauSortToNiveauAcquisition[niveauSortPermis])).map(s => {
       return { text: s.nom, value: s.id };
     });
   };

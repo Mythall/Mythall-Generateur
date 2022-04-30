@@ -136,7 +136,7 @@ class FormSortComponent extends HTMLElement {
         this.duree.value = sort.duree;
         this.zone.value = sort.zone;
       } catch (error) {
-        alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
+        alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
       }
     }
