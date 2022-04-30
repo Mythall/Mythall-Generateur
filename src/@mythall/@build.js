@@ -80,6 +80,18 @@ const buildPersonnageForProgression = async personnage => {
     _updateLoadingState("Domaines & Esprits...");
     await Promise.all([_getDomaines(personnage), _getEsprit(personnage)]);
 
+    _updateLoadingState("Aptitudes...");
+    await _getAllAptitudes(personnage);
+
+    _updateLoadingState("Dons...");
+    await _getAllDons(personnage);
+
+    _updateLoadingState("Statistiques de base...");
+    await _getStatistiquesParDefault(personnage);
+
+    _updateLoadingState("Statistiques...");
+    await _getStatistiques(personnage);
+
     _updateLoadingState("Assemblage du personnage terminé!");
 
     // Completed

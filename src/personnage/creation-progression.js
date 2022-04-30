@@ -1,5 +1,5 @@
 import { auth } from "../assets/js/firebase";
-import { buildPersonnage, buildPersonnageForProgression } from "../@mythall/@build";
+import { buildPersonnageForProgression } from "../@mythall/@build";
 import { Personnage, addPersonnage, getPersonnage, updatePersonnage } from "../@mythall/personnages";
 import {
   getAvailableRaces,
@@ -58,7 +58,7 @@ class CreationPersonnage extends HTMLElement {
 
         // Build Existing Personnage
         this.initialPersonnage = await getPersonnage(id);
-        this.initialPersonnage = await buildPersonnage(this.initialPersonnage);
+        this.initialPersonnage = await buildPersonnageForProgression(this.initialPersonnage);
         this.initialPersonnage.id = id;
 
         // Set nom for visual cue
