@@ -549,15 +549,15 @@ const _getStatistiquesParDefault = async personnage => {
 };
 
 const _getStatistiques = async personnage => {
-  // Ajoute ou Update la statistique avec la bonne valeur, commulable ou non
+  // Ajoute ou Update la statistique avec la bonne valeur, cumulable ou non
   const _setStatistique = statistiqueItem => {
     const matchingIndex = personnage.statistiques.findIndex(statistiqueValue => statistiqueValue.statistique.id == statistiqueItem.statistiqueRef);
     if (matchingIndex > -1) {
       const statistique = personnage.statistiques[matchingIndex];
       if (statistique) {
         statistique.valeur = statistiqueItem.cummulable
-          ? (statistique.valeur += statistiqueItem.valeur) // Cummulable l'ajoute à la valeur
-          : (statistique.valeur = Math.max(statistique.valeur, statistiqueItem.valeur)); // Non Cummulable prend la plus forte valeur
+          ? (statistique.valeur += statistiqueItem.valeur) // Cumulable l'ajoute à la valeur
+          : (statistique.valeur = Math.max(statistique.valeur, statistiqueItem.valeur)); // Non Cumulable prend la plus forte valeur
       }
     } else {
       personnage.statistiques.push(

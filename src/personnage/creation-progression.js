@@ -18,12 +18,13 @@ import {
   getAvailableDivinites
 } from "../@mythall/@progression";
 import { getRace } from "../@mythall/races";
-import { ClasseItem, getClasse } from "../@mythall/classes";
+import { ClasseItem, getClasse, isMagicien } from "../@mythall/classes";
 import { getDomaine } from "../@mythall/domaines";
 import { DonItem } from "../@mythall/dons";
 import { FourberieItem } from "../@mythall/fourberies";
 import { SortItem } from "../@mythall/sorts";
 import { AptitudeItem } from "../@mythall/aptitudes";
+import { findProgressionSortsRecopiables } from "../@mythall/progressionSortsRecopiables";
 
 class CreationPersonnage extends HTMLElement {
   constructor() {
@@ -42,7 +43,7 @@ class CreationPersonnage extends HTMLElement {
   }
 
   async connectedCallback() {
-    // Get URL paramas and convert from a set to an array
+    // Get URL params and convert from a set to an array
     const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
       return { [item[0]]: item[1] };
     });
@@ -59,12 +60,11 @@ class CreationPersonnage extends HTMLElement {
         this.initialPersonnage = await getPersonnage(id);
         this.initialPersonnage = await buildPersonnageForProgression(this.initialPersonnage);
         this.initialPersonnage.id = id;
-        console.log(this.initialPersonnage);
 
         // Set nom for visual cue
         this.nom.value = this.initialPersonnage.nom;
       } catch (error) {
-        alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
+        alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
       }
     } else {
@@ -194,7 +194,6 @@ class CreationPersonnage extends HTMLElement {
   _getDynamicSteps = async () => {
     if (this.progressingClasse) {
       const availableChoix = await getAvailableChoix(this.personnage, this.progressingClasse);
-      console.log(availableChoix);
       availableChoix.forEach(choix => {
         if (choix.type == "domaine" && choix.quantite > 0) {
           for (let i = 1; i <= choix.quantite; i++) {
@@ -367,6 +366,26 @@ class CreationPersonnage extends HTMLElement {
         }
       });
 
+      if (isMagicien(this.progressingClasse.classeRef)) {
+        let progressionSortsRecopiables = await findProgressionSortsRecopiables(this.personnage, this.progressingClasse);
+        console.log('copies', progressionSortsRecopiables);
+
+        for (let i = 1; i <= progressionSortsRecopiables.quantiteSortsPermis; i++) {
+          if (!this.steps.find(step => step.id == `sort-recopiables-${i}`)) {
+            this.steps.push({
+              id: `sort-recopiables-${i}`,
+              text: `Sort recopié (${i}/${progressionSortsRecopiables.quantiteSortsPermis})`,
+              completed: false,
+              dynamic: true,
+              order: 11,
+              copy: null,
+              getOptions: this._getSortsOptions,
+              updateEvent: this._updateSort
+            });
+          }
+        }
+      }
+
       // Add Divinite step
       if (!this.personnage.dieuRef && !this.steps.find(step => step.id == `divinite`)) {
         this.steps.push({
@@ -374,7 +393,7 @@ class CreationPersonnage extends HTMLElement {
           text: `Divinité`,
           completed: false,
           dynamic: true,
-          order: 11,
+          order: 12,
           copy: null,
           getOptions: this._getDivinitesOptions,
           updateEvent: this._updateDivinite

@@ -236,4 +236,8 @@ const deleteClasse = async id => {
   return await deleteDoc(doc(db, `classes/${id}`));
 };
 
-export { Classe, ClasseItem, getClasses, getClasse, addClasse, updateClasse, deleteClasse };
+const isMagicien = ref =>{
+  return ref === "InLXowaFisDm6vtZ49WL";
+}
+
+export { Classe, ClasseItem, getClasses, getClasse, addClasse, updateClasse, deleteClasse, isMagicien };

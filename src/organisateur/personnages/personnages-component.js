@@ -163,7 +163,7 @@ class FormPersonnageComponent extends HTMLElement {
   }
 
   async _getPersonnage() {
-    // Get URL paramas and convert from a set to an array
+    // Get URL params and convert from a set to an array
     const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
       return { [item[0]]: item[1] };
     });
