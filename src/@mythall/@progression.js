@@ -540,15 +540,15 @@ const getAvailableFourberies = async personnage => {
     list = result;
   }
 
-  // Trie en Ordre Alphabetic
+  // Trie en Ordre Alphabétique
   return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 
-const getAvailableSorts = async (personnage, progressingClasse) => {
+const getAvailableSorts = async (personnage, progressingClasse, niveauObtentionSortPermis) => {
   // Liste des sorts disponible pour la classe qui progresse actuellement selon son niveau
-  let list = progressingClasse.classe.sortsDisponible.filter(sd => sd.niveauObtention <= progressingClasse.niveau);
+  let list = progressingClasse.classe.sortsDisponible.filter(sd => sd.niveauObtention <= niveauObtentionSortPermis);
 
-  // Filtre les sorts déjà existant
+  // Filtre les sorts déjà existants
   list = list.filter(sd => !personnage.sorts.find(s => s.sortRef == sd.sortRef));
 
   // Get Sort(s)
@@ -558,7 +558,7 @@ const getAvailableSorts = async (personnage, progressingClasse) => {
     })
   );
 
-  // Trie en Ordre Alphabetic
+  // Trie en Ordre Alphabétique
   return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));
 };
 

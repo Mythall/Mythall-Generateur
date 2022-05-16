@@ -163,7 +163,7 @@ class FormPersonnageComponent extends HTMLElement {
   }
 
   async _getPersonnage() {
-    // Get URL paramas and convert from a set to an array
+    // Get URL params and convert from a set to an array
     const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
       return { [item[0]]: item[1] };
     });
@@ -221,7 +221,7 @@ class FormPersonnageComponent extends HTMLElement {
           this._addFourberieItem(null, fourberieItem);
         });
       } catch (error) {
-        alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
+        alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
       }
     }

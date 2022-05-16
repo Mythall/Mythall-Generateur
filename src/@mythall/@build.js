@@ -80,6 +80,18 @@ const buildPersonnageForProgression = async personnage => {
     _updateLoadingState("Domaines & Esprits...");
     await Promise.all([_getDomaines(personnage), _getEsprit(personnage)]);
 
+    _updateLoadingState("Aptitudes...");
+    await _getAllAptitudes(personnage);
+
+    _updateLoadingState("Dons...");
+    await _getAllDons(personnage);
+
+    _updateLoadingState("Statistiques de base...");
+    await _getStatistiquesParDefault(personnage);
+
+    _updateLoadingState("Statistiques...");
+    await _getStatistiques(personnage);
+
     _updateLoadingState("Assemblage du personnage terminé!");
 
     // Completed
@@ -123,7 +135,7 @@ const _getAlignement = async personnage => {
     try {
       personnage.alignement = await getAlignement(personnage.alignementRef);
     } catch (e) {
-      console.log("Une erreure est survenue lors de la requete pour l'alignement du personnage");
+      console.log("Une erreur est survenue lors de la requete pour l'alignement du personnage");
     }
   }
   return personnage;
@@ -134,7 +146,7 @@ const _getDieu = async personnage => {
     try {
       personnage.dieu = await getDieu(personnage.dieuRef);
     } catch (e) {
-      console.log("Une erreure est survenue lors de la requete pour le dieu du personnage");
+      console.log("Une erreur est survenue lors de la requete pour le dieu du personnage");
     }
   }
   return personnage;
@@ -145,7 +157,7 @@ const _getOrdres = async personnage => {
     try {
       personnage.ordres = await Promise.all(personnage.ordresRef.map(ref => getOrdre(ref)));
     } catch (e) {
-      console.log("Une erreure est survenue lors de la requete des ordres du personnage");
+      console.log("Une erreur est survenue lors de la requete des ordres du personnage");
     }
   }
   return personnage;
@@ -549,15 +561,15 @@ const _getStatistiquesParDefault = async personnage => {
 };
 
 const _getStatistiques = async personnage => {
-  // Ajoute ou Update la statistique avec la bonne valeur, commulable ou non
+  // Ajoute ou Update la statistique avec la bonne valeur, cumulable ou non
   const _setStatistique = statistiqueItem => {
     const matchingIndex = personnage.statistiques.findIndex(statistiqueValue => statistiqueValue.statistique.id == statistiqueItem.statistiqueRef);
     if (matchingIndex > -1) {
       const statistique = personnage.statistiques[matchingIndex];
       if (statistique) {
         statistique.valeur = statistiqueItem.cummulable
-          ? (statistique.valeur += statistiqueItem.valeur) // Cummulable l'ajoute à la valeur
-          : (statistique.valeur = Math.max(statistique.valeur, statistiqueItem.valeur)); // Non Cummulable prend la plus forte valeur
+          ? (statistique.valeur += statistiqueItem.valeur) // Cumulable l'ajoute à la valeur
+          : (statistique.valeur = Math.max(statistique.valeur, statistiqueItem.valeur)); // Non Cumulable prend la plus forte valeur
       }
     } else {
       personnage.statistiques.push(

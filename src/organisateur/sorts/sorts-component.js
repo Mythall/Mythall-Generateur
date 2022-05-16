@@ -109,7 +109,7 @@ class FormSortComponent extends HTMLElement {
   }
 
   async _getSort() {
-    // Get URL paramas and convert from a set to an array
+    // Get URL params and convert from a set to an array
     const params = [...new URLSearchParams(window.location.search).entries()].map(item => {
       return { [item[0]]: item[1] };
     });
@@ -136,7 +136,7 @@ class FormSortComponent extends HTMLElement {
         this.duree.value = sort.duree;
         this.zone.value = sort.zone;
       } catch (error) {
-        alert(`Une erreure est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
+        alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
       }
     }
