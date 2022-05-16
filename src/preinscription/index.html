@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
+    <style>
+      .preinscription {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .preinscription__title {
+        text-align: center;
+      }
+      .preinscription__description {
+        gap: var(--space-lg);
+      }
+      .preinscription__featured {
+        width: 100%;
+        height: auto;
+      }
+      .preinscription__success {
+        color: var(--color-success);
+      }
+      .preinscription__box {
+        margin-top: var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+        max-width: 750px;
+      }
+      .preinscription__group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+      .preinscription__description,
+      .preinscription__signUp {
+        gap: var(--space-sm);
+      }
+      .hidden {
+        display: none;
+      }
+      .required {
+        color: var(--color-error);
+      }
+      @media (min-width: 480px) {
+        .preinscription__box {
+          width: auto;
+          min-width: 320px;
+          padding: var(--space-md);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header-component></header-component>
+    <main>
+      <preinscription-component class="preinscription">
+        <div class="preinscription__title">
+          <h1>Préinscription</h1>
+          <p>
+            GN du <span id="date"></span><br />
+            Saison <span id="saison"></span><br />
+            <span id="inscrits"></span> inscrit(s)
+          </p>
+        </div>
+        <form class="preinscription__box">
+          <div id="description" class="preinscription__description preinscription__group">
+            <h2>La grande peste de Salleum</h2>
+            <i>Deux longues années de malheurs se sont produites...</i>
+            <i>
+              Nous ne savons pas comment cela est possible, mais il semblerait que les sorcières de Talona aient réussis a recréér un mythall en
+              volant le parchemin de création du mythallar.
+            </i>
+            <i>
+              Elles ont construit un univers perverti et putride dans lequel nulle ne peut s'enfuir si ce n'est en mourant pestiféré ou en leur
+              dévouent corps et âme. Dieux et déesse, aidez nous!
+            </i>
+            <img alt="Talona Witches" class="preinscription__featured" src="/assets/img/witches.jpeg" width="1200" height="1200" />
+            <i>
+              Les temps ont changé à Salleum, beaucoup ont fuient la grande cité et nombreux sont ceux et celles qui ont succombé à la maladie.
+              Certaines rumeurs courent comme quoi même le Grand Maître Wong n'aurait pu échapper au destin.
+            </i>
+            <i>
+              Suite aux récents événements, l'économie fut bouleversée et les éffluves de la toile perturbés. Des artéfacts aux objets merveilleux,
+              leurs essences magiques ne se font plus ressentir et malgré leurs incroyables histoires, ils semblent tous avoir été réduits à de
+              vulgaires breloques.
+            </i>
+            <i> Braves sont ceux et celles qui osent encore s'aventurer à Salleum. </i>
+            <h2>Informations</h2>
+            <p>
+              Nous offrons la possibilité au joueur de changer complètement de personnage, ou de faire des modifications sur leur fiche actuelle pour
+              le premier Mythall de la saison. Pour ce faire, veuillez contacter un membre de l'équipe sur
+              <a target="_blank" href="https://discord.gg/P6FU5GwQ">Discord</a> ou via
+              <a target="_blank" href="https://www.facebook.com/mythall">Facebook</a>.
+            </p>
+            <p>
+              Bien que les objets magiques en jeu ne fonctionnent plus, il est toujours possible de trouver un moyen pour les réactiver, mais vous
+              devrez passer par l'équipe d'animation.
+            </p>
+            <p><strong>Quand:</strong> <span id="quand"></span></p>
+            <p><strong>Arrivé au terrain et Inscriptions:</strong> Vendredi de 16h00 à 22h00 <br /></p>
+            <p><strong>Briefing & Début du jeu:</strong> Vendredi vers 23h30 <br /></p>
+            <p><strong>Jeu:</strong> Vendredi & samedi jusqu'à épuisement<br /></p>
+            <p><strong>Débriefing et départ:</strong> Dimanche 10h00<br /></p>
+            <p>
+              <strong>Où:</strong>
+              <a
+                target="_blank"
+                href="https://www.google.ca/maps?q=127+Rue+Ducharme,+Orford,+QC&hl=fr&ie=UTF8&sll=46.788334,-71.275466&sspn=0.009329,0.022702&oq=127+rue+ducharme,+orford&hnear=127+Rue+Ducharme,+Orford,+Qu%C3%A9bec+J1X+6W6&t=m&z=16">
+                Terrain de Mythall au 127 rue Ducharme, Orford
+              </a>
+            </p>
+            <p><strong>Coûts:</strong> $20 - Le paiement se fait sur place et en argent comptant seulement, merci.</p>
+            <p>
+              <a target="_blank" href="http://mythall.com/wp-content/uploads/2012/01/decharge_de_responsabilite_mythall.pdf"
+                >La décharge de responsabilité</a
+              >
+              <span>doit être remplie et signée par tous.</span>
+            </p>
+            <p>
+              Nous demandons aux joueurs de moins de 18 ans d’avoir la signature et l’approbation d’un adulte responsable pour participer au jeu. Les
+              joueurs de moins de 13 ans ne peuvent pas participer aux combats et doivent être accompagnés d’un adulte en tout temps.
+            </p>
+            <h2>Taverne</h2>
+            <p>La taverne ne sera malheureusement pas disponible pour le premier événement, veuillez apporter votre nourriture.</p>
+          </div>
+          <h2>Préinscription</h2>
+          <div id="preinscription" class="preinscription__signUp preinscription__group">
+            <i> Un seul personnage par événement peut recevoir un niveau.</i>
+            <i> Si votre personnage n'est pas créé, vous pouvez le faire via <a href="/personnage/creation">la création de personnages</a> </i>
+            <div class="preinscription__group">
+              <label for="joueur"><strong>Joueur</strong> <span class="required">*</span></label>
+              <select id="joueur" required></select>
+            </div>
+            <div class="preinscription__group">
+              <label for="taverne"><strong>Taverne</strong> <span class="required">*</span></label>
+              <select id="taverne" required>
+                <option value="false" selected>Non</option>
+              </select>
+            </div>
+            <div class="preinscription__group">
+              <label for="personnages"><strong>Personnage</strong> <span class="required">*</span></label>
+              <select id="personnages" required>
+                <option value=""></option>
+                <option value="">Je vais le créer à l'inscription</option>
+              </select>
+            </div>
+            <div class="preinscription__group">
+              <label for="groupe"><strong>Groupe</strong></label>
+              <input id="groupe" type="text" />
+            </div>
+            <button type="submit">Envoyer</button>
+          </div>
+          <strong id="success" class="hidden preinscription__success">
+            Votre préinscription est complète.<br />
+            On se voit à Mythall!
+          </strong>
+        </form>
+      </preinscription-component>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
+  <script type="module" src="/preinscription/preinscription.js" defer></script>
+</html>

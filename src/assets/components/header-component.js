@@ -26,8 +26,10 @@ class HeaderAuthentication extends HTMLElement {
   renderAuthenticated = () => {
     this.innerHTML = `
       <a class="header__link" href="/compte">Mon compte</a>
+      
       <button id="logout" class="link header__link" href="/logout">Déconnexion</button>
     `;
+    // <a class="header__link" href="/preinscription?id=XQpD2WxV2jNytLHxn8AK">Préinscription</a>
     this.querySelector("#logout").addEventListener("click", async () => {
       await signOut(auth);
       window.location.href = "/";
