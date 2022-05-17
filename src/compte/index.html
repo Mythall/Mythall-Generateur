@@ -12,46 +12,95 @@
     <link rel="stylesheet" href="/assets/css/variables.css" />
     <link rel="stylesheet" href="/assets/css/theme.css" />
     <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
     <style>
-      user-component {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        gap: var(--space-sm);
+      compte-component {
+        text-align: center;
       }
-      personnages-component {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        gap: var(--space-md);
-        margin-top: var(--space-md);
-      }
-      .personnage {
-        background-color: #ffffff;
+      .personnages {
+        margin-top: var(--space-sm);
+        background: #fff;
         border-radius: var(--base-radius);
         box-shadow: var(--base-shadow);
-        padding: var(--space-sm);
+        padding: var(--space-md) var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        text-align: left;
+      }
+      .personnages__headers,
+      .personnages__item {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+      .personnages__list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+      .personnages__item {
+        padding: var(--space-sm) 0 var(--space-xs);
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+      }
+      .personnages__actions {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--space-sm);
+      }
+      .personnages__action-icon {
+        width: 20px;
+        height: 20px;
+      }
+      .hidden {
+        display: none;
       }
     </style>
   </head>
   <body>
     <header-component></header-component>
     <main>
-      <user-component>
+      <compte-component>
         <h1>Bienvenue <span id="name"></span></h1>
-        <div id="organisateur"></div>
-        <div id="animateur"></div>
-        <div id="joueur"></div>
-      </user-component>
-      <personnages-component>
-        <template>
-          <a id="personnage" href="" class="personnage">
-            <h2 id="nom">nom</h2>
-          </a>
-        </template>
-      </personnages-component>
+        <div class="personnages">
+          <div id="joueur">
+            <a href="/personnage/creation" class="button__primary">Création de personnage</a>
+          </div>
+          <div id="animateur"></div>
+          <div id="organisateur"></div>
+          <div id="headers" class="hidden personnages__headers">
+            <strong>Nom</strong>
+            <strong>Actions</strong>
+          </div>
+          <div id="list" class="hidden personnages__list"></div>
+          <template id="personnage">
+            <div class="personnages__item">
+              <span id="nom"></span>
+              <div class="personnages__actions">
+                <!--View-->
+                <a id="view" href="" class="personnages__action-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
+                    <path
+                      fill-rule="evenodd"
+                      d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </a>
+                <!--Progress-->
+                <!-- <a id="progress" href="" class="personnages__action-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path
+                      fill-rule="evenodd"
+                      d="M12 7a1 1 0 110-2h5a1 1 0 011 1v5a1 1 0 11-2 0V8.414l-4.293 4.293a1 1 0 01-1.414 0L8 10.414l-4.293 4.293a1 1 0 01-1.414-1.414l5-5a1 1 0 011.414 0L11 10.586 14.586 7H12z"
+                      clip-rule="evenodd" />
+                  </svg>
+                </a> -->
+              </div>
+            </div>
+          </template>
+        </div>
+      </compte-component>
     </main>
     <footer-component></footer-component>
   </body>

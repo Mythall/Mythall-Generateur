@@ -9,10 +9,17 @@ header-component {
   padding: var(--space-md) var(--page-padding);
   display: flex;
   flex: 1;
+  flex-direction: column;
   align-items: center;
   gap: var(--space-sm);
   justify-content: space-between;
   box-shadow: var(--shadow-md);
+}
+
+@media (min-width: 760px) {
+  .header {
+    flex-direction: row;
+  }
 }
 
 .header__logo {

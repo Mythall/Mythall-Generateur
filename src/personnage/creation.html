@@ -24,6 +24,10 @@
       .personnage__title {
         text-align: center;
       }
+      .personnage__warning {
+        margin-top: var(--space-sm);
+        text-align: center;
+      }
       .personnage__box {
         margin-top: var(--base-padding);
         display: flex;
@@ -70,6 +74,7 @@
     <main>
       <creation-personnage class="personnage">
         <h2 id="title" class="personnage__title">Création de personnage</h2>
+        <p><a href="/compte">Retour à mon compte</a></p>
         <form id="personnageForm" class="personnage__box">
           <!--Nom-->
           <div class="personnage__group">
@@ -79,6 +84,12 @@
           <button id="submit" type="submit" disabled>Envoyer</button>
         </form>
       </creation-personnage>
+      <p class="personnage__warning">
+        Si vous rencontrez un problème lors de la création de personnage, veuillez contacter l'équipe sur
+        <a target="_blank" href="https://discord.gg/P6FU5GwQ">Discord</a> ou
+        <a target="_blank" href="https://www.facebook.com/mythall">Facebook</a>.<br />
+        Merci
+      </p>
     </main>
     <footer-component></footer-component>
   </body>

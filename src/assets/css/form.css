@@ -76,3 +76,7 @@ button[type="submit"] {
   width: 20px;
   height: 20px;
 }
+
+a.button__primary {
+  text-decoration: none;
+}

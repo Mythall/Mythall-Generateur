@@ -3,60 +3,58 @@ import { onAuthStateChanged } from "firebase/auth";
 import { getUser } from "../@mythall/users";
 import { getPersonnagesFromUserId } from "../@mythall/personnages";
 
-let currentUser;
-
-class UserComponent extends HTMLElement {
+class CompteComponent extends HTMLElement {
   constructor() {
     super();
+
+    this.currentUser;
 
     onAuthStateChanged(auth, async user => {
       if (user == null) {
         return;
       }
 
-      currentUser = await getUser(user.uid);
-      this.querySelector("#name").innerHTML = `${currentUser.displayname}`;
+      this.currentUser = await getUser(user.uid);
+      this.querySelector("#name").innerHTML = `${this.currentUser.displayname}`;
 
-      if (currentUser.roles.animateur == true || currentUser.roles.organisateur == true) {
+      if (this.currentUser.roles?.animateur == true || this.currentUser.roles?.organisateur == true) {
         this.querySelector("#animateur").innerHTML = `
-        <a href="/organisateur/personnages">Liste des personnages</a>
-        `;
+      <a  class="button__primary" href="/organisateur/personnages">Liste des personnages</a>
+      `;
       }
 
-      if (currentUser.roles.organisateur == true) {
+      if (this.currentUser.roles?.organisateur == true) {
         this.querySelector("#organisateur").innerHTML = `
-        <a href="/organisateur/sorts">Liste des sorts</a>
-        `;
+      <a  class="button__primary" href="/organisateur/sorts">Liste des sorts</a>
+      `;
       }
 
-      const personnagesComponent = document.querySelector("personnages-component");
-      await personnagesComponent.getPersonnages();
+      await this._getPersonnages();
     });
   }
-}
 
-class PersonnagesComponent extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  getPersonnages = async () => {
-    if (currentUser) {
-      const personnages = await getPersonnagesFromUserId(currentUser.uid);
+  _getPersonnages = async () => {
+    if (this.currentUser) {
+      const personnages = await getPersonnagesFromUserId(this.currentUser.uid);
 
       // Make sure browser support template
       if ("content" in document.createElement("template")) {
         // Create a list of personnages
         personnages.forEach(personnage => {
           const clone = this.querySelector("template").content.cloneNode(true);
-          clone.querySelector("#nom").textContent = personnage.nom;
-          clone.querySelector("#personnage").href = `/personnage?id=${personnage.id}`;
-          this.appendChild(clone);
+          clone.querySelector("#nom").innerHTML = personnage.nom;
+          clone.querySelector("#view").setAttribute("href", `/personnage?id=${personnage.id}`);
+          // clone.querySelector("#progress").setAttribute("href", `/personnage/progression?id=${personnage.id}`);
+          this.querySelector("#list").appendChild(clone);
         });
+      }
+
+      if (personnages.length > 0) {
+        this.querySelector("#headers").classList.toggle("hidden", false);
+        this.querySelector("#list").classList.toggle("hidden", false);
       }
     }
   };
 }
 
-customElements.define("user-component", UserComponent);
-customElements.define("personnages-component", PersonnagesComponent);
+customElements.define("compte-component", CompteComponent);
