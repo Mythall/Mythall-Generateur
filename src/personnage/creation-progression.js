@@ -368,7 +368,6 @@ class CreationPersonnage extends HTMLElement {
 
       if (isMagicien(this.progressingClasse.classeRef)) {
         let progressionSortsRecopiables = await findProgressionSortsRecopiables(this.personnage, this.progressingClasse);
-        console.log('copies', progressionSortsRecopiables);
 
         for (let i = 1; i <= progressionSortsRecopiables.quantiteSortsPermis; i++) {
           if (!this.steps.find(step => step.id == `sort-recopiables-${i}`)) {

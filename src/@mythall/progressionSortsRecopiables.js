@@ -43,7 +43,7 @@ const findProgressionSortsRecopiablesById = async id => {
 const findProgressionSortsRecopiables = async (personnage, progressingClasse) => {
   let progressionSortsRecopiables = await _findProgressionSortsRecopiablesByNiveauMagicien(progressingClasse.niveau);
 
-  if (personnage.statistiques.filter(stat => stat.statistique.id === statistiqueIds.Intelligence && stat.valeur > 0).length > 0) {
+  if (progressionSortsRecopiables.niveauSortPermis < 9 && personnage.statistiques.filter(stat => stat.statistique.id === statistiqueIds.Intelligence && stat.valeur > 0).length > 0) {
     progressionSortsRecopiables.niveauSortPermis += 1;
   }
 
