@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
+    <link rel="stylesheet" href="/assets/css/modal-component.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <style>
+      .preinscriptions {
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+        padding: var(--space-md) var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+      }
+      .preinscriptions__headers,
+      .preinscriptions__item {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+      }
+      .preinscriptions__list {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-xs);
+      }
+      .preinscriptions__item {
+        padding: var(--space-sm) 0 var(--space-xs);
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+      }
+      .preinscriptions__actions {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: var(--space-sm);
+      }
+      .preinscriptions__action-icon {
+        width: 20px;
+        height: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <modal-component></modal-component>
+    <header-component></header-component>
+    <main>
+      <list-preinscriptions-component class="preinscriptions">
+        <template>
+          <div class="preinscriptions__item">
+            <span id="joueur"></span>
+            <span id="personnage"></span>
+            <span id="groupe"></span>
+            <input id="present" type="checkbox" />
+            <input id="taverne" type="checkbox" />
+          </div>
+        </template>
+        <div>
+          <a href="/organisateur/preinscriptions" class="button__primary">Liste d'événements</a>
+        </div>
+        <div><strong>Total: </strong><span id="total"></span> Joueur(s)</div>
+        <div class="preinscriptions__headers">
+          <strong>Joueur</strong>
+          <strong>Personnage</strong>
+          <strong>Groupe</strong>
+          <strong>Present</strong>
+          <strong>Taverne</strong>
+        </div>
+        <div id="list" class="preinscriptions__list"></div>
+      </list-preinscriptions-component>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
+  <script type="module" src="/assets/components/modal-component.js" defer></script>
+  <script type="module" src="/organisateur/evenements/evenements-component.js" defer></script>
+</html>

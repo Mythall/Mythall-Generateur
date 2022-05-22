@@ -2,13 +2,14 @@ import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, 
 import { db } from "../assets/js/firebase";
 
 class InscriptionItem {
-  constructor(userRef, joueur, personangeRef, personnage, taverne, groupe) {
+  constructor(userRef, joueur, personnageRef, personnage, groupe, taverne, present) {
     this.userRef = userRef;
     this.joueur = joueur; // Name only to avoid doing requests in the list
-    this.personangeRef = personangeRef;
+    this.personnageRef = personnageRef;
     this.personnage = personnage; // Name only to avoid doing requests in the list
-    this.taverne = taverne;
     this.groupe = groupe;
+    this.taverne = taverne;
+    this.present = present;
   }
 }
 
@@ -24,7 +25,11 @@ class Evenement {
 
   saveState() {
     const inscriptionsMap = this.inscriptions.map(i => {
-      return { ...i };
+      return {
+        ...i,
+        taverne: i.taverne === "true" || i.taverne === true ? true : false,
+        present: i.present === "true" || i.present === true ? true : false
+      };
     });
 
     return {
