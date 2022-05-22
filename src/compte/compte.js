@@ -20,6 +20,7 @@ class CompteComponent extends HTMLElement {
       if (this.currentUser.roles?.animateur == true || this.currentUser.roles?.organisateur == true) {
         this.querySelector("#animateur").innerHTML = `
       <a  class="button__primary" href="/organisateur/personnages">Liste des personnages</a>
+      <a  class="button__primary" href="/organisateur/evenements">Liste des évenements</a>
       `;
       }
 
