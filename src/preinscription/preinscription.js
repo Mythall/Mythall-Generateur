@@ -92,8 +92,9 @@ class PreinscriptionComponent extends HTMLElement {
         this.currentUser.displayname,
         personnage.id,
         personnage.nom,
+        this.querySelector("#groupe").value,
         this.querySelector("#taverne").value,
-        this.querySelector("#groupe").value
+        false
       );
 
       this.evenement.inscriptions.push(inscription);
