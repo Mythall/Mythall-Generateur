@@ -3,6 +3,12 @@ header-component {
   background: var(--color-primary);
 }
 
+@media print {
+  header-component {
+    display: none;
+  }
+}
+
 .header {
   max-width: var(--page-width);
   margin: 0 auto;
