@@ -677,9 +677,11 @@ const _getStatistiques = async personnage => {
             manaProfane += statistiqueValueUpdate.valeur;
 
             if (statistiqueValueUpdate.valeur == 1) {
+              manaProfane += 1;
               manaProfane = Math.round(personnage.niveauProfane / 2 + manaProfane);
             }
             if (statistiqueValueUpdate.valeur > 1) {
+              manaProfane += 2;
               manaProfane = Math.round((personnage.niveauProfane + 1) / 2 + manaProfane);
             }
           }
