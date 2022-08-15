@@ -59,8 +59,6 @@ class PreinscriptionComponent extends HTMLElement {
       try {
         this.evenement = await getEvenement(id);
 
-        console.log(this.evenement);
-
         this.querySelector("#date").innerHTML = this.evenement.date;
         this.querySelector("#saison").innerHTML = this.evenement.saison;
         this.querySelector("#quand").innerHTML = `${this.evenement.date} ${this.evenement.saison}`;
@@ -106,8 +104,6 @@ class PreinscriptionComponent extends HTMLElement {
 
       this.evenement.inscriptions.push(inscription);
       this.evenement.inscrits++;
-
-      console.log(this.evenement);
 
       await updateEvenement(this.evenement);
       this.toggleSuccess();
