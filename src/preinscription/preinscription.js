@@ -59,11 +59,18 @@ class PreinscriptionComponent extends HTMLElement {
       try {
         this.evenement = await getEvenement(id);
 
+        console.log(this.evenement);
+
         this.querySelector("#date").innerHTML = this.evenement.date;
         this.querySelector("#saison").innerHTML = this.evenement.saison;
         this.querySelector("#quand").innerHTML = `${this.evenement.date} ${this.evenement.saison}`;
         this.querySelector("#inscrits").innerHTML = this.evenement.inscrits;
-        // this.querySelector("#description").innerHTML = this.evenement.description;
+        this.querySelector("#titre").innerHTML = this.evenement.titre;
+        this.querySelector("#description").innerHTML = this.evenement.description;
+        console.log(this.querySelector("#featured"));
+        this.querySelector("#featured").setAttribute("src", this.evenement.featured.src);
+        this.querySelector("#featured").setAttribute("width", this.evenement.featured.width);
+        this.querySelector("#featured").setAttribute("height", this.evenement.featured.height);
       } catch (error) {
         alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
@@ -99,6 +106,8 @@ class PreinscriptionComponent extends HTMLElement {
 
       this.evenement.inscriptions.push(inscription);
       this.evenement.inscrits++;
+
+      console.log(this.evenement);
 
       await updateEvenement(this.evenement);
       this.toggleSuccess();

@@ -1,6 +1,14 @@
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
 
+class Featured {
+  constructor(src, width, height) {
+    this.src = src;
+    this.width = width;
+    this.height = height;
+  }
+}
+
 class InscriptionItem {
   constructor(userRef, joueur, personnageRef, personnage, groupe, taverne, present) {
     this.userRef = userRef;
@@ -14,10 +22,12 @@ class InscriptionItem {
 }
 
 class Evenement {
-  constructor(id, { date, saison, description, inscriptions, inscrits }) {
+  constructor(id, { date, saison, titre, description, featured, inscriptions, inscrits }) {
     this.id = id;
     this.date = date;
     this.saison = saison;
+    this.featured = featured;
+    this.titre = titre;
     this.description = description;
     this.inscriptions = inscriptions;
     this.inscrits = inscrits ? inscrits : 0;
@@ -35,6 +45,8 @@ class Evenement {
     return {
       date: this.date,
       saison: this.saison,
+      featured: this.featured,
+      titre: this.titre,
       description: this.description,
       inscriptions: inscriptionsMap,
       inscrits: this.inscrits

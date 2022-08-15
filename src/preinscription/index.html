@@ -24,12 +24,21 @@
       .preinscription__title {
         text-align: center;
       }
+      .preinscription__wrapper {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
       .preinscription__description {
-        gap: var(--space-lg);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
       }
       .preinscription__featured {
         width: 100%;
         height: auto;
+        max-height: 600px;
+        object-fit: cover;
       }
       .preinscription__success {
         color: var(--color-success);
@@ -83,38 +92,15 @@
           </p>
         </div>
         <form class="preinscription__box">
-          <div id="description" class="preinscription__description preinscription__group">
-            <h2>La grande peste de Salleum</h2>
-            <i>Deux longues années de malheur se sont produites...</i>
-            <i>
-              Nous ne savons pas comment cela est possible, mais il semblerait que les sorcières de Talona aient réussi a recréér un mythall en volant
-              le parchemin de création du mythallar.
-            </i>
-            <i>
-              Elles ont construit un univers perverti et putride dans lequel nul ne peut s'enfuir si ce n'est en mourant pestiféré ou en leur dévouant
-              corps et âme. Dieux et déesse, aidez-nous!
-            </i>
-            <img alt="Talona Witches" class="preinscription__featured" src="/assets/img/witches.jpeg" width="1200" height="1200" />
-            <i>
-              Les temps ont changé à Salleum, beaucoup ont fui la grande cité et nombreux sont ceux et celles qui ont succombé à la maladie. Certaines
-              rumeurs courent comme quoi même le Grand Maître Wong n'aurait pu échapper au destin.
-            </i>
-            <i>
-              Suite aux récents événements, l'économie fut bouleversée et les éffluves de la toile perturbés. Des artéfacts aux objets merveilleux,
-              leurs essences magiques ne se font plus ressentir et malgré leurs incroyables histoires, ils semblent tous avoir été réduits à de
-              vulgaires breloques.
-            </i>
-            <i> Braves sont ceux et celles qui osent encore s'aventurer à Salleum. </i>
+          <div class="preinscription__wrapper">
+            <h2 id="titre"></h2>
+            <img id="featured" class="preinscription__featured" />
+            <div id="description" class="preinscription__description"></div>
             <h2>Informations</h2>
             <p>
-              Nous offrons la possibilité au joueur de changer complètement de personnage, ou de faire des modifications sur leur fiche actuelle pour
-              le premier Mythall de la saison. Pour ce faire, veuillez contacter un membre de l'équipe sur
+              La progression de vos personnages se fera sur place. Si vous avez des questions n'hésitez pas à contacter un membre de l'équipe sur
               <a target="_blank" href="https://discord.gg/P6FU5GwQ">Discord</a> ou via
               <a target="_blank" href="https://www.facebook.com/mythall">Facebook</a>.
-            </p>
-            <p>
-              Bien que les objets magiques en jeu ne fonctionnent plus, il est toujours possible de trouver un moyen pour les réactiver, mais vous
-              devrez passer par l'équipe d'animation.
             </p>
             <p><strong>Quand:</strong> <span id="quand"></span></p>
             <p><strong>Arrivé au terrain et Inscriptions:</strong> Vendredi de 16h00 à 22h00 <br /></p>
@@ -141,7 +127,7 @@
               joueurs de moins de 13 ans ne peuvent pas participer aux combats et doivent être accompagnés d’un adulte en tout temps.
             </p>
             <h2>Taverne</h2>
-            <p>La taverne ne sera malheureusement pas disponible pour le premier événement, veuillez apporter votre nourriture.</p>
+            <p>La taverne ne sera malheureusement pas disponible pour cette événement, veuillez apporter votre nourriture.</p>
           </div>
           <h2>Préinscription</h2>
           <div id="preinscription" class="preinscription__signUp preinscription__group">

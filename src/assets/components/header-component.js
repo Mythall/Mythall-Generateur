@@ -26,7 +26,7 @@ class HeaderAuthentication extends HTMLElement {
   renderAuthenticated = () => {
     this.innerHTML = `
       <a class="header__link" href="/compte">Mon compte</a>
-      <a class="header__link" href="/preinscription?id=XQpD2WxV2jNytLHxn8AK">Préinscription</a>
+      <a class="header__link" href="/preinscription?id=WLaxqXuB19CE0dqjYiN6">Préinscription</a>
       <button id="logout" class="link header__link" href="/logout">Déconnexion</button>
     `;
     this.querySelector("#logout").addEventListener("click", async () => {
