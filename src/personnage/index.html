@@ -13,16 +13,24 @@
     <link rel="stylesheet" href="/assets/css/theme.css" />
     <link rel="stylesheet" href="/assets/css/header.css" />
     <link rel="stylesheet" href="/assets/css/footer.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
     <style>
       .hidden {
         display: none;
+      }
+      .personnage__actions {
+        align-items: flex-start;
+        flex-wrap: wrap;
+        display: flex;
+        gap: var(--space-xs);
+        margin-bottom: var(--space-sm);
       }
       .personnage {
         max-width: 80rem;
         background: #ffffff;
         border-radius: var(--base-radius);
         box-shadow: var(--base-shadow);
-        padding: var(--space-lg);
+        padding: var(--space-sm);
         display: flex;
         flex-direction: column;
         gap: var(--space-lg);
@@ -63,6 +71,9 @@
       }
 
       @media (min-width: 760px) {
+        .personnage {
+          padding: var(--space-lg);
+        }
         .personnage__informations,
         .personnage__statistiques,
         .personnage__resistances-immunites {
@@ -70,6 +81,16 @@
         }
         .hidden {
           display: none;
+        }
+      }
+
+      @media print {
+        .personnage__actions {
+          display: none;
+        }
+        .personnage {
+          padding: 0;
+          box-shadow: none;
         }
       }
     </style>
@@ -124,6 +145,11 @@
             </div>
           </div>
         </template>
+
+        <div class="personnage__actions">
+          <a id="progression" class="button__primary hidden" href="#">Progression</a>
+          <a id="modeDM" class="button__primary hidden" href="#">Mode DM</a>
+        </div>
 
         <div class="personnage">
           <!--Informations-->

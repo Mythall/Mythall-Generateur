@@ -1,4 +1,7 @@
+import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "../assets/js/firebase";
 import { toggleLoading } from "../assets/components/loading-component";
+import { getUser } from "../@mythall/users";
 import { getPersonnage } from "../@mythall/personnages";
 import { buildPersonnage } from "../@mythall/@build";
 import { statistiqueIds } from "../@mythall/statistiques";
@@ -10,6 +13,21 @@ class PersonnageComponent extends HTMLElement {
 
   async connectedCallback() {
     toggleLoading(true, "Téléchargement de la fiche de personnage...");
+
+    // User Permissions
+    onAuthStateChanged(auth, async user => {
+      if (user == null) {
+        return;
+      }
+
+      this.currentUser = await getUser(user.uid);
+
+      if (this.currentUser.roles?.animateur == true || this.currentUser.roles?.organisateur == true) {
+        console.log(this.querySelector("#progression"));
+        this.querySelector("#progression").classList.toggle("hidden", false); // Enable when character progression is ready for all
+        this.querySelector("#modeDM").classList.toggle("hidden", false);
+      }
+    });
 
     // Load Character
     await this._getPersonnage();
@@ -41,6 +59,10 @@ class PersonnageComponent extends HTMLElement {
         // Build Personnage
         const base = await getPersonnage(id);
         this.personnage = await buildPersonnage(base);
+
+        // Set Actions
+        this.querySelector("#progression").href = `/personnage/progression?id=${id}`;
+        this.querySelector("#modeDM").href = `/organisateur/personnages/form?id=${id}`;
       } catch (error) {
         alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);

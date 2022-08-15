@@ -18,6 +18,7 @@ class HeaderAuthentication extends HTMLElement {
 
   renderAnnonymous = () => {
     this.innerHTML = `
+      <a class="header__link" href="https://www.dropbox.com/s/xiq6apwh94ctojh/6-Bible%20de%20Mythall%20V3.5.pdf?dl=0" target="_blank">Bible</a>
       <a class="header__link" href="/compte/connexion">Connexion</a>
       <a class="header__link" href="/compte/inscription">Inscription</a>
     `;
@@ -25,6 +26,7 @@ class HeaderAuthentication extends HTMLElement {
 
   renderAuthenticated = () => {
     this.innerHTML = `
+      <a class="header__link" href="https://www.dropbox.com/s/xiq6apwh94ctojh/6-Bible%20de%20Mythall%20V3.5.pdf?dl=0" target="_blank">Bible</a>
       <a class="header__link" href="/compte">Mon compte</a>
       <a class="header__link" href="/preinscription?id=WLaxqXuB19CE0dqjYiN6">Préinscription</a>
       <button id="logout" class="link header__link" href="/logout">Déconnexion</button>

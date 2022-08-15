@@ -37,6 +37,7 @@ header-component {
 header-authentication {
   display: flex;
   gap: var(--space-sm);
+  flex-wrap: wrap;
 }
 
 .header__link {
