@@ -4,8 +4,9 @@
   "description": "This is the final version of Mythall Web App & Generator Built using basic html / css / js for easy collaboration",
   "scripts": {
     "build": "vite build",
-    "dev": "firebase emulators:start",
-    "watch": "vite build --watch"
+    "dev": "vite build --mode=development --watch & firebase emulators:start",
+    "emulator": "firebase emulators:start",
+    "watch": "vite build --mode=development --watch"
   },
   "repository": {
     "type": "git",
