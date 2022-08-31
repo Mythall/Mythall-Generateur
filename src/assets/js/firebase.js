@@ -25,6 +25,8 @@ if (import.meta.env.MODE == "production") {
   };
 }
 
+// Forcing retry
+
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = initializeAnalytics(app);
