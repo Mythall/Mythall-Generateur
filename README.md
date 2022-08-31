@@ -8,11 +8,15 @@ Built using basic html, css & javascript for easy collaboration
 
 npm install
 
-Use 2 terminal for the following commands:
+Unix users:
+
+npm run dev
+
+Windows users - Use 2 terminal for the following commands:
 
 npm run watch
 
-npm run dev
+npm run emulator
 
 This will build & watch the project for you and run the firebase emulator on localhost:3000
 
