@@ -29,8 +29,32 @@ header-component {
 }
 
 .header__logo {
+  position: relative;
+}
+
+.header__img {
   width: 200px;
   height: auto;
+}
+
+.header__dev {
+  display: block;
+  position: absolute;
+  bottom: 10px;
+  right: -20px;
+  color: #fff;
+  font-weight: 700;
+  transform: rotate(-45deg);
+  animation: blinker 2s linear infinite;
+}
+@keyframes blinker {
+  50% {
+    opacity: 0;
+  }
+}
+.header__dev:hover {
+  cursor: default;
+  text-decoration: none;
 }
 
 .header__links,

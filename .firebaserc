@@ -1,12 +1,20 @@
 {
   "projects": {
-    "default": "mythall-v7"
+    "default": "mythall-dev",
+    "dev": "mythall-dev"
   },
   "targets": {
     "mythall-v7": {
       "hosting": {
         "mythall": [
           "mythall"
+        ]
+      }
+    },
+    "mythall-dev": {
+      "hosting": {
+        "mythall-dev": [
+          "mythall-dev"
         ]
       }
     }
