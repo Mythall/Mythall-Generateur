@@ -1,16 +1,30 @@
 {
-  "hosting": {
-    "target": "mythall",
-    "public": "dist",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-    "cleanUrls": true,
-    "rewrites": [
-      {
-        "source": "**",
-        "destination": "/error.html"
-      }
-    ]
-  },
+  "hosting": [
+    {
+      "target": "mythall",
+      "public": "dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "cleanUrls": true,
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/error.html"
+        }
+      ]
+    },
+    {
+      "target": "dev-mythall",
+      "public": "dist",
+      "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+      "cleanUrls": true,
+      "rewrites": [
+        {
+          "source": "**",
+          "destination": "/error.html"
+        }
+      ]
+    }
+  ],
   "emulators": {
     "hosting": {
       "port": 3000

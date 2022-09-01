@@ -1,8 +1,11 @@
 # Mythall-3.5
 
-This is the final version of Mythall Web App & Generator
+This is the code for the Mythall Character Generator
 
 Built using basic html, css & javascript for easy collaboration
+
+Live URL: https://mythall.web.app
+Dev URL: https://dev-mythall.web.app
 
 # How to use
 
@@ -48,8 +51,23 @@ BEM (CSS naming convention) - http://getbem.com/naming/
 
 # Deploy
 
-When you develop, create a feature branch for your update.
+We have 2 environments; Mythall & Dev-Mythall
 
-Once published, the project owner will merge it to the main branch.
+Branch are main & dev
 
-Deploy will be automatic once merged using a github action.
+Always make sure dev is up to date with main before creating your pull request:
+
+git checkout dev
+git fetch origin
+git merge origin/main
+
+You can repeat the same process with your own branch to avoid conflict as much as possible.
+Once your feature branch is ready to deploy and test, push it to git
+Create a pull request from your branch into dev
+Wait for the automatic deploy to happen (2 mins on average)
+Test your new features
+Adjusts and repeat the process until everything is good to go
+
+When you are ready to deploy to production, create a pull request of your branch into main
+An admin will have to review and approve your pull request
+Once approved it will automaticly update the live environment

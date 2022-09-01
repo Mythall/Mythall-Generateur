@@ -48,8 +48,9 @@ class HeaderComponent extends HTMLElement {
   connectedCallback() {
     this.innerHTML = `
       <header class="header">
-        <a href="/">
-          <img alt="Logo" class="header__logo" src="${logoWhite}" />
+        <a class="header__logo" href="/">
+          <img alt="Logo" class="header__img" src="${logoWhite}" />
+          ${import.meta.env.MODE == "development" ? '<span class="header__dev">Dev</span>' : ""}
         </a>
         <nav class="header__links">
           ${this.links
