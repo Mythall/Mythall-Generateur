@@ -1,7 +1,7 @@
 {
   "hosting": [
     {
-      "target": "mythall",
+      "target": "mythall-v7",
       "public": "dist",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "cleanUrls": true,
@@ -13,7 +13,7 @@
       ]
     },
     {
-      "target": "mythall-dev",
+      "target": "dev-mythall",
       "public": "dist",
       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
       "cleanUrls": true,

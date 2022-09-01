@@ -16,7 +16,7 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: "${{ secrets.GITHUB_TOKEN }}"
-          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MYTHALL_DEV }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_MYTHALL_V7 }}"
           channelId: live
-          projectId: mythall-dev
-          target: mythall-dev
+          projectId: mythall-v7
+          target: dev-mythall
