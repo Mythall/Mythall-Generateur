@@ -81,3 +81,31 @@ When you are ready to deploy to production, create a pull request of your branch
 An admin will have to review and approve your pull request
 
 Once approved it will automaticly update the live environment
+
+# Backup & Restore Firestore
+
+Open a cloud shell with owner account at https://console.cloud.google.com/welcome?project=mythall-v7&cloudshell=true
+
+Use the commands to backup firestore:
+
+gcloud config set project mythall-v7
+
+gcloud firestore export gs://mythall-v7.appspot.com --async
+
+To copy live database to dev (Update the timestamp to last backup):
+
+gcloud alpha storage cp --recursive gs://mythall-v7.appspot.com/2022-09-02T15:48:43_56723/ gs://mythall-dev.appspot.com
+
+gcloud config set project mythall-dev
+
+gcloud firestore import gs://mythall-dev.appspot.com/2022-09-02T15:48:43_56723 --async
+
+# To transfer Users from Authentication from live to dev
+
+firebase auth:export AllUsers.json --project mythall-v7
+
+firebase auth:import AllUsers.json --project mythall-dev
+
+Password hashes are not the same, so you will have to go throught forgot password and reset it for your account
+
+You can delete the AllUsers.json file in your project, but it's also ignored by git
