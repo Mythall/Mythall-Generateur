@@ -24,6 +24,10 @@ npm run emulator
 
 This will build & watch the project for you and run the firebase emulator on localhost:3000
 
+# Windows permission fix
+
+open windows powershell as administrator and run Set-ExecutionPolicy RemoteSigned
+
 # Requirements
 
 Install the VS Code extension Prettier
