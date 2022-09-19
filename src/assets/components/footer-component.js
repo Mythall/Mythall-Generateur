@@ -2,7 +2,7 @@ class FooterComponent extends HTMLElement {
   constructor() {
     super();
     this.copyright = `Mythall ${new Date().getFullYear()} © Tous droits réservés`;
-    this.reference = `Conception web par <a href="https://www.dominikgiroux.com/fr" target="_blank">Dominik Giroux</a>`;
+    this.reference = `Crafted with 🤍 by <a href="https://www.dominikgiroux.com" target="_blank">Dominik Giroux</a>`;
   }
 
   async connectedCallback() {

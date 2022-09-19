@@ -1,10 +1,8 @@
 import { auth } from "../assets/js/firebase";
 import { onAuthStateChanged } from "firebase/auth";
 import { getUser } from "../@mythall/users";
-import { getEvenement, updateEvenement, InscriptionItem } from "../@mythall/evenements";
+import { getEvenement, InscriptionItem, preinscription } from "../@mythall/evenements";
 import { getPersonnagesFromUserId } from "../@mythall/personnages";
-
-let currentUser;
 
 class PreinscriptionComponent extends HTMLElement {
   constructor() {
@@ -62,13 +60,30 @@ class PreinscriptionComponent extends HTMLElement {
         this.querySelector("#date").innerHTML = this.evenement.date;
         this.querySelector("#saison").innerHTML = this.evenement.saison;
         this.querySelector("#quand").innerHTML = `${this.evenement.date} ${this.evenement.saison}`;
-        this.querySelector("#inscrits").innerHTML = this.evenement.inscrits;
+        this.querySelector("#inscrits").innerHTML = this.evenement.inscriptions.length;
         this.querySelector("#titre").innerHTML = this.evenement.titre;
         this.querySelector("#description").innerHTML = this.evenement.description;
-        console.log(this.querySelector("#featured"));
         this.querySelector("#featured").setAttribute("src", this.evenement.featured.src);
         this.querySelector("#featured").setAttribute("width", this.evenement.featured.width);
         this.querySelector("#featured").setAttribute("height", this.evenement.featured.height);
+
+        // Enable Taverne description
+        if (this.evenement.taverne) {
+          this.querySelector("#taverneDescription").innerHTML =
+            "La taverne est ouverte pour cet événement. Le déjeuner, dîner et soupé du samedi sont offerts pour le prix de 15$.";
+        }
+
+        // Enable Taverne Dropdown
+        const taverneCount = this.evenement.inscriptions.filter(i => i.taverne).length;
+        this.querySelector("#tavernePlace").innerHTML = `(${taverneCount}/${this.evenement.taverneLimit})`;
+        if (this.evenement.taverne && this.evenement.taverneLimit > taverneCount) {
+          this.querySelector("#taverne").removeAttribute("disabled");
+        }
+
+        // Enable Mobeu Dropdown
+        if (this.evenement.mobeux) {
+          this.querySelector("#mobeu").removeAttribute("disabled");
+        }
       } catch (error) {
         alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
@@ -99,13 +114,11 @@ class PreinscriptionComponent extends HTMLElement {
         personnage.nom,
         this.querySelector("#groupe").value,
         this.querySelector("#taverne").value,
+        this.querySelector("#mobeu").value,
         false
       );
 
-      this.evenement.inscriptions.push(inscription);
-      this.evenement.inscrits++;
-
-      await updateEvenement(this.evenement);
+      await preinscription(this.evenement, inscription);
       this.toggleSuccess();
     } catch (error) {
       console.log(error);

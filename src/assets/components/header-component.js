@@ -1,10 +1,26 @@
 import { auth } from "../js/firebase";
 import { onAuthStateChanged, signOut } from "firebase/auth";
+import { getSetting } from "../../@mythall/settings";
 import logoWhite from "../img/logo-white.png";
 
 class HeaderAuthentication extends HTMLElement {
   constructor() {
     super();
+
+    this.bible = `<a class="header__link" href="https://www.dropbox.com/s/xiq6apwh94ctojh/6-Bible%20de%20Mythall%20V3.5.pdf?dl=0" target="_blank">Bible</a>`;
+    this.login = `<a class="header__link" href="/compte/connexion">Connexion</a>`;
+    this.register = `<a class="header__link" href="/compte/inscription">Inscription</a>`;
+    this.logout = `<button id="logout" class="link header__link" href="/logout">Déconnexion</button>`;
+    this.account = `<a class="header__link" href="/compte">Mon compte</a>`;
+    this.preinscription;
+  }
+
+  async connectedCallback() {
+    const activePreinscription = await getSetting("activePreinscription");
+    if (activePreinscription && activePreinscription.value !== "") {
+      this.preinscription = `<a class="header__link" href="/preinscription?id=${activePreinscription.value}">Préinscription</a>`;
+    }
+
     onAuthStateChanged(auth, user => {
       if (user == null) {
         this.renderAnnonymous();
@@ -16,20 +32,20 @@ class HeaderAuthentication extends HTMLElement {
     });
   }
 
-  renderAnnonymous = () => {
+  renderAnnonymous = async () => {
     this.innerHTML = `
-      <a class="header__link" href="https://www.dropbox.com/s/xiq6apwh94ctojh/6-Bible%20de%20Mythall%20V3.5.pdf?dl=0" target="_blank">Bible</a>
-      <a class="header__link" href="/compte/connexion">Connexion</a>
-      <a class="header__link" href="/compte/inscription">Inscription</a>
+      ${this.bible}
+      ${this.login}
+      ${this.register}
     `;
   };
 
-  renderAuthenticated = () => {
+  renderAuthenticated = async () => {
     this.innerHTML = `
-      <a class="header__link" href="https://www.dropbox.com/s/xiq6apwh94ctojh/6-Bible%20de%20Mythall%20V3.5.pdf?dl=0" target="_blank">Bible</a>
-      <a class="header__link" href="/compte">Mon compte</a>
-      <a class="header__link" href="/preinscription?id=WLaxqXuB19CE0dqjYiN6">Préinscription</a>
-      <button id="logout" class="link header__link" href="/logout">Déconnexion</button>
+      ${this.bible}
+      ${this.account}
+      ${this.preinscription ? this.preinscription : ""}
+      ${this.logout}      
     `;
     this.querySelector("#logout").addEventListener("click", async () => {
       await signOut(auth);

@@ -23,6 +23,7 @@ export default defineConfig(async () => {
           personnagesForm: resolve(__dirname, `${root}/organisateur/personnages/form.html`),
           preinscription: resolve(__dirname, `${root}/preinscription/index.html`),
           evenementsList: resolve(__dirname, `${root}/organisateur/evenements/index.html`),
+          evenementsForm: resolve(__dirname, `${root}/organisateur/evenements/form.html`),
           evenementsPreinscription: resolve(__dirname, `${root}/organisateur/evenements/preinscription.html`),
           sortsList: resolve(__dirname, `${root}/organisateur/sorts/index.html`),
           sortsForm: resolve(__dirname, `${root}/organisateur/sorts/form.html`),

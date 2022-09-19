@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Mythall 3.5</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://firebasestorage.googleapis.com/v0/b/mythall-v7.appspot.com/o/favicon.ico?alt=media&token=7be4603a-486e-4174-82f4-a490dcfd1cd5" />
+    <link rel="stylesheet" href="/assets/css/reset.css" />
+    <link rel="stylesheet" href="/assets/css/variables.css" />
+    <link rel="stylesheet" href="/assets/css/theme.css" />
+    <link rel="stylesheet" href="/assets/css/header.css" />
+    <link rel="stylesheet" href="/assets/css/form.css" />
+    <link rel="stylesheet" href="/assets/css/modal-component.css" />
+    <link rel="stylesheet" href="/assets/css/footer.css" />
+    <style>
+      form-evenement-component {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+      .form__title {
+        text-align: center;
+      }
+      .form__box {
+        margin-top: var(--base-padding);
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+        padding: var(--space-sm);
+        width: 100%;
+        background: #fff;
+        border-radius: var(--base-radius);
+        box-shadow: var(--base-shadow);
+      }
+      .form__group {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        gap: var(--space-xs);
+      }
+      .form__multigroup {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+      }
+      .required {
+        color: var(--color-error);
+      }
+      @media (min-width: 480px) {
+        .form__box {
+          width: auto;
+          min-width: 400px;
+          padding: var(--space-md);
+        }
+        .form__multigroup {
+          flex-direction: row;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <modal-component></modal-component>
+    <header-component></header-component>
+    <main>
+      <form-evenement-component>
+        <div class="form__title">
+          <h1 id="formTitle">Création d'événement</h1>
+          <p><a href="/organisateur/evenements">Retour à la liste des evenements</a></p>
+        </div>
+        <form class="form__box">
+          <div class="form__group">
+            <label for="titre">Titre <span class="required">*</span></label>
+            <input id="titre" type="text" placeholder="La saison des ombres" required />
+          </div>
+          <div class="form__group">
+            <label for="date">Date <span class="required">*</span></label>
+            <input id="date" type="text" placeholder="18-19-20 mois" required />
+          </div>
+          <div class="form__group">
+            <label for="saison">Saison <span class="required">*</span></label>
+            <textarea id="saison" type="text" placeholder="2022" required></textarea>
+          </div>
+          <div class="form__group">
+            <label for="description">Description <span class="required">*</span></label>
+            <textarea id="description" type="text" placeholder="<strong>Supporte le html</strong>" required></textarea>
+          </div>
+          <div class="form__group">
+            <label for="taverne">Taverne <span class="required">*</span></label>
+            <select id="taverne" required>
+              <option value="false">Fermé</option>
+              <option value="true">Ouverte</option>
+            </select>
+          </div>
+          <div class="form__group">
+            <label for="taverneLimit">Limite de la taverne</label>
+            <input id="taverneLimit" type="number" placeholder="45" min="0" />
+          </div>
+          <div class="form__group">
+            <label for="mobeux">Mobeux <span class="required">*</span></label>
+            <select id="mobeux" required>
+              <option value="false">Non</option>
+              <option value="true">Oui</option>
+            </select>
+          </div>
+          <button type="submit">Envoyer</button>
+        </form>
+      </form-evenement-component>
+    </main>
+    <footer-component></footer-component>
+  </body>
+  <script type="module" src="/assets/js/firebase.js" defer></script>
+  <script type="module" src="/assets/components/header-component.js" defer></script>
+  <script type="module" src="/assets/components/footer-component.js" defer></script>
+  <script type="module" src="/assets/components/modal-component.js" defer></script>
+  <script type="module" src="/organisateur/evenements/evenements-component.js" defer></script>
+</html>
