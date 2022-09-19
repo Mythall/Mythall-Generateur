@@ -28,7 +28,7 @@
       .preinscriptions__headers,
       .preinscriptions__item {
         display: grid;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(7, 1fr);
       }
       .preinscriptions__list {
         display: flex;
@@ -60,20 +60,27 @@
             <span id="joueur"></span>
             <span id="personnage"></span>
             <span id="groupe"></span>
-            <input id="present" type="checkbox" />
+            <input id="mobeu" type="checkbox" />
             <input id="taverne" type="checkbox" />
+            <input id="tavernePaye" type="checkbox" />
+            <input id="present" type="checkbox" />
           </div>
         </template>
         <div>
           <a href="/organisateur/evenements" class="button__primary">Liste d'événements</a>
         </div>
-        <div><strong>Total: </strong><span id="total"></span> Joueur(s)</div>
+        <div>
+          <strong>Total: </strong><span id="total"></span> Joueur(s), <span id="totalMobs">0</span> Mobeu(x) et
+          <span id="totalTaverne">0</span> Taverne(s)
+        </div>
         <div class="preinscriptions__headers">
           <strong>Joueur</strong>
           <strong>Personnage</strong>
           <strong>Groupe</strong>
-          <strong>Present</strong>
+          <strong>Mobeu</strong>
           <strong>Taverne</strong>
+          <strong>Taverne (Payé)</strong>
+          <strong>Present (Payé)</strong>
         </div>
         <div id="list" class="preinscriptions__list"></div>
       </list-preinscriptions-component>
