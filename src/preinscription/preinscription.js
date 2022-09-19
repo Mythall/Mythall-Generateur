@@ -70,7 +70,7 @@ class PreinscriptionComponent extends HTMLElement {
         // Enable Taverne description
         if (this.evenement.taverne) {
           this.querySelector("#taverneDescription").innerHTML =
-            "La taverne est ouverte pour cet événement. Le déjeuner, dîner et soupé du samedi sont offerts pour le prix de 15$.";
+            "La taverne est ouverte pour cet événement. Le déjeuner, dîner et souper du samedi sont offerts pour le prix de 15$.";
         }
 
         // Enable Taverne Dropdown
