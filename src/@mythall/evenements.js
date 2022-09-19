@@ -1,5 +1,6 @@
 import { doc, getDoc, getDocs, addDoc, updateDoc, deleteDoc, collection, query, orderBy } from "firebase/firestore";
 import { db } from "../assets/js/firebase";
+import { Timestamp } from "firebase/firestore";
 
 class Featured {
   constructor(src, width, height) {
@@ -10,19 +11,21 @@ class Featured {
 }
 
 class InscriptionItem {
-  constructor(userRef, joueur, personnageRef, personnage, groupe, taverne, present) {
+  constructor(userRef, joueur, personnageRef, personnage, groupe, taverne, mobeu, present, tavernePaye) {
     this.userRef = userRef;
     this.joueur = joueur; // Name only to avoid doing requests in the list
     this.personnageRef = personnageRef;
     this.personnage = personnage; // Name only to avoid doing requests in the list
     this.groupe = groupe;
     this.taverne = taverne;
+    this.mobeu = mobeu;
     this.present = present;
+    this.tavernePaye = tavernePaye;
   }
 }
 
 class Evenement {
-  constructor(id, { date, saison, titre, description, featured, inscriptions, inscrits }) {
+  constructor(id, { date, saison, titre, description, featured, inscriptions, inscrits, taverne, taverneLimit, mobeux }) {
     this.id = id;
     this.date = date;
     this.saison = saison;
@@ -31,31 +34,40 @@ class Evenement {
     this.description = description;
     this.inscriptions = inscriptions;
     this.inscrits = inscrits ? inscrits : 0;
+    this.taverne = taverne;
+    this.taverneLimit = taverneLimit ? taverneLimit : 0;
+    this.mobeux = mobeux;
   }
 
   saveState() {
-    const inscriptionsMap = this.inscriptions.map(i => {
-      return {
-        ...i,
-        taverne: i.taverne === "true" || i.taverne === true ? true : false,
-        present: i.present === "true" || i.present === true ? true : false
-      };
-    });
-
     return {
       date: this.date,
       saison: this.saison,
-      featured: this.featured,
+      featured: this.featured ? this.featured : {},
       titre: this.titre,
       description: this.description,
-      inscriptions: inscriptionsMap,
-      inscrits: this.inscrits
+      inscriptions: this.inscriptions
+        ? this.inscriptions.map(i => {
+            return {
+              ...i,
+              mobeu: i.mobeu === "true" || i.mobeu === true ? true : false,
+              taverne: i.taverne === "true" || i.taverne === true ? true : false,
+              present: i.present === "true" || i.present === true ? true : false,
+              tavernePaye: i.tavernePaye === "true" || i.tavernePaye === true ? true : false
+            };
+          })
+        : [],
+      inscrits: this.inscrits,
+      taverne: this.taverne,
+      taverneLimit: this.taverneLimit,
+      mobeux: this.mobeux,
+      updatedAt: Timestamp.now()
     };
   }
 }
 
 const getEvenements = async () => {
-  return (await getDocs(query(collection(db, "evenements")))).docs.map(snap => {
+  return (await getDocs(query(collection(db, "evenements"), orderBy("updatedAt", "desc")))).docs.map(snap => {
     return new Evenement(snap.id, snap.data());
   });
 };
@@ -71,11 +83,42 @@ const addEvenement = async evenement => {
 };
 
 const updateEvenement = async evenement => {
-  return await updateDoc(doc(db, `evenements/${evenement.id}`), evenement.saveState());
+  // Loading existing evenement & merging data to avoid overwriting other fields
+  const existingEvenement = await getEvenement(evenement.id);
+  const data = new Evenement(evenement.id, {
+    ...existingEvenement,
+    titre: evenement.titre,
+    date: evenement.date,
+    saison: evenement.saison,
+    description: evenement.description,
+    taverne: evenement.taverne,
+    taverneLimit: evenement.taverneLimit,
+    mobeux: evenement.mobeux
+  });
+  return await updateDoc(doc(db, `evenements/${evenement.id}`), data.saveState());
+};
+
+const updateInscription = async (evenement, inscription) => {
+  const existingEvenement = await getEvenement(evenement.id);
+
+  const entry = existingEvenement.inscriptions.find(i => i.userRef === inscription.userRef);
+  entry.mobeu = inscription.mobeu;
+  entry.taverne = inscription.taverne;
+  entry.tavernePaye = inscription.tavernePaye;
+  entry.present = inscription.present;
+
+  return await updateDoc(doc(db, `evenements/${evenement.id}`), existingEvenement.saveState());
 };
 
 const deleteEvenement = async id => {
   return await deleteDoc(doc(db, `evenements/${id}`));
 };
 
-export { Evenement, InscriptionItem, getEvenements, getEvenement, addEvenement, updateEvenement, deleteEvenement };
+const preinscription = async (evenement, inscription) => {
+  const existingEvenement = await getEvenement(evenement.id);
+  existingEvenement.inscriptions.push(inscription);
+  existingEvenement.inscrits++;
+  return await updateDoc(doc(db, `evenements/${evenement.id}`), existingEvenement.saveState());
+};
+
+export { Evenement, InscriptionItem, getEvenements, getEvenement, addEvenement, updateEvenement, updateInscription, deleteEvenement, preinscription };

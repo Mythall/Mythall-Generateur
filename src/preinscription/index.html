@@ -127,7 +127,7 @@
               joueurs de moins de 13 ans ne peuvent pas participer aux combats et doivent être accompagnés d’un adulte en tout temps.
             </p>
             <h2>Taverne</h2>
-            <p>La taverne ne sera malheureusement pas disponible pour cette événement, veuillez apporter votre nourriture.</p>
+            <p id="taverneDescription">La taverne ne sera malheureusement pas disponible pour cette événement, veuillez apporter votre nourriture.</p>
           </div>
           <h2>Préinscription</h2>
           <div id="preinscription" class="preinscription__signUp preinscription__group">
@@ -136,12 +136,6 @@
             <div class="preinscription__group">
               <label for="joueur"><strong>Joueur</strong> <span class="required">*</span></label>
               <select id="joueur" required></select>
-            </div>
-            <div class="preinscription__group">
-              <label for="taverne"><strong>Taverne</strong> <span class="required">*</span></label>
-              <select id="taverne" required>
-                <option value="false" selected>Non</option>
-              </select>
             </div>
             <div class="preinscription__group">
               <label for="personnages"><strong>Personnage</strong> <span class="required">*</span></label>
@@ -153,6 +147,26 @@
             <div class="preinscription__group">
               <label for="groupe"><strong>Groupe</strong></label>
               <input id="groupe" type="text" />
+            </div>
+            <div class="preinscription__group">
+              <label for="taverne"><strong>Taverne</strong> <span id="tavernePlace"></span> <span class="required">*</span></label>
+              <select id="taverne" required disabled>
+                <option value="false" selected>Non</option>
+                <option value="true">Oui</option>
+              </select>
+              <small>
+                <i>15$ supplémentaire pour le dejeuner, dinner et souper du samedi</i>
+              </small>
+            </div>
+            <div class="preinscription__group">
+              <label for="mobeu"><strong>Mobeu</strong> <span class="required">*</span></label>
+              <select id="mobeu" required disabled>
+                <option value="false" selected>Non</option>
+                <option value="true">Oui</option>
+              </select>
+              <small>
+                <i>Êtes-vous dispinible pour faire du mobbing avec l'animation durand une partie du gn</i>
+              </small>
             </div>
             <button type="submit">Envoyer</button>
           </div>
