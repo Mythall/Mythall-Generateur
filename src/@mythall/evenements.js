@@ -25,7 +25,7 @@ class InscriptionItem {
 }
 
 class Evenement {
-  constructor(id, { date, saison, titre, description, featured, inscriptions, inscrits, taverne, taverneLimit, mobeux }) {
+  constructor(id, { date, saison, titre, description, featured, inscriptions, inscrits, taverne, taverneLimit, mobeux, journee }) {
     this.id = id;
     this.date = date;
     this.saison = saison;
@@ -37,6 +37,7 @@ class Evenement {
     this.taverne = taverne;
     this.taverneLimit = taverneLimit ? taverneLimit : 0;
     this.mobeux = mobeux;
+    this.journee = journee;
   }
 
   saveState() {
@@ -61,6 +62,7 @@ class Evenement {
       taverne: this.taverne,
       taverneLimit: this.taverneLimit,
       mobeux: this.mobeux,
+      journee: this.journee,
       updatedAt: Timestamp.now()
     };
   }
@@ -93,7 +95,8 @@ const updateEvenement = async evenement => {
     description: evenement.description,
     taverne: evenement.taverne,
     taverneLimit: evenement.taverneLimit,
-    mobeux: evenement.mobeux
+    mobeux: evenement.mobeux,
+    journee: evenement.journee
   });
   return await updateDoc(doc(db, `evenements/${evenement.id}`), data.saveState());
 };
