@@ -211,6 +211,7 @@ class FormEvenementComponent extends HTMLElement {
     this.taverne = this.querySelector("#taverne");
     this.taverneLimit = this.querySelector("#taverneLimit");
     this.mobeux = this.querySelector("#mobeux");
+    this.journee = this.querySelector("#journee");
 
     // Form submit
     this.addEventListener("submit", async event => await this._saveEvenement(event));
@@ -245,6 +246,7 @@ class FormEvenementComponent extends HTMLElement {
         this.taverne.value = evenement.taverne;
         this.taverneLimit.value = evenement.taverneLimit;
         this.mobeux.value = evenement.mobeux;
+        this.journee.value = evenement.journee;
       } catch (error) {
         alert(`Une erreur est survenue, veuillez contacter l'équipe pour corriger le problème, merci.`);
         console.log(error);
@@ -263,7 +265,8 @@ class FormEvenementComponent extends HTMLElement {
         description: this.description.value,
         taverne: this.taverne.value,
         taverneLimit: this.taverneLimit.value,
-        mobeux: this.mobeux.value
+        mobeux: this.mobeux.value,
+        journee: this.journee.value
       });
 
       if (this.params.id) {
