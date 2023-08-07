@@ -1,7 +1,7 @@
 {
-  "name": "mythall-3.5",
+  "name": "mythall-generateur",
   "version": "3.5.0",
-  "description": "This is the final version of Mythall Web App & Generator Built using basic html / css / js for easy collaboration",
+  "description": "Générateur de Mythall fait en Vanilla HTML, CSS, JS pour collaboration facile.",
   "scripts": {
     "build": "vite build",
     "build-dev": "vite build  --mode=development",
@@ -11,15 +11,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dominik-Giroux/Mythall-3.5.git"
+    "url": "git+https://github.com/Mythall/Mythall-Generateur.git"
   },
   "keywords": [],
-  "author": "Dominik Giroux",
+  "author": "Élyse Giroux",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dominik-Giroux/Mythall-3.5/issues"
+    "url": "https://github.com/Mythall/Mythall-Generateur/issues"
   },
-  "homepage": "https://github.com/Dominik-Giroux/Mythall-3.5#readme",
+  "homepage": "https://github.com/Mythall/Mythall-Generateur#readme",
   "dependencies": {
     "firebase": "^9.6.7",
     "vite": "^2.8.6"
