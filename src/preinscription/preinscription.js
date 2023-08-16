@@ -63,6 +63,7 @@ class PreinscriptionComponent extends HTMLElement {
         this.querySelector("#inscrits").innerHTML = this.evenement.inscriptions.length;
         this.querySelector("#titre").innerHTML = this.evenement.titre;
         this.querySelector("#description").innerHTML = this.evenement.description;
+        //adding later
         // this.querySelector("#featured").setAttribute("src", this.evenement.featured.src);
         this.querySelector("#featured").setAttribute("width", this.evenement.featured.width);
         this.querySelector("#featured").setAttribute("height", this.evenement.featured.height);
