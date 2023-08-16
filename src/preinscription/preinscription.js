@@ -63,7 +63,7 @@ class PreinscriptionComponent extends HTMLElement {
         this.querySelector("#inscrits").innerHTML = this.evenement.inscriptions.length;
         this.querySelector("#titre").innerHTML = this.evenement.titre;
         this.querySelector("#description").innerHTML = this.evenement.description;
-        this.querySelector("#featured").setAttribute("src", this.evenement.featured.src);
+        // this.querySelector("#featured").setAttribute("src", this.evenement.featured.src);
         this.querySelector("#featured").setAttribute("width", this.evenement.featured.width);
         this.querySelector("#featured").setAttribute("height", this.evenement.featured.height);
 
@@ -71,7 +71,7 @@ class PreinscriptionComponent extends HTMLElement {
         this.querySelector("#heure-debut").innerHTML = this.evenement.journee ? "Samedi 12h00" : "Vendredi vers 23h30";
         this.querySelector("#heure-jeu").innerHTML = this.evenement.journee ? "Samedi de 12h00 à 8h00" : "Vendredi & samedi jusqu'à épuisement";
         this.querySelector("#heure-fin").innerHTML = this.evenement.journee ? "Samedi 8h00 PM" : "Dimanche 10h00";
-
+        console.log(this.evenement.journee)
         // Enable Taverne description
         if (this.evenement.taverne) {
           this.querySelector("#taverneDescription").innerHTML = "La taverne est ouverte pour cet événement.";
