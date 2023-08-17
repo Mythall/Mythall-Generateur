@@ -19,11 +19,62 @@ class ListPersonnagesComponent extends HTMLElement {
   constructor() {
     super();
     this.filtreNom = this.querySelector("#filtreNom");
+    this.querySelector('#dev').addEventListener("click", async() => this.functionCallerDev())
     this.filtreNom.addEventListener(
       "input",
       this._debounce(() => this._filterPersonnages())
     );
   }
+
+  async functionCallerDev() {
+    let codeOpp = prompt('please enter function number')
+    switch (codeOpp) {
+      case 'delt':
+        await this._deletePersonnageByLvl()
+      break
+      case 'existTrue':
+        await this._setExistTrue()
+      break
+    }
+  }
+  // code delt
+  async _deletePersonnageByLvl() {
+    let lvl = prompt('delete character totalLvl > input')
+    const personnages = this.personnages
+    const personnagesToDeleteIds = personnages.map((personnage) => {
+      const id = personnage.id
+      const totalLvl = personnage.classes.reduce((acc, curr) => {
+        return acc + +curr.niveau
+      }, 0)
+      return {
+        id,
+        lvl: totalLvl
+      }
+    }).filter((personnage) => personnage.lvl > lvl).map((personnage) => personnage.id)
+    console.log('character to delete', personnagesToDeleteIds.length)
+    try {
+      personnagesToDeleteIds.forEach(async (id) => {
+        await deletePersonnage(id)
+      })
+    } catch (err) {
+      alert(err)
+    }
+  }
+
+  // code existTrue
+  //ToDO make it work
+  // async _setExistTrue() {
+  //   const personnages = this.personnages
+  //   try {
+  //     personnages.forEach(async (personnage) => {
+  //       const goodBuildPersonnage = await getPersonnage(personnage.id)
+  //       console.log(goodBuildPersonnage)
+  //       await updatePersonnage({...goodBuildPersonnage, exist: true})
+  //     })
+  //   } catch (err) {
+  //     alert(err)
+  //   }
+  // }
 
   async connectedCallback() {
     await this._getPersonanges();
@@ -129,7 +180,6 @@ class FormPersonnageComponent extends HTMLElement {
     this.querySelector("#addSort").addEventListener("click", async event => this._addSortItem(event));
     this.querySelector("#addAptitude").addEventListener("click", async event => this._addAptitudeItem(event));
     this.querySelector("#addFourberie").addEventListener("click", async event => this._addFourberieItem(event));
-
     // Tab Clicks
     this.tabs = this.querySelectorAll(".form__tab");
     this.tabLinks = this.querySelectorAll(".tablinks__link");
@@ -178,8 +228,6 @@ class FormPersonnageComponent extends HTMLElement {
 
         // Get Personnage
         const personnage = await getPersonnage(this.params.id);
-
-        console.log(personnage);
 
         // Set Inputs
         this.nom.value = personnage.nom;
