@@ -88,7 +88,6 @@ class Personnage {
   }
 
   saveState() {
-    console.log('bob')
     if (!this.dieuRef) this.dieuRef = "";
     if (!this.ecoleRef) this.ecoleRef = "";
     if (!this.espritRef) this.espritRef = "";
@@ -225,7 +224,6 @@ const addPersonnage = async personnage => {
 };
 
 const updatePersonnage = async personnage => {
-  console.log(personnage)
   const updatedPersonnage = personnage.saveState()
   return await updateDoc(doc(db, `personnages/${personnage.id}`), updatedPersonnage);
 };
