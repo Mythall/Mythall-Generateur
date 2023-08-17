@@ -740,7 +740,8 @@ class CreationPersonnage extends HTMLElement {
 
     try {
       this.personnage.gnEffectif++;
-
+      this.personnage.exist = true; 
+      
       if (!this.personnage.nom) {
         this.personnage.nom = this.querySelector("#nom").value;
       }

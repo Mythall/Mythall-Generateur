@@ -42,7 +42,8 @@ class Personnage {
       gnEffectif,
       vie,
       createdAt,
-      updatedAt
+      updatedAt,
+      exist
     }
   ) {
     this.id = id;
@@ -83,6 +84,7 @@ class Personnage {
     this.vie = vie ? vie : 5;
     this.createdAt = createdAt ? createdAt : Timestamp.now();
     this.updatedAt = updatedAt ? updatedAt : Timestamp.now();
+    this.exist = exist ? exist : true
   }
 
   saveState() {
@@ -127,7 +129,8 @@ class Personnage {
       vie: this.vie,
       gnEffectif: this.gnEffectif,
       createdAt: this.createdAt,
-      updatedAt: Timestamp.now()
+      updatedAt: Timestamp.now(),
+      exist: this.exist
     };
   }
 
@@ -217,12 +220,12 @@ const getPersonnage = async id => {
 
 const addPersonnage = async personnage => {
   const docRef = await addDoc(collection(db, `personnages`), personnage.saveState());
-  console.log(docRef.id);
   return docRef;
 };
 
 const updatePersonnage = async personnage => {
-  return await updateDoc(doc(db, `personnages/${personnage.id}`), personnage.saveState());
+  const updatedPersonnage = personnage.saveState()
+  return await updateDoc(doc(db, `personnages/${personnage.id}`), updatedPersonnage);
 };
 
 const deletePersonnage = async id => {
