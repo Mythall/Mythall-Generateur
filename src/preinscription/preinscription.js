@@ -67,7 +67,7 @@ class PreinscriptionComponent extends HTMLElement {
         // this.querySelector("#featured").setAttribute("src", this.evenement.featured.src);
         // this.querySelector("#featured").setAttribute("width", this.evenement.featured.width);
         // this.querySelector("#featured").setAttribute("height", this.evenement.featured.height);
-        console.log(this.evenement)
+
         this.querySelector("#heure-arrive").innerHTML = this.evenement.journee === 'true' ? "Samedi entre 9h00 et 11h30" : "Vendredi de 16h00 à 22h00";
         this.querySelector("#heure-debut").innerHTML = this.evenement.journee === 'true' ? "Samedi 12h00" : "Vendredi vers 23h30";
         this.querySelector("#heure-jeu").innerHTML = this.evenement.journee === 'true' ? "Samedi de 12h00 à 8h00" : "Vendredi & samedi jusqu'à épuisement";
