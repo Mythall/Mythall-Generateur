@@ -130,8 +130,6 @@ const getAvailableChoix = async (personnage, progressingClasse) => {
       quantite: 1
     });
 
-    // console.log("Don 3 niveau ou lvl 1");
-
     listChoix.push(Object.assign({}, don));
   }
 
@@ -194,7 +192,6 @@ const getAvailableChoix = async (personnage, progressingClasse) => {
         domaine.choix.forEach(choixDomaine => {
           if (choixDomaine.niveauObtention == progressingClasse.niveau) {
             const existingChoix = listChoix.find(c => c.type == choixDomaine.type && c.categorie == choixDomaine.categorie);
-            console.log(existingChoix);
             if (existingChoix) {
               existingChoix.quantite++;
             } else {
@@ -345,9 +342,13 @@ const getAvailableConnaissances = async personnage => {
       });
     });
   }
-
+  const raceDonsIds = personnage.race.donsRacialRef
+  const personnageDonsIds = personnage.dons.map((don) => {
+    return don.donref
+  })
+  const allDonsIds =  [...classesDonsIds, ...raceDonsIds, ...personnageDonsIds]
   // Filtre les prérequis de dons
-  if (personnage.dons) {
+  if (allDonsIds) {
     let result = [];
 
     list.forEach(don => {
@@ -359,8 +360,8 @@ const getAvailableConnaissances = async personnage => {
         don.donsRequisRef.forEach(donReqRef => {
           let found = false;
 
-          personnage.dons.forEach(donPerso => {
-            if (donReqRef == donPerso.donRef) {
+          allDonsIds.forEach(ids => {
+            if (donReqRef == ids) {
               found = true;
             }
           });
@@ -434,9 +435,20 @@ const getAvailableDons = async personnage => {
 
     list = result;
   }
-
+  
   // Filtre les prérequis de dons
-  if (personnage.dons) {
+  const classesDonsIds = personnage.classes.flatMap((classe) => {
+    return classe.classe.dons.map((don) => {
+      return don.donRef
+    })
+  }) 
+  const raceDonsIds = personnage.race.donsRacialRef
+  const personnageDonsIds = personnage.dons.map((don) => {
+    return don.donref
+  })
+  const allDonsIds =  [...classesDonsIds, ...raceDonsIds, ...personnageDonsIds]
+
+  if (allDonsIds) {
     let result = [];
 
     list.forEach(don => {
@@ -447,13 +459,11 @@ const getAvailableDons = async personnage => {
         // Make sure all requirements is filled
         don.donsRequisRef.forEach(donReqRef => {
           let found = false;
-
-          personnage.dons.forEach(donPerso => {
-            if (donReqRef == donPerso.donRef) {
+          allDonsIds.forEach(ids => {
+            if (donReqRef == ids) {
               found = true;
             }
           });
-
           if (!found) {
             add = false;
           }
@@ -470,7 +480,6 @@ const getAvailableDons = async personnage => {
 
     list = result;
   }
-
   // Filtre les restrictions de niveaux
   if (personnage.niveauReel) {
     // Filtre Niveau Max D'Obtention
@@ -570,6 +579,13 @@ const getAvailableDivinites = async personnage => {
     list = list.filter(function (dieu) {
       return dieu.alignementPermisRef.includes(personnage.alignementRef);
     });
+  }
+  if (personnage.domainesRef.length) {
+    personnage.domainesRef.forEach((domaine) => {
+      list = list.filter((dieu) => {
+        return dieu.domainesRef.includes(domaine)
+      })
+    })
   }
 
   return list.sort((a, b) => (a.nom > b.nom ? 1 : -1));

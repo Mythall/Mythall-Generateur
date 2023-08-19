@@ -742,7 +742,7 @@ const _getResistances = async personnage => {
     if (matchingIndex > -1) {
       const resistance = personnage.resistances[matchingIndex];
       if (resistance) {
-        resistance.valeur = resistanceItem.cummulable
+        resistance.valeur = resistanceItem.cummulable && resistanceItem.niveau <= personnage.niveauEffectif
           ? (resistance.valeur += resistanceItem.valeur) // Cummulable l'ajoute à la valeur
           : (resistance.valeur = Math.max(resistance.valeur, resistanceItem.valeur)); // Non Cummulable prend la plus forte valeur
       }
@@ -752,8 +752,8 @@ const _getResistances = async personnage => {
       );
     }
   };
-
-  // Race Resistances
+    
+    // Race Resistances
   personnage.race.resistances.forEach(resistanceItem => {
     _setResistance(resistanceItem);
   });
