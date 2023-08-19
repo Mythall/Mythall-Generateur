@@ -20,10 +20,10 @@ import {
 import { getRace } from "../@mythall/races";
 import { ClasseItem, getClasse, isMagicien } from "../@mythall/classes";
 import { getDomaine } from "../@mythall/domaines";
-import { DonItem } from "../@mythall/dons";
+import { DonItem, getDon } from "../@mythall/dons";
 import { FourberieItem } from "../@mythall/fourberies";
-import { SortItem } from "../@mythall/sorts";
-import { AptitudeItem } from "../@mythall/aptitudes";
+import { SortItem, getSort } from "../@mythall/sorts";
+import { AptitudeItem, getAptitude } from "../@mythall/aptitudes";
 import { findProgressionSortsRecopiables } from "../@mythall/progressionSortsRecopiables";
 
 class CreationPersonnage extends HTMLElement {
@@ -603,6 +603,73 @@ class CreationPersonnage extends HTMLElement {
 
       // Fill Requirements for next step
       this.personnage.race = await getRace(this.personnage.raceRef);
+      const race = this.personnage.race
+      const aptitudesToAdd = []
+      const donsToAdd = []
+      const spellsToAdd = []
+      if (race.aptitudesRacialRef.length > 0) {
+        const aptitudesRacial = await Promise.all(race.aptitudesRacialRef.map(async ref => await getAptitude(ref)))
+        const missingAptitudes = aptitudesRacial.filter((raceApt) => {
+          return !this.personnage.aptitudes.some((apt) => {
+            return raceApt.id === apt.aptitudeRef
+          })
+        })
+        if (missingAptitudes.length > 0) {
+          aptitudesToAdd.push(...missingAptitudes)
+        }
+      }
+      if (race.donsRacialRef.length > 0) {
+        const donsRacial = await Promise.all(race.donsRacialRef.map(async ref => await getDon(ref)))
+        const missingDons = donsRacial.filter((raceDon) => {
+          return !this.personnage.dons.some((don) => {
+            return raceDon.id === don.donRef
+          })
+        })
+        if (missingDons.length > 0) {
+          donsToAdd.push(...missingDons)
+        }
+      }
+      if (race.sortsRacialRef.length > 0) {
+        const sortRacial = await Promise.all(race.sortsRacialRef.map(async ref => await getSort(ref)))
+        const missingSorts = sortRacial.filter((raceSpell) => {
+          return !this.personnage.sorts.some((sort) => {
+            return raceSpell.id === sort.sortRef
+          })
+        })
+        if (missingSorts.length > 0) {
+          spellsToAdd.push(...missingSorts)
+        }
+      }
+      if (donsToAdd.length) {
+        donsToAdd.forEach((don) => {
+          this.personnage.dons.push(
+            new DonItem({
+              donRef: don.id,
+              niveauObtention: this.personnage.niveauReel
+            })
+          )
+        })
+      }
+      if (aptitudesToAdd.length) {
+        aptitudesToAdd.forEach((apt) => {
+          this.personnage.aptitudes.push(
+            new AptitudeItem({
+              aptitudeRef: apt.id,
+              niveauObtention: this.personnage.niveauReel
+            })
+          );
+        })
+      }
+      if (spellsToAdd.length) {
+        spellsToAdd.forEach((spell) => {
+          this.personnage.sorts.push(
+            new SortItem({
+              sortRef: spell.id,
+              niveauObtention: this.personnage.niveauReel
+            })
+          )
+        })
+      }
     }
   };
 
@@ -644,7 +711,48 @@ class CreationPersonnage extends HTMLElement {
 
     // Fill Requirements for available domaines
     const domaines = await Promise.all(this.personnage.domainesRef.map(ref => getDomaine(ref)));
-    domaines.forEach((domaine, i) => (this.personnage.domaines[i] = domaine));
+    let spellToAdds = []
+    let donToAdds = []
+    let aptitudeToAdds = []
+    domaines.forEach((domaine, i) => {
+      this.personnage.domaines[i] = domaine
+      const personnageDons = this.personnage.dons
+      const personnageSpells = this.personnage.sorts
+      const personnageAptitudes = this.personnage.aptitudes
+      if (domaine.sorts.length > 0) {
+        const missingSpells = domaine.sorts.filter((domSort) => {
+          return !personnageSpells.some((sort) => {
+            return domSort.sortRef === sort.sortRef
+          })
+        })
+        if (missingSpells.length > 0) {
+          spellToAdds.push(...missingSpells)
+        }
+      }
+      if (domaine.dons.length > 0) {
+        const missingDons = domaine.dons.filter((domDons) => {
+          return !personnageDons.some((don) => {
+            return domDons.donRef === don.donRef
+          })
+        })
+        if (missingDons.length > 0) {
+          donToAdds.push(...missingDons)
+        }
+      }
+      if (domaine.aptitudes.length > 0) {
+        const missingAptitudes = domaine.aptitudes.filter((domApt) => {
+          return !personnageAptitudes.some((apt) => {
+            return domApt.aptitudeRef === apt.aptitudeRef
+          })
+        })
+        if (missingAptitudes.length > 0) {
+          aptitudeToAdds.push(...missingAptitudes)
+        }
+      }
+    });
+    this.personnage.sorts = [...spellToAdds, ...this.personnage.sorts]
+    this.personnage.dons = [...donToAdds, ...this.personnage.dons]
+    this.personnage.aptitudes = [...aptitudeToAdds, ...this.personnage.aptitudes]
   };
 
   _updateEcole = async value => {
