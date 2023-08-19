@@ -191,12 +191,8 @@ const getAvailableChoix = async (personnage, progressingClasse) => {
       if (progressingClasse.classeRef == "fNqknNgq0QmHzUaYEvEd") {
         domaine.choix.forEach(choixDomaine => {
           if (choixDomaine.niveauObtention == progressingClasse.niveau) {
-            const existingChoix = listChoix.find(c => c.type == choixDomaine.type && c.categorie == choixDomaine.categorie);
-            if (existingChoix) {
-              existingChoix.quantite++;
-            } else {
-              listChoix.push(choixDomaine);
-            }
+            listChoix.push(choixDomaine);
+
           }
         });
       }

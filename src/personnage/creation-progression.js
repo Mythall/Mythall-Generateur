@@ -263,7 +263,7 @@ class CreationPersonnage extends HTMLElement {
           }
         }
 
-        if (choix.type == "aptitude" && choix.quantite > 0) {
+        if (choix.type == "aptitude" && choix.quantite > 0 && !choix.domaine) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `aptitude-${i}`)) {
               this.steps.push({
@@ -280,7 +280,7 @@ class CreationPersonnage extends HTMLElement {
           }
         }
 
-        if (choix.type == "don" && choix.categorie == "Connaissance" && choix.quantite > 0) {
+        if (choix.type == "don" && choix.categorie == "Connaissance" && choix.quantite > 0 && !choix.domaine) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `connaissance-${i}`)) {
               this.steps.push({
@@ -297,7 +297,7 @@ class CreationPersonnage extends HTMLElement {
           }
         }
 
-        if (choix.type == "don" && choix.categorie == "Normal" && choix.quantite > 0) {
+        if (choix.type == "don" && choix.categorie == "Normal" && choix.quantite > 0 && !choix.domaine) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `don-${i}`)) {
               this.steps.push({
@@ -314,7 +314,7 @@ class CreationPersonnage extends HTMLElement {
           }
         }
 
-        if (choix.type == "fourberie" && choix.quantite > 0) {
+        if (choix.type == "fourberie" && choix.quantite > 0 && !choix.domaine) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `fourberie-${i}`)) {
               this.steps.push({
@@ -330,7 +330,6 @@ class CreationPersonnage extends HTMLElement {
             }
           }
         }
-
         if (choix.type == "sort" && choix.quantite > 0 && !choix.domaine) {
           for (let i = 1; i <= choix.quantite; i++) {
             if (!this.steps.find(step => step.id == `sort-${i}`)) {
@@ -340,23 +339,6 @@ class CreationPersonnage extends HTMLElement {
                 completed: false,
                 dynamic: true,
                 order: 9,
-                copy: null,
-                getOptions: this._getSortsOptions,
-                updateEvent: this._updateSort
-              });
-            }
-          }
-        }
-
-        if (choix.type == "sort" && choix.quantite > 0 && choix.domaine) {
-          for (let i = 1; i <= choix.quantite; i++) {
-            if (!this.steps.find(step => step.id == `sort-domaine-${i}`)) {
-              this.steps.push({
-                id: `sort-domaine-${i}`,
-                text: `Sort de domaine (${i}/${choix.quantite})`,
-                completed: false,
-                dynamic: true,
-                order: 10,
                 copy: null,
                 getOptions: this._getSortsOptions,
                 updateEvent: this._updateSort
@@ -719,40 +701,94 @@ class CreationPersonnage extends HTMLElement {
       const personnageDons = this.personnage.dons
       const personnageSpells = this.personnage.sorts
       const personnageAptitudes = this.personnage.aptitudes
+      // adding spell for domaine with lvl
+      const [sortDomaine] = domaine.choix.filter((choix) => choix.niveauObtention === this.personnage.niveauEffectif && choix.type === 'sort')
+      .flatMap((spell) => spell.ref)
+      if (sortDomaine && !this.personnage.sorts.some((sort)=> sort.sortRef === sortDomaine) ) {
+        spellToAdds.push(sortDomaine)
+      }
+      // adding don for domaine with lvl
+      const [donDomaine] = domaine.choix.filter((choix) => choix.niveauObtention === this.personnage.niveauEffectif && choix.type === 'don')
+      .flatMap((don) => don.ref)
+      if (donDomaine && !this.personnage.dons.some((don)=> don.donRef === sortDomaine) ) {
+        donToAdds.push(sortDomaine)
+      }
+      // adding aptitudes for domaine with lvl
+      const [aptitudeDomaine] = domaine.choix.filter((choix) => choix.niveauObtention === this.personnage.niveauEffectif && choix.type === 'aptitude')
+      .flatMap((apt) => apt.ref)
+      if (aptitudeDomaine && !this.personnage.aptitudes.some((don)=> don.aptitudeRef === aptitudeDomaine) ) {
+        aptitudeToAdds.push(aptitudeDomaine)
+      }
+      // adding sort bonus
       if (domaine.sorts.length > 0) {
-        const missingSpells = domaine.sorts.filter((domSort) => {
-          return !personnageSpells.some((sort) => {
-            return domSort.sortRef === sort.sortRef
+        const missingSpells = domaine.sorts
+          .filter((domSort) => {
+            return !personnageSpells.some((sort) => {
+              return domSort.sortRef === sort.sortRef
+            })
           })
-        })
-        if (missingSpells.length > 0) {
-          spellToAdds.push(...missingSpells)
+          .filter((sort) => !spellToAdds.includes(sort.sortRef))
+          .map((sort) => sort.sortRef)
+        if (missingSpells.length > 0 ) {
+          missingSpells.forEach((spell) => spellToAdds.push(spell))
         }
       }
+      // adding don bonus
       if (domaine.dons.length > 0) {
-        const missingDons = domaine.dons.filter((domDons) => {
-          return !personnageDons.some((don) => {
-            return domDons.donRef === don.donRef
+        const missingDons = domaine.dons
+          .filter((domDons) => {
+            return !personnageDons.some((don) => {
+              return domDons.donRef === don.donRef
+            })
           })
-        })
+          .filter((don) => !donToAdds.includes(don.donref))
+          .map((don) => don.donRef)
         if (missingDons.length > 0) {
-          donToAdds.push(...missingDons)
+          missingDons.forEach((don) => donToAdds.push(don))
         }
       }
+      // adding aptitude bonus
       if (domaine.aptitudes.length > 0) {
-        const missingAptitudes = domaine.aptitudes.filter((domApt) => {
-          return !personnageAptitudes.some((apt) => {
-            return domApt.aptitudeRef === apt.aptitudeRef
+        const missingAptitudes = domaine.aptitudes
+          .filter((domApt) => {
+            return !personnageAptitudes.some((apt) => {
+              return domApt.aptitudeRef === apt.aptitudeRef
+            })
           })
-        })
+          .filter((apt) => !aptitudeToAdds.includes(apt.aptitudeRef))
+          .map((apt) => apt.aptitudeRef)
         if (missingAptitudes.length > 0) {
-          aptitudeToAdds.push(...missingAptitudes)
+          missingAptitudes.forEach((apt) => aptitudeToAdds.push(apt))
         }
       }
     });
-    this.personnage.sorts = [...spellToAdds, ...this.personnage.sorts]
-    this.personnage.dons = [...donToAdds, ...this.personnage.dons]
-    this.personnage.aptitudes = [...aptitudeToAdds, ...this.personnage.aptitudes]
+    // adding spell in personnage
+    spellToAdds.forEach((spell) => {
+      this.personnage.sorts.push(
+        new SortItem({
+          sortRef: spell,
+          niveauObtention: this.personnage.niveauReel
+        })
+      )
+    })
+    // adding don in personnage
+    donToAdds.forEach((don) => {
+      this.personnage.dons.push(
+        new DonItem({
+          donRef: don,
+          niveauObtention: this.personnage.niveauReel
+        })
+      )
+    })
+    // adding aptitude in personnage
+    aptitudeToAdds.forEach((apt) => {
+      this.personnage.aptitudes.push(
+        new AptitudeItem({
+          aptitudeRef: apt,
+          niveauObtention: this.personnage.niveauReel
+        })
+      )
+    })
   };
 
   _updateEcole = async value => {
