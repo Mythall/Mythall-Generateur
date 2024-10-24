@@ -72,6 +72,8 @@ class PreinscriptionComponent extends HTMLElement {
         this.querySelector("#heure-debut").innerHTML = this.evenement.journee == 'true' ? "Samedi 12h00" : "Vendredi vers 23h30";
         this.querySelector("#heure-jeu").innerHTML = this.evenement.journee == 'true' ? "Samedi de 12h00 à 8h00" : "Vendredi & samedi jusqu'à épuisement";
         this.querySelector("#heure-fin").innerHTML = this.evenement.journee == 'true' ? "Samedi 8h00 PM" : "Dimanche 10h00";
+        this.querySelector("#prix-preinscription").innerHTML = this.evenement.journee == 'true' ? "$20" : "$30";
+        this.querySelector("#prix-porte").innerHTML = this.evenement.journee == 'true' ? "$30" : "$40";
         // Enable Taverne description
         if (this.evenement.taverne === 'true') {
           this.querySelector("#taverneDescription").innerHTML = "La taverne est ouverte pour cet événement.";
