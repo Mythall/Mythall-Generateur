@@ -273,7 +273,7 @@ const getAvailableOrdres = async personnage => {
 
 const getAvailableAptitudes = async (personnage, progressingClasse) => {
   let aptitudeRefs = progressingClasse.classe.choix
-    .filter(x => x.type == 'aptitude' && x.niveauObtention === progressingClasse.niveau)
+    .filter(x => x.type == "aptitude" && x.niveauObtention === progressingClasse.niveau)
     .map(x => x.ref)
     .flat();
 
@@ -284,23 +284,23 @@ const getAvailableAptitudes = async (personnage, progressingClasse) => {
   }
 
   return await Promise.all(aptitudeRefs.map(async ref => await getAptitude(ref)));
-}
+};
 
 const rangedCombatStyleAptitudeRefs = [
-  'g5NSyyh4n2M9A69Gpcj3', // Style
-  '2QK0QnyPsu9WljfWqBAC', // Science
-  'bqZBLKSRTdZibeAQ5jKE' // Maîtrise
-]
+  "g5NSyyh4n2M9A69Gpcj3", // Style
+  "2QK0QnyPsu9WljfWqBAC", // Science
+  "bqZBLKSRTdZibeAQ5jKE" // Maîtrise
+];
 
 const dualWieldCombatStyleAptitudeRefs = [
-  'fvb07AqehmArvoHyw929', // Style
-  'VM4yz2QmWy101SzPWw2C', // Science
-  'xUliJugimhST8EY3YRS7' // Maîtrise
-]
+  "fvb07AqehmArvoHyw929", // Style
+  "VM4yz2QmWy101SzPWw2C", // Science
+  "xUliJugimhST8EY3YRS7" // Maîtrise
+];
 
-const _getRodeurUnavailableCombatStyleProgress = (personnage) => {
+const _getRodeurUnavailableCombatStyleProgress = personnage => {
   let currentAptitudes = personnage.aptitudes.map(x => x.aptitudeRef);
-  
+
   if (currentAptitudes.length <= 0) {
     return null;
   }
@@ -327,10 +327,10 @@ const _getRodeurUnavailableCombatStyleProgress = (personnage) => {
     if (currentAptitudeIndex > -1) {
       newAvailableAptitudeRefIndex = currentAptitudeIndex + 1;
     }
-  })
+  });
 
   return aptitudesFromWhichToRemove[newAvailableAptitudeRefIndex];
-}
+};
 
 const getAvailableConnaissances = async personnage => {
   const dons = await getDons("Connaissance");
@@ -407,6 +407,42 @@ const getAvailableDons = async personnage => {
         return don.id != donPerso.donRef;
       });
     });
+  }
+
+  // Filtre les prérequis de dons
+  if (personnage.dons) {
+    let result = [];
+
+    list.forEach(don => {
+      let add = true;
+
+      // No requirements
+      if (don.donsRequisRef && don.donsRequisRef.length > 0) {
+        // Make sure all requirements is filled
+        don.donsRequisRef.forEach(donReqRef => {
+          let found = false;
+
+          personnage.dons.forEach(donPerso => {
+            if (donReqRef == donPerso.donRef) {
+              found = true;
+            }
+          });
+
+          if (!found) {
+            add = false;
+          }
+        });
+      }
+
+      if (add) {
+        if (!result.find(r => r.id == don.id)) {
+          result.push(don);
+        }
+        result.push(don);
+      }
+    });
+
+    list = result;
   }
 
   // Filtre les Races Autorisées
