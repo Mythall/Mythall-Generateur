@@ -176,7 +176,7 @@ const _getNiveauEffectif = async personnage => {
 
       if (classe.classe.sort == "Profane") {
         if (classe.classe.type == "Combatant") {
-          personnage.niveauProfane += +(classe.niveau / 2);
+          personnage.niveauProfane += Math.floor(classe.niveau / 2);
         } else {
           personnage.niveauProfane += +classe.niveau;
         }
@@ -184,7 +184,7 @@ const _getNiveauEffectif = async personnage => {
 
       if (classe.classe.sort == "Divin") {
         if (classe.classe.type == "Combatant") {
-          personnage.niveauDivin += +(classe.niveau / 2);
+          personnage.niveauDivin += Math.floor(classe.niveau / 2);
         } else {
           personnage.niveauDivin += +classe.niveau;
         }
