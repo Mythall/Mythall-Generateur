@@ -409,42 +409,6 @@ const getAvailableDons = async personnage => {
     });
   }
 
-  // Filtre les prérequis de dons
-  if (personnage.dons) {
-    let result = [];
-
-    list.forEach(don => {
-      let add = true;
-
-      // No requirements
-      if (don.donsRequisRef && don.donsRequisRef.length > 0) {
-        // Make sure all requirements is filled
-        don.donsRequisRef.forEach(donReqRef => {
-          let found = false;
-
-          personnage.dons.forEach(donPerso => {
-            if (donReqRef == donPerso.donRef) {
-              found = true;
-            }
-          });
-
-          if (!found) {
-            add = false;
-          }
-        });
-      }
-
-      if (add) {
-        if (!result.find(r => r.id == don.id)) {
-          result.push(don);
-        }
-        result.push(don);
-      }
-    });
-
-    list = result;
-  }
-
   // Filtre les Races Autorisées
   if (personnage.raceRef) {
     list = list.filter(function (don) {

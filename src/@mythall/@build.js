@@ -175,11 +175,19 @@ const _getNiveauEffectif = async personnage => {
       personnage.niveauReel += +classe.niveau;
 
       if (classe.classe.sort == "Profane") {
-        personnage.niveauProfane += +classe.niveau;
+        if (classe.classe.type == "Combatant") {
+          personnage.niveauProfane += +(classe.niveau / 2);
+        } else {
+          personnage.niveauProfane += +classe.niveau;
+        }
       }
 
       if (classe.classe.sort == "Divin") {
-        personnage.niveauDivin += +classe.niveau;
+        if (classe.classe.type == "Combatant") {
+          personnage.niveauDivin += +(classe.niveau / 2);
+        } else {
+          personnage.niveauDivin += +classe.niveau;
+        }
       }
     });
   }
