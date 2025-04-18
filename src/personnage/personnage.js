@@ -89,12 +89,12 @@ class PersonnageComponent extends HTMLElement {
       })
       .join(", ");
 
-    if (this.personnage?.niveauDivin > 1) {
+    if (this.personnage?.niveauDivin >= 1) {
       const elem = this.querySelector("#niveauDivin");
       elem.innerHTML = `(Divin ${this.personnage.niveauDivin})`;
       elem.classList.toggle("hidden", false);
     }
-    if (this.personnage?.niveauProfane > 1) {
+    if (this.personnage?.niveauProfane >= 1) {
       const elem = this.querySelector("#niveauProfane");
       elem.innerHTML = `(Profane ${this.personnage.niveauProfane})`;
       elem.classList.toggle("hidden", false);
