@@ -170,11 +170,15 @@ const _getNiveauEffectif = async personnage => {
   personnage.niveauDivin = 0;
 
   if (personnage.classes) {
+    let hasProfaneClass = false;
+    let hasDivinClass = false;
+
     personnage.classes.forEach(classe => {
       personnage.niveauEffectif += +classe.niveau;
       personnage.niveauReel += +classe.niveau;
 
       if (classe.classe.sort == "Profane") {
+        hasProfaneClass = true;
         if (classe.classe.type == "Combatant") {
           personnage.niveauProfane += Math.floor(classe.niveau / 2);
         } else {
@@ -183,6 +187,7 @@ const _getNiveauEffectif = async personnage => {
       }
 
       if (classe.classe.sort == "Divin") {
+        hasDivinClass = true;
         if (classe.classe.type == "Combatant") {
           personnage.niveauDivin += Math.floor(classe.niveau / 2);
         } else {
@@ -190,6 +195,15 @@ const _getNiveauEffectif = async personnage => {
         }
       }
     });
+
+    // Ensure minimum level of 1 if the character has any class of that type
+    if (hasProfaneClass && personnage.niveauProfane < 1) {
+      personnage.niveauProfane = 1;
+    }
+
+    if (hasDivinClass && personnage.niveauDivin < 1) {
+      personnage.niveauDivin = 1;
+    }
   }
 
   if (personnage.race) {
