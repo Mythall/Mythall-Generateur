@@ -561,14 +561,14 @@ class CreationPersonnage extends HTMLElement {
   _getSortsRecopiablesOptions = async (niveauSortPermis) => {
     let niveauSortToNiveauAcquisition = {
       1: 1,
-      2: 2,
-      3: 3,
-      4: 4,
-      5: 6,
-      6: 8,
-      7: 10,
-      8: 13,
-      9: 16,
+      2: 3,
+      3: 5,
+      4: 7,
+      5: 9,
+      6: 11,
+      7: 13,
+      8: 15,
+      9: 17,
     };
 
     return (await getAvailableSorts(this.personnage, this.progressingClasse, niveauSortToNiveauAcquisition[niveauSortPermis])).map(s => {
