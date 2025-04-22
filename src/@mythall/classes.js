@@ -237,7 +237,20 @@ const deleteClasse = async id => {
 };
 
 const isMagicien = ref =>{
-  return ref === "InLXowaFisDm6vtZ49WL";
+  const magicienIds = [
+    "InLXowaFisDm6vtZ49WL",
+    "kva6xN1Djmfakffrx4Mn",
+    "CcRXhxmJlWXKaMFaPvMx",
+    "oRpje1KOBgOpd7DSgf24",
+    "vfmtI9HlbsCvHeDT2Utv",
+    "cAn72Bn7hde7EthhhJYo",
+    "wDmnfBXWAFKySvo3MolS",
+    "UTvAEgRunf3gbyBH0Qm5",
+    "99rBrahwBkNr6bMny56V",
+    "DmYZUxZdCS3L3jHSrFQx"
+  ];
+
+  return magicienIds.includes(ref);
 }
 
 export { Classe, ClasseItem, getClasses, getClasse, addClasse, updateClasse, deleteClasse, isMagicien };
