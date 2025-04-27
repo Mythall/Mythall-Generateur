@@ -558,7 +558,7 @@ class CreationPersonnage extends HTMLElement {
     });
   };
 
-  _getSortsRecopiablesOptions = async (niveauSortPermis) => {
+  _getSortsRecopiablesOptions = async niveauSortPermis => {
     let niveauSortToNiveauAcquisition = {
       1: 1,
       2: 3,
@@ -568,7 +568,7 @@ class CreationPersonnage extends HTMLElement {
       6: 11,
       7: 13,
       8: 15,
-      9: 17,
+      9: 17
     };
 
     return (await getAvailableSorts(this.personnage, this.progressingClasse, niveauSortToNiveauAcquisition[niveauSortPermis])).map(s => {
@@ -618,6 +618,12 @@ class CreationPersonnage extends HTMLElement {
       this.personnage.niveauEffectif++;
     } else {
       this.personnage.classes.push(new ClasseItem({ classeRef: value }));
+
+      // If in progression mode and adding a new class, also increment levels
+      if (this.progression) {
+        this.personnage.niveauReel++;
+        this.personnage.niveauEffectif++;
+      }
     }
 
     // Fill Requirements for available classes
@@ -740,8 +746,8 @@ class CreationPersonnage extends HTMLElement {
 
     try {
       this.personnage.gnEffectif++;
-      this.personnage.exist = true; 
-      
+      this.personnage.exist = true;
+
       if (!this.personnage.nom) {
         this.personnage.nom = this.querySelector("#nom").value;
       }
