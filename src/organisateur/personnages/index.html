@@ -25,9 +25,12 @@
         gap: var(--space-md);
       }
       .personnages__headers,
-      .personnages__item {
+      .personnages__item,
+      .personnages__filters {
         display: grid;
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: 1fr 1fr 0.5fr;
+        gap: var(--space-sm);
+        align-items: center;
       }
       .personnages__list {
         display: flex;
@@ -57,6 +60,7 @@
         <template>
           <div class="personnages__item">
             <span id="nom"></span>
+            <span id="user"></span>
             <div class="personnages__actions">
               <!--View-->
               <a id="view" href="" class="personnages__action-icon">
@@ -98,14 +102,15 @@
         <div>
           <a href="/personnage/creation" class="button__primary">Création de personnage (DM)</a>
           <a href="/organisateur/personnages/form" class="button__primary">Ajouter personnage (DM)</a>
-          <button class="button__primary" id="dev">Dev</button>
         </div>
         <div class="personnages__headers">
           <strong>Nom</strong>
+          <strong>Utilisateur</strong>
           <strong>Actions</strong>
         </div>
         <div class="personnages__filters">
-          <input id="filtreNom" type="text" placeholder="Filtre" />
+          <input id="filtreNom" type="text" placeholder="Filtre nom" />
+          <input id="filtreUser" type="text" placeholder="Filtre utilisateur" />
         </div>
         <div id="list" class="personnages__list"></div>
       </list-personnages-component>

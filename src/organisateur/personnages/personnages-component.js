@@ -19,79 +19,51 @@ class ListPersonnagesComponent extends HTMLElement {
   constructor() {
     super();
     this.filtreNom = this.querySelector("#filtreNom");
-    this.querySelector('#dev').addEventListener("click", async() => this.functionCallerDev())
+    this.filtreUser = this.querySelector("#filtreUser"); // Add this line
+    // Dev button event listener removed
+
+    // Update both filter event listeners
     this.filtreNom.addEventListener(
       "input",
       this._debounce(() => this._filterPersonnages())
     );
+    this.filtreUser.addEventListener(
+      "input",
+      this._debounce(() => this._filterPersonnages())
+    );
   }
-
-  async functionCallerDev() {
-    let codeOpp = prompt('please enter function number')
-    switch (codeOpp) {
-      case 'delt':
-        await this._deletePersonnageByLvl()
-      break
-      case 'existTrue':
-        await this._setExistTrue()
-      break
-    }
-  }
-  // code delt
-  async _deletePersonnageByLvl() {
-    let lvl = prompt('delete character totalLvl > input')
-    const personnages = this.personnages
-    const personnagesToDeleteIds = personnages.map((personnage) => {
-      const id = personnage.id
-      const totalLvl = personnage.classes.reduce((acc, curr) => {
-        return acc + +curr.niveau
-      }, 0)
-      return {
-        id,
-        lvl: totalLvl
-      }
-    }).filter((personnage) => personnage.lvl > lvl).map((personnage) => personnage.id)
-    console.log('character to delete', personnagesToDeleteIds.length)
-    try {
-      personnagesToDeleteIds.forEach(async (id) => {
-        await deletePersonnage(id)
-      })
-    } catch (err) {
-      alert(err)
-    }
-  }
-
-  // code existTrue
-  //ToDO make it work
-  // async _setExistTrue() {
-  //   const personnages = this.personnages
-  //   try {
-  //     personnages.forEach(async (personnage) => {
-  //       const goodBuildPersonnage = await getPersonnage(personnage.id)
-  //       console.log(goodBuildPersonnage)
-  //       await updatePersonnage({...goodBuildPersonnage, exist: true})
-  //     })
-  //   } catch (err) {
-  //     alert(err)
-  //   }
-  // }
 
   async connectedCallback() {
     await this._getPersonanges();
   }
 
   async _getPersonanges() {
+    // Get all personnages and users
     this.personnages = await getPersonnages();
+    const users = await getUsers();
+
+    // Attach username to each personnage
     this.personnages.forEach(personnage => {
+      if (personnage.userRef) {
+        const user = users.find(user => user.uid === personnage.userRef);
+        personnage.username = user ? user.displayname : "—";
+      } else {
+        personnage.username = "—";
+      }
       this._setPersonnage(personnage);
     });
   }
 
   _filterPersonnages() {
     this._clearPersonnages();
-    let searchQuery = this._cleanForSearch(this.filtreNom.value);
+    let searchQueryName = this._cleanForSearch(this.filtreNom.value);
+    let searchQueryUser = this._cleanForSearch(this.filtreUser.value);
+
     this.personnages
-      .filter(personnage => this._cleanForSearch(personnage.nom).includes(searchQuery))
+      .filter(
+        personnage =>
+          this._cleanForSearch(personnage.nom).includes(searchQueryName) && this._cleanForSearch(personnage.username || "").includes(searchQueryUser)
+      )
       .forEach(personnage => {
         this._setPersonnage(personnage);
       });
@@ -106,6 +78,8 @@ class ListPersonnagesComponent extends HTMLElement {
     if ("content" in document.createElement("template")) {
       const clone = this.querySelector("template").content.cloneNode(true);
       clone.querySelector("#nom").innerHTML = personnage.nom;
+      // Add the username to the display
+      clone.querySelector("#user").innerHTML = personnage.username || "—";
       clone.querySelector("#view").setAttribute("href", `/personnage?id=${personnage.id}`);
       clone.querySelector("#progress").setAttribute("href", `/personnage/progression?id=${personnage.id}`);
       clone.querySelector("#edit").setAttribute("href", `/organisateur/personnages/form?id=${personnage.id}`);

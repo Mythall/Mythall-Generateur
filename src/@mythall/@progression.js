@@ -121,8 +121,6 @@ const getAvailableAlignements = async personnage => {
 const getAvailableChoix = async (personnage, progressingClasse) => {
   let listChoix = [];
 
-  console.log(personnage.niveauReel);
-
   // Dons aux 3 niveaux & don niveau 1
   if (personnage.niveauReel % 3 == 0 || personnage.niveauReel == 1) {
     const don = new Choix({
