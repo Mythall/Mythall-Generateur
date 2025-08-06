@@ -76,19 +76,22 @@ class PreinscriptionComponent extends HTMLElement {
         this.querySelector("#prix-porte").innerHTML = this.evenement.journee == 'true' ? "$30" : "$45";
         // Enable Taverne description
         if (this.evenement.taverne === 'true') {
-          this.querySelector("#taverneDescription").innerHTML = "La taverne est ouverte pour cet événement.";
-
-          this.querySelector("#taverne-description-small").innerHTML = this.evenement.journee
-            ? "La tavenre est incluse dans le prix - comprends le souper du samedi"
-            : "Le déjeuner, dîner et souper du samedi sont offerts pour le prix de 15$.";
+          this.querySelector("#taverneDescription").innerHTML = `
+            Pour la taverne, vous devez directement contacter Anne-Marie soit par courriel ou texto à 
+            <a href="mailto:aviens19@ubishops.ca">aviens19@ubishops.ca</a> ou 
+            <a href="tel:+18195806307">819-580-6307</a> au maximum jusqu'au lundi soir 23h59 la semaine du GN.
+          `;
+        } else {
+          this.querySelector("#taverneDescription").innerHTML = "La taverne est fermée pour cet événement.";
         }
 
+        // Commented out: Taverne selection is now handled externally
         // Enable Taverne Dropdown
-        const taverneCount = this.evenement.inscriptions.filter(i => i.taverne).length;
-        this.querySelector("#tavernePlace").innerHTML = `(${taverneCount}/${this.evenement.taverneLimit})`;
-        if (this.evenement.taverne && this.evenement.taverneLimit > taverneCount) {
-          this.querySelector("#taverne").removeAttribute("disabled");
-        }
+        // const taverneCount = this.evenement.inscriptions.filter(i => i.taverne).length;
+        // this.querySelector("#tavernePlace").innerHTML = `(${taverneCount}/${this.evenement.taverneLimit})`;
+        // if (this.evenement.taverne && this.evenement.taverneLimit > taverneCount) {
+        //   this.querySelector("#taverne").removeAttribute("disabled");
+        // }
 
         // Enable Mobeu Dropdown
         if (this.evenement.mobeux) {
@@ -123,7 +126,8 @@ class PreinscriptionComponent extends HTMLElement {
         personnage.id,
         personnage.nom,
         this.querySelector("#groupe").value,
-        this.querySelector("#taverne").value,
+        false, // Taverne is now handled externally, always false
+        // this.querySelector("#taverne").value, // Commented out: taverne input removed
         this.querySelector("#mobeu").value,
         false
       );
