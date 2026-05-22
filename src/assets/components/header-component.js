@@ -7,7 +7,7 @@ class HeaderAuthentication extends HTMLElement {
   constructor() {
     super();
 
-    this.bible = `<a class="header__link" href="https://www.dropbox.com/scl/fi/26b7bpiy2tb2h50gi9rgy/7-Bible-de-Mythall-V4.pdf?rlkey=x7smqc0agtd4tsa96ds2xrx5r&e=1&st=8hbpcogx&dl=0" target="_blank">Bible</a>`;
+    this.bible = `<a class="header__link" href="https://drive.google.com/drive/folders/1h2x7YNE885uQFe87WEZJr9En-vQKdcze" target="_blank">Bible</a>`;
     this.login = `<a class="header__link" href="/compte/connexion">Connexion</a>`;
     this.register = `<a class="header__link" href="/compte/inscription">Inscription</a>`;
     this.logout = `<button id="logout" class="link header__link" href="/logout">Déconnexion</button>`;
